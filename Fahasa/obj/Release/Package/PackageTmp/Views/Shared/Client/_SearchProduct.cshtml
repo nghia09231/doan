@@ -1,0 +1,32 @@
+﻿@model Fahasa.Models.Product
+
+<div class="item-inner">
+    <div class="ma-box-content">
+        <div class="products clearfix">
+            <div class="product images-container">
+                <a href="/Products/Details/@Model.Id"
+                   title="@Model.Name"
+                   class="product-image">
+                    <span class="product-image">
+                        <img src="@Model.ImageSrc"
+                             width="270" height="364" class="" style="aspect-ratio: 1 /1"
+                             alt="@Model.Name">
+                    </span>
+                </a>
+            </div>
+        </div>
+        <h2 class="product-name-no-ellipsis p-name-list">
+            <a href="/Products/Details/@Model.Id"
+               title="@Model.Name">@Model.Name</a>
+        </h2>
+        <div class="price-label">
+            <p class="special-price w-100 mb-2 flex-wrap align-items-center">
+                <span class="price m-price-font" style="line-height: 1; min-height: 0">@Fahasa.Ultis.PriceUltis.getShowDiscount(Model.Price, Model.Discount)</span>
+                <span class="discount-percent ms-sm-2">-@Model.Discount%</span>
+            </p>
+            <p class="old-price bg-white">
+                <span class="price-label"></span><span class="price m-price-font">@Fahasa.Ultis.PriceUltis.getShow(Model.Price)</span>
+            </p>
+        </div>
+    </div>
+</div>

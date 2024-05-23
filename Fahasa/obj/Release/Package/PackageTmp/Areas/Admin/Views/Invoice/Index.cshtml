@@ -1,0 +1,563 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+
+<style>
+    .bg-warning2 {
+        background-color: #fefce8;
+    }
+</style>
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Đơn đặt hàng</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Quản lí Đơn đặt hàng</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Đơn đặt hàng</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+<div id="popupOrderDetail"></div>
+
+@section scripts{
+    <script>
+
+        var PrintPlugin = (function (win, doc) {
+            function getPrintableHTMLContent(str) {
+                var htmlEl = doc.implementation.createHTMLDocument("Printable Document");
+                htmlEl.body.innerHTML = str;
+                return htmlEl.documentElement.outerHTML;
+            }
+
+            function printHTML(str) {
+                /**
+                 * Create the blob of html page and setting its src to appended <iframe>
+             **/
+                var fullHTMLStr = getPrintableHTMLContent(str);
+                var contentBlob = new Blob([str], { type: 'text/html;charset=utf-8' });
+
+                var frameEl = doc.createElement('iframe'),
+                    removeFrame = function () {
+                        if (frameEl) {
+                            doc.body.removeChild(frameEl);
+                            frameEl = null;
+                        }
+                    };
+                frameEl.style.display = "none";
+                frameEl.onload = function () {
+                    try {
+                        this.contentWindow.print();
+                        setTimeout(function () {
+                            // Timeout is used due to Firefox bug, when <iframe> is being removed before print occurs
+                            removeFrame();
+                        }, 0);
+                    } catch (e) {
+                        console.log(e);
+                        this.alert(e.message);
+                    }
+                };
+
+                frameEl.src = URL.createObjectURL(contentBlob);
+                doc.body.appendChild(frameEl);
+
+                return frameEl.contentWindow;
+            }
+
+            return {
+                print: printHTML
+            }
+        })(window, document);
+
+    $(document).ready(function () {
+            LoadDsCategory();
+        });
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        function LoadDsCategory() {
+            $(() => {
+                const url = window.location.origin;
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "Invoice" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Invoice/GetOrders`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    sorting: {
+                        mode: 'multiple',
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                         @if(permissions.Find(p => p.Name == "Invoice" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Invoice" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Invoice" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        popup: {
+                            title: 'Đơn đặt  hàng',
+                            showTitle: true,
+                            width: 800,
+                            height: 'auto',
+                        },
+                        form: {
+                            items: [
+                                {
+                                    itemType: 'group',
+                                    colCount: 1,
+                                    colSpan: 2,
+                                    items: ['ShipCode',],
+                                }],
+                        },
+                    },
+
+                    columnResizingMode: 'widget',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            caption: 'Mã ĐH',
+                            width: 100,
+                            dataType: 'string',
+                        }, {
+                            dataField: 'Name',
+                            caption: 'Khách hàng',
+                            width: 150,
+                            dataType: 'string',
+                        }, {
+                            dataField: 'Phone',
+                            caption: 'SĐT',
+                            width: 120,
+                            dataType: 'string',
+                        }, {
+                            dataField: 'Email',
+                            caption: 'Email',
+                            width: 220,
+                            dataType: 'string',
+                        }, {
+                            dataField: "Address",
+                            caption: "Địa chỉ",
+                            width: 270,
+                            cellTemplate(container, option) {
+                                if (option.value) {
+                                    let arrayPlace = []
+                                    if (option.value.Street) {
+                                        arrayPlace.push(option.value.Street)
+                                    }
+                                    if (option.value.Ward) {
+                                        arrayPlace.push(option.value.Ward)
+                                    }
+                                    if (option.value.District) {
+                                        arrayPlace.push(option.value.District)
+                                    }
+                                    if (option.value.Province) {
+                                        arrayPlace.push(option.value.Province)
+                                    }
+                                    container.text(arrayPlace.join(', '))
+                                } else {
+                                    container.text("")
+                                }
+                            },
+                        }, {
+                            dataField: 'OrderDate',
+                            caption: 'Ngày đặt',
+                            width: 150,
+                            dataType: 'datetime',
+                        }, {
+                            dataField: 'Price.total',
+                            caption: 'Tổng giá sản phẩm',
+                            width: 160,
+                            format: 'fixedPoint',
+                            dataType: 'number',
+                        }, {
+                            dataField: 'FeeShip',
+                            caption: 'Phí vận chuyển',
+                            width: 150,
+                            format: 'fixedPoint',
+                            dataType: 'number',
+                        }, {
+                            dataField: 'Price.sumDiscountValue',
+                            width: 150,
+                            caption: 'Tổng giảm giá',
+                            format: 'fixedPoint',
+                            dataType: 'number',
+                        }, {
+                            dataField: 'Price.totalPaid',
+                            width: 150,
+                            caption: 'Phải thanh toán',
+                            format: 'fixedPoint',
+                            dataType: 'number',
+                        }, {
+                            dataField: 'ShipCode',
+                            width: 150,
+                            caption: 'Mã vận chuyển',
+                            dataType: 'string',
+                            cellTemplate(container, options) {
+                                if (!options.row.data.ShipCode)
+                                    container.addClass("bg-warning2").text("")
+                                else
+                                    return $('<a>', { href: "https://tracking.ghn.dev/?order_code=" + options.value, target: '_blank' }).text(options.value)
+                            },
+                        }, {
+                            dataField: 'Status',
+                            width: 150,
+                            caption: 'Trạng thái',
+                            dataType: 'string',
+                        }, {
+                            type: 'buttons',
+                            width: 'auto',
+                            fixed: true,
+                            buttons: [{
+                                hint: 'Từ chối đơn đặt hàng',
+                                icon: 'trash',
+                                onClick(e) {
+                                    const popup = $('#popupOrderDetail')
+                                        .dxPopup({
+                                            width: 500,
+                                            maxHeight: 'calc(100vh - 100px)',
+                                            height: 'auto',
+                                            visible: false,
+                                            title: 'Từ chối nhận đơn đặt hàng',
+                                            hideOnOutsideClick: true,
+                                            showCloseButton: true,
+                                            resizeEnabled: true,
+                                            contentTemplate() {
+                                                const form = $('<form>').attr("id", "deleteOrderForm")
+                                                const message = $('<p>').text("Bạn chắc chắn muốn từ chối đơn hành này?")
+                                                form.append(message)
+                                                form.append(`<div class="">
+                                                                <input hidden name="key" value='${e.row.data.Id}'/>
+                                                                <input class="w-100 form-control" placeholder="Lý do..." name="Reason"/>
+                                                          </div>`)
+                                                return form;
+                                            },
+                                            toolbarItems: [
+                                                {
+                                                    widget: 'dxButton',
+                                                    toolbar: 'bottom',
+                                                    location: 'after',
+                                                    options: {
+                                                        icon: 'check',
+                                                        text: 'Xác nhận',
+                                                        onClick() {
+                                                            const form = document.forms["deleteOrderForm"]
+                                                            const formData = new FormData(form)
+
+                                                            axios({
+                                                                url: "/Admin/Invoice/Delete",
+                                                                method: "DELETE",
+                                                                data: formData
+                                                            }).then(() => {
+                                                                dataGrid.refresh()
+                                                                toast.option({ message: "Thực hiện thành công!!!", type: "success" });
+                                                                toast.show();
+                                                                popup.hide()
+                                                            }).catch(() => {
+                                                                toast.option({ message: "Thực hiện không thành công!!!", type: "success" });
+                                                                toast.show();
+                                                            })
+                                                        },
+                                                    },
+                                                },
+                                                {
+                                                    widget: 'dxButton',
+                                                    toolbar: 'bottom',
+                                                    location: 'after',
+                                                    options: {
+                                                        icon: 'clear',
+                                                        text: 'Hủy',
+                                                        onClick() {
+                                                            popup.hide()
+                                                        },
+                                                    },
+                                                },
+                                            ]
+                                        })
+                                        .dxPopup('instance');
+                                    popup.show()
+                                }
+                            }, {
+                                hint: 'Sản phẩm trong đơn',
+                                icon: 'description',
+                                onClick(e) {
+                                    const popup = $('#popupOrderDetail')
+                                        .dxPopup({
+                                            width: 1000,
+                                            maxHeight: 'calc(100vh - 100px)',
+                                            height: 'auto',
+                                            visible: false,
+                                            title: 'Lịch sử công việc',
+                                            hideOnOutsideClick: true,
+                                            showCloseButton: true,
+                                            resizeEnabled: true,
+                                            contentTemplate() {
+                                                const div = $('<div>')
+                                                const discountGrid = $('<div>').addClass("mb-5").dxDataGrid({
+                                                    dataSource: e.row.data.Discounts || [],
+                                                    paging: {
+                                                        pageSize: 5,
+                                                    },
+                                                    showBorders: true,
+                                                    editing: {
+                                                        allowUpdating: false,
+                                                        allowAdding: false,
+                                                        useIcons: true,
+                                                        allowDeleting: false,
+                                                    },
+                                                    wordWrapEnabled: true,
+
+                                                    columns: [{
+                                                        dataField: 'Code',
+                                                            dataType: 'string',
+                                                            caption: 'Mã'
+                                                        }, {
+                                                        dataField: 'Title',
+                                                        caption: 'Tiêu đề'
+                                                        }, {
+                                                            dataField: 'Value',
+                                                            format: 'fixedPoint',
+                                                            caption: 'Tổng giá'
+                                                        }, {
+                                                        dataField: 'Type',
+                                                            caption: 'Tổng giá'
+                                                        }, {
+                                                            dataField: 'Conditional',
+                                                            caption: 'Điều kiện',
+                                                            width: 150,
+                                                            dataType: 'string',
+                                                            cellTemplate(container, option) {
+                                                                if (option.row.data) {
+                                                                    let arrayPlace = []
+                                                                    if (option.row.data.ApplyField) {
+                                                                        arrayPlace.push(option.row.data.ApplyField)
+                                                                    }
+                                                                    if (option.row.data.ConditionalOperator) {
+                                                                        arrayPlace.push(option.row.data.ConditionalOperator)
+                                                                    }
+                                                                    if (option.row.data.ConditionalPrice) {
+                                                                        arrayPlace.push(option.row.data.ConditionalPrice)
+                                                                    }
+                                                                    container.text(arrayPlace.join(' '))
+                                                                } else {
+                                                                    container.text("")
+                                                                }
+                                                            },
+                                                        },
+                                                    ],
+                                                });
+                                                div.append(discountGrid)
+
+                                                const view = $('<div>').dxDataGrid({
+                                                    dataSource: e.row.data.Details || [],
+                                                    paging: {
+                                                        pageSize: 5,
+                                                    },
+                                                    showBorders: true,
+                                                    editing: {
+                                                        allowUpdating: false,
+                                                        allowAdding: false,
+                                                        useIcons: true,
+                                                        allowDeleting: false,
+                                                    },
+                                                    wordWrapEnabled: true,
+
+                                                    columns: [
+                                                        {
+                                                            dataField: 'ImageSrc',
+                                                            caption: 'Ảnh',
+                                                            cellTemplate(container, options) {
+                                                                $('<div>')
+                                                                    .append($('<img>', { src: options.value, class: 'w-100' }))
+                                                                    .appendTo(container);
+                                                            },
+                                                            width: 100,
+                                                            fixed: true,
+                                                            allowFiltering: false,
+                                                        }, {
+                                                            dataField: 'Name',
+                                                            dataType: 'string',
+                                                            caption: 'Tên sản phẩm'
+                                                        }, {
+                                                            dataField: 'Price',
+                                                            format: 'fixedPoint',
+                                                            caption: 'Giá'
+                                                        }, {
+                                                            dataField: 'Amount',
+                                                            dataType: 'string',
+                                                            caption: 'Số lượng'
+                                                        }, {
+                                                            dataField: 'TotalPrice',
+                                                            format: 'fixedPoint',
+                                                            caption: 'Tổng giá'
+                                                        },
+                                                    ],
+                                                    summary: {
+                                                        totalItems: [{
+                                                            column: 'TotalPrice',
+                                                            summaryType: 'sum',
+                                                            valueFormat: 'fixedPoint',
+                                                        }],
+                                                    },
+                                                });
+                                                div.append(view)
+                                                return div;
+                                            }
+                                        })
+                                        .dxPopup('instance');
+                                    popup.show()
+                                }
+                                }, {
+                                    hint: 'In vận đơn',
+                                    icon: 'print',
+                                    onClick(e) {
+                                        axios({
+                                            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/a5/gen-token",
+                                            method: "POST",
+                                            headers: {
+                                                Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                                            },
+                                            data: {
+                                                order_codes: [e.row.data.ShipCode]
+                                            }
+                                        }).then(({ data }) => {
+                                            window.open("https://dev-online-gateway.ghn.vn/a5/public-api/printA5?token=" + data.data.token, "_blank")
+                                        })
+                                    }
+                                }]
+                        }
+                    ],
+                    summary: {
+                        totalItems: [{
+                            showInColumn: 'Price.sumDiscountValue',
+                            valueFormat: 'fixedPoint',
+                            displayFormat: 'Tổng: {0}',
+                            summaryType: 'custom',
+                            name: 'sumDiscountValue'
+                        }, {
+                            showInColumn: 'Price.totalPaid',
+                            valueFormat: 'fixedPoint',
+                            displayFormat: 'Tổng: {0}',
+                            summaryType: 'custom',
+                            name: 'totalPaid'
+                            },{
+                            showInColumn: 'FeeShip',
+                            valueFormat: 'fixedPoint',
+                            displayFormat: 'Tổng: {0}',
+                            summaryType: 'custom',
+                            name: 'FeeShip'
+                            },{
+                                showInColumn: 'Price.total',
+                                valueFormat: 'fixedPoint',
+                                displayFormat: 'Tổng: {0}',
+                                summaryType: 'custom',
+                                name: 'total'
+                            }],
+
+                        calculateCustomSummary(options) {
+                            if (options.name === 'total') {
+                                if (options.summaryProcess === 'start') {
+                                    options.totalValue = 0;
+                                }
+                                if (options.summaryProcess === 'calculate') {
+                                    if (options.value && options.value.Status != 'Đã hủy') {
+                                        options.totalValue += options.value.Price.total;
+                                    }
+                                }
+                            }
+                            if (options.name === 'FeeShip') {
+                                if (options.summaryProcess === 'start') {
+                                    options.totalValue = 0;
+                                }
+                                if (options.summaryProcess === 'calculate') {
+                                    if (options.value && options.value.Status != 'Đã hủy') {
+                                        options.totalValue += options.value.FeeShip;
+                                    }
+                                }
+                            }
+                            if (options.name === 'totalPaid') {
+                                if (options.summaryProcess === 'start') {
+                                    options.totalValue = 0;
+                                }
+                                if (options.summaryProcess === 'calculate') {
+                                    if (options.value && options.value.Status != 'Đã hủy') {
+                                        options.totalValue += options.value.Price.totalPaid;
+                                    }
+                                }
+                            }
+                            if (options.name === 'sumDiscountValue') {
+                                if (options.summaryProcess === 'start') {
+                                    options.totalValue = 0;
+                                }
+                                if (options.summaryProcess === 'calculate') {
+                                    if (options.value && options.value.Status != 'Đã hủy') {
+                                        options.totalValue += options.value.Price.sumDiscountValue;
+                                    }
+                                }
+                            }
+                        },
+                    },
+                }).dxDataGrid('instance');
+
+                const now = new Date();
+                const initStartDate = new Date(now.getTime())
+                const initEndDate = new Date(now.getTime())
+                initStartDate.setHours(0, 0, 0, 0)
+                initEndDate.setHours(23, 59, 59, 59)
+
+                dataGrid.option("filterValue", [["OrderDate", ">=", initStartDate], "and", ["OrderDate", "<=", initEndDate], "and", ["Status", "<>", "Đã hủy"]])
+            });
+        }
+    </script>
+}

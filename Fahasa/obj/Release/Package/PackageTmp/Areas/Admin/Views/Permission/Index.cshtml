@@ -1,0 +1,136 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Quyền truy cập</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách Quyền truy cập</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Quyền truy cập</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            Load();
+        });
+
+        function Load() {
+            $(() => {
+                const url = window.location.origin;
+                $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+
+                        @if(permissions.Find(p => p.Name == "Permission" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetPermissions`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/Permission/Add`,
+                        updateUrl: `${url}/Admin/Permission/Update`,
+                        deleteUrl: `${url}/Admin/Permission/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'form',
+                         @if(permissions.Find(p => p.Name == "Permission" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Permission" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Permission" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        form: {
+                            items: [{
+                                itemType: 'group',
+                                colCount: 1,
+                                colSpan: 2,
+                                items: ['Name','Function']
+
+}]
+                        }
+                    },
+
+                    columnResizingMode: 'widget',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            sortOrder: 'desc',
+                            disabled: true,
+                            visible: false,
+                        },
+                       {
+                            dataField: 'Name',
+                            caption: 'Danh mục',
+                            dataType: 'string'
+                        },
+                        {
+                            dataField: 'Function',
+                            caption: 'Chức năng',
+                            dataType: 'string',
+                            lookup: {
+                                dataSource: ["Create", "Read","Delete", "Update"]
+                            }
+                        }
+                    ],
+                });
+            });
+        }
+    </script>
+}

@@ -1,0 +1,253 @@
+﻿@using Fahasa.Models
+@using Newtonsoft.Json
+@{
+    Person person = (Person)Session["info"];
+}
+
+
+<div class="youama-ajaxlogin-cover" onclick="closeLoginModel()" style="display: none" id="youama-ajaxlogin-cover"></div>
+
+<!-- Form Đăng Nhập -->
+<div class="youama-login-window" id="youama-login-window">
+    <div class="youama-window-outside">
+        <span class="close" onclick="closeLoginModel()" id="close-sigin">×</span>
+        <div>
+            <ul id="popup-login-tab_list" class="popup-login-tab">
+                <li class="popup-login-tab-item popup-login-tab-login active"><a class="h3">Đăng nhập</a><hr></li>
+            </ul>
+        </div>
+        <div class="popup-login-content">
+            <form id="login-form">
+                <div class="fhs-input-box">
+                    <label>Tên đăng nhập</label>
+                    <div class="fhs-input-group">
+                        <input class="fhs-textbox" type="text" placeholder="Nhập số điện thoại hoặc email" id="login_username" maxlength="200" name="Username" value="">
+                        <span class="fhs-input-icon fhs-textbox-alert"></span>
+                    </div>
+                    <div class="fhs-input-alert"></div>
+                </div>
+                <div class="fhs-input-box fhs-input-display">
+                    <div class="clear space"></div>
+                    <label>Mật khẩu</label>
+                    <div class="fhs-input-group">
+                        <input class="fhs-textbox" type="password" placeholder="Nhập mật khẩu" id="login_password" name="Password" maxlength="30" value="">
+                    </div>
+                    <div class="fhs-input-alert"></div>
+                </div>
+                @*<div class="fhs-input-box">
+                        <div class="fhs-forget-pass"><span>Quên mật khẩu?</span></div>
+                    </div>*@
+
+                <div class="fhs-input-box">
+                    <div class="fhs-btn-box">
+                        <button type="submit" id="loginBtn" title="Đăng nhập" class="fhs-btn-login w-100"><span>Đăng nhập</span></button>
+                    </div>
+                </div>
+                <div class="fhs-popup-msg fhs-login-msg"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Form Đăng Ký  -->
+<div class="youama-login-window" id="youama-register-window">
+    <div class="youama-window-outside">
+        <span class="close" onclick="closeRegisterModel()" id="close-register">×</span>
+        <div class="youama-window-inside">
+            <div>
+                <ul id="popup-login-tab_list" class="popup-login-tab">
+                    <li class="popup-login-tab-item popup-login-tab-register active"><a class="h3">Đăng ký</a><hr></li>
+                </ul>
+                <div class="popup-change-title popup-login-title" style="display:none;">
+                    Khôi phục mật khẩu
+                </div>
+            </div>
+            <div class="popup-register-content" style="display: block;">
+                <form name="registerForm" id="register-form">
+                    <div class="fhs-input-box fhs-input-send">
+                        <label>Tên đăng nhập</label>
+                        <div class="fhs-input-group">
+                            <input class="fhs-textbox" type="text" placeholder="Nhập số điện thoại" id="register_username" name="Username" value="" autocomplete="off">
+                        </div>
+                        <div class="fhs-input-alert"></div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-display">
+                        <div class="clear space"></div>
+                        <label>Mật khẩu</label>
+                        <div class="fhs-input-group">
+                            <input class="fhs-textbox" type="password" placeholder="Nhập mật khẩu" id="register_password" name="Password" maxlength="30" value="" autocomplete="off">
+                        </div>
+                        <div class="fhs-input-alert"></div>
+                    </div>
+                    <div class="fhs-input-box  fhs-input-display">
+                        <div class="clear space"></div>
+                        <label>Nhập lại mật khẩu</label>
+                        <div class="fhs-input-group">
+                            <input class="fhs-textbox" type="password" placeholder="Nhập mật khẩu" id="register_repassword" name="Repassword" maxlength="30" value="" autocomplete="off">
+                        </div>
+                        <div class="fhs-input-alert"></div>
+                    </div>
+
+                    <div class="fhs-input-box">
+                        <div class="fhs-btn-box">
+                            <button type="submit" id="registerBtn" title="Đăng ký" class="fhs-btn-register w-100"><span>Đăng ký</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    const login_cover = document.querySelector('#youama-ajaxlogin-cover')
+    const login_window = document.querySelector('#youama-login-window')
+    const register_cover = document.querySelector('#youama-ajaxlogin-cover')
+    const register_window = document.querySelector('#youama-register-window')
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Validator({
+            formElement: '#register-form',
+            formMessage: '.fhs-input-alert',
+            formGroup: '.fhs-input-box',
+            rules: [
+                Validator.isRequired('#register_username'),
+                Validator.isRequired('#register_password'),
+                Validator.isRequired('#register_repassword'),
+                Validator.minLength('#register_password', 6),
+                Validator.minLength('#register_repassword', 6),
+                Validator.isConfirmed('#register_repassword', function () {
+                    return document.querySelector('#register_password').value
+                }),
+            ],
+            onSubmit(data) {
+                axios({
+                    url: '/User/Register',
+                    data,
+                    method: "POST",
+                }).then((e) => {
+                    toast({
+                        text: "Đăng ký thành công",
+                        type: 'success'
+                    })
+                    closeRegisterModel()
+                }).catch((e) => {
+                    toast({
+                        text: "Đăng ký không thành công",
+                        type: 'error'
+                    })
+                })
+            }
+        })
+
+
+        Validator({
+            formElement: '#login-form',
+            formMessage: '.fhs-input-alert',
+            formGroup: '.fhs-input-box',
+            rules: [
+                Validator.isRequired('#login_username'),
+                Validator.isRequired('#login_password'),
+                Validator.minLength('#login_password', 6),
+            ],
+            onSubmit(data) {
+                axios({
+                    url: '/User/Login',
+                    data,
+                    method: "POST",
+                }).then((e) => {
+                    window.location.reload()
+                    toast({
+                        text: "Đăng nhập thành công",
+                        type: 'success'
+                    })
+                }).catch((e) => {
+                    toast({
+                        text: "Đăng nhập không thành công",
+                        type: 'error'
+                    })
+                })
+            }
+        })
+    })
+
+    function showLoginModel() {
+        if (login_cover.style.display === 'none') {
+            login_cover.style.display = 'block';
+            login_window.style.display = 'block';
+        } else {
+            login_cover.style.display = 'none';
+            login_window.style.display = 'none';
+        }
+        dialogLoginTippy[0].hide()
+    }
+
+    function closeLoginModel() {
+        login_cover.style.display = 'none';
+        login_window.style.display = 'none';
+        register_cover.style.display = 'none';
+        register_window.style.display = 'none';
+    }
+
+    function customerLogin() {
+        console.log("login processing...")
+        let email = document.getElementById('email');
+        let password = document.getElementById('password');
+
+        const formData = new FormData();
+        formData.append('email', email.value);
+        formData.append('password', password.value)
+
+        axios.post('/customer/signin', formData)
+            .then((res) => {
+                console.log(res.data);
+                window.location.reload();
+            })
+            .catch((err) => console.log(err))
+    }
+    function showRegisterModel() {
+        if (register_cover.style.display === 'none') {
+            register_cover.style.display = 'block';
+            register_window.style.display = 'block';
+        } else {
+            register_cover.style.display = 'none';
+            register_window.style.display = 'none';
+        }
+        dialogLoginTippy[0].hide()
+    }
+
+    function closeRegisterModel() {
+        register_cover.style.display = 'none';
+        register_window.style.display = 'none';
+    }
+
+    const dialogLoginTippy = tippy('.header-user-btn', {
+        content: `@if (person == null)
+        {
+            @Html.Raw("<div class=\"bg-white d-flex align-items-center justify-content-center flex-column\" style=\"padding: 20px;width:240px;box-shadow: 0 4px 6px rgb(32 33 36 / 28%);\">\r\n                    <div>\r\n                        <button id=\"signin\" onclick=\"showLoginModel()\" type=\"button\" title=\"Đăng nhập\" class=\"fhs_btn_default active my-4\">\r\n                            <span>Đăng nhập</span>\r\n                        </button>\r\n                    </div>\r\n                    <div>\r\n                        <button id=\"register\" onclick=\"showRegisterModel()\" type=\"button\" title=\"Đăng ký\" class=\"fhs_btn_default my-4\">\r\n                            <span>Đăng ký</span>\r\n                        </button>\r\n                    </div>\r\n                 </div>")
+        } else
+            {
+                @Html.Raw(@"<div class='fhs_top_account_dropdown min bg-white d-block'>
+                            <div style='border-top: 1px solid #F2F4F5;'> <a class='fhs_center_left' href='/Customer'>
+                                <span class='icon_account_gray' style='margin-right:8px;'></span> <span>Thông tin tài khoản</span>
+                            </a> </div>
+                            <div style='border-top: 1px solid #F2F4F5;'> <a class='fhs_center_left' href='/Customer/OrderHistory'>
+                                    <span class='icon_bill_gray' style='margin-right:8px;'></span> <span>Đơn hàng của tôi</span>
+                                </a> </div>
+                            <div class='fhs_center_left fhs_mouse_point' style='border-top: 1px solid #F2F4F5;'>
+                                <a class='fhs_center_left fhs_flex_grow' href='/User/Logout'> <span class='ico_logout_gray'
+                                        style='margin-right:8px;'></span> <span>Thoát tài khoản</span> </a>
+                            </div>
+                        </div>")
+            }`,
+        allowHTML: true,
+        appendTo: () => document.body,
+        trigger: 'click',
+        arrow: false,
+        interactive: true,
+    });
+
+</script>
+

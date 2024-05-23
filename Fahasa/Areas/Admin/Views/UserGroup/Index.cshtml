@@ -1,0 +1,226 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Quyền</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách Quyền</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Quyền</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+
+@section scripts{
+    <script>
+        const url = window.location.origin;
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        $(document).ready(function () {
+            Load();
+        });
+
+        function Load() {
+            $(() => {
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "Group" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/UserGroup/GetUserGroups`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/UserGroup/Add`,
+                        updateUrl: `${url}/Admin/UserGroup/Update`,
+                        deleteUrl: `${url}/Admin/UserGroup/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'form',
+                         @if(permissions.Find(p => p.Name == "Group" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Group" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Group" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        form: {
+                            items: [{
+                                itemType: 'group',
+                                colCount: 1,
+                                colSpan: 2,
+                                items: ['Name']
+
+                            }]
+                        }
+                    },
+
+                    columnResizingMode: 'nextColumn',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            sortOrder: 'desc',
+                            disabled: true,
+                            visible: false,
+                        },
+                        {
+                            dataField: 'Name',
+                            caption: 'Nhóm',
+                            dataType: 'string'
+                        },
+                    ],
+                    masterDetail: {
+                        enabled: true,
+                        template(container, options) {
+                            const { data } = options;
+
+                            const addContainer = $('<div>').addClass('d-flex w-100 mb-3')
+
+                            const selectBox = $('<div>').addClass('flex-fill').dxSelectBox({
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Permission/GetPermissions?GroupId=${options.data.Id}`,
+                                    onBeforeSend(method, ajaxOptions) {
+                                        ajaxOptions.xhrFields = { withCredentials: true };
+                                    },
+                                }),
+                                dropDownOptions: {
+                                    height: 300,
+                                },
+                                itemTemplate(data) {
+                                    return `<div class='custom-item'>${data.Name} - ${data.Function}</div>`;
+                                },
+                                displayExpr: function (item) {
+                                    return item ? `${item?.Name} - ${item?.Function}` : ""
+                                }
+                            })
+
+                            const addButton = $('<div>').dxButton({
+                                stylingMode: 'contained',
+                                text: 'Thêm',
+                                type: 'default',
+                                width: 120,
+                                onClick() {
+                                    axios({
+                                        url: `${url}/Admin/UserGroup/AddPermission`,
+                                        method: 'POST',
+                                        data: {
+                                            Id: options.data.Id,
+                                            PermissionAdd: selectBox.dxSelectBox('instance').option('value')
+                                        }
+                                    }).then(() => {
+                                        dataGrid.refresh()
+                                        toast.option({ message: "Thêm thành công!!!", type: "success" });
+                                        toast.show();
+                                    }).catch((e) => {
+                                        toast.option({ message: "Thêm thât bại!!!", type: "error" });
+                                        toast.show();
+                                    })
+                                },
+                            })
+
+                            selectBox.appendTo(addContainer);
+                            addButton.appendTo(addContainer);
+                            addContainer.appendTo(container);
+
+                            $('<div>')
+                                .dxDataGrid({
+                                    columnAutoWidth: true,
+                                    showBorders: true,
+                                    height: 300,
+                                    editing: {
+                                        mode: 'row',
+                                        allowDeleting: true,
+                                        useIcons: true,
+                                    },
+                                    onRowRemoving(e) {
+                                        console.log(e)
+                                        axios({
+                                            url: `${url}/Admin/UserGroup/DeletePermission`,
+                                            method: 'DELETE',
+                                            data: {
+                                                GroupId: options.data.Id,
+                                                PermissionId: e.data.Id
+                                            }
+                                        }).then(() => {
+                                            dataGrid.refresh()
+                                            toast.option({ message: "Xóa thành công!!!", type: "success" });
+                                            toast.show();
+                                        }).catch((e) => {
+                                            toast.option({ message: "Xóa thât bại!!!", type: "error" });
+                                            toast.show();
+                                        })
+                                        e.cancel = true
+                                    },
+                                    columns: [{
+                                        dataField: "Name",
+                                        caption: "Danh mục"
+                                    }, {
+                                        dataField: "Function",
+                                        caption: "Chức năng"
+                                    }],
+                                    dataSource: new DevExpress.data.DataSource({
+                                        store: new DevExpress.data.ArrayStore({
+                                            key: 'Id',
+                                            data: data.Permissions,
+                                        }),
+                                    }),
+                                }).appendTo(container);
+                        },
+                    },
+                }).dxDataGrid('instance');
+            });
+        }
+    </script>
+}

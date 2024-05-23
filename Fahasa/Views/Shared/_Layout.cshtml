@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@Html.Partial("Client/_HeadTag")
+
+<body>
+
+    @RenderSection("Tawk", required: false)
+    <div id="toast"></div>
+    <div class="wrapper-page" style="background-color: #f0f0f0;">
+        <!-- =============================== [HEADER] =================================-->
+        <section class="header" id="header">
+
+            <!-- * Header 1 * -->
+            @Html.Partial("Client/_Header")
+
+            <!-- * Header-Breadcrumbs * -->
+
+        </section>
+        <!-- =============================== [END] ====================================-->
+        <!-- =============================== [MAIN-CONTAINER] =========================-->
+        <div class="main-container" id="main-container">
+            <div class="container-1">
+                <div class="container-inner">
+
+                    <!-- * LOGIN * -->
+                    @Html.Partial("Client/_Login")
+
+                    @RenderBody()
+
+                </div>
+            </div>
+        </div>
+        <!-- =============================== [END] ==================================== -->
+        <!-- =============================== [FOOTER] =================================-->
+        <!-- * FOOTER * -->
+        @Html.Partial("Client/_Footer")
+        <!-- =============================== [END] ====================================-->
+
+
+
+    </div>
+
+    @Html.Partial("Client/_ScriptTag")
+
+    <script>
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            document.querySelector("footer")?.remove()
+            document.querySelector(".top-link.top-banner")?.remove()
+
+        } else {
+        }
+    </script>
+</body>
+
+</html>

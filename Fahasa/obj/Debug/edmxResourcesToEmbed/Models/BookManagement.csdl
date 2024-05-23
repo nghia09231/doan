@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BookManagement" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__AuthorI__6FE99F9F" FromRole="Author" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Int32" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Cart__ProductId__671F4F74" FromRole="Cart" ToRole="Product" />
+    <NavigationProperty Name="Person" Relationship="Self.FK__Cart__UserId__681373AD" FromRole="Cart" ToRole="People" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.ProductCategory" FromRole="Category" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Cover">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__Publish__5DCAEF64" FromRole="Cover" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Discount">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Value" Type="Int64" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateExpired" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Int32" />
+    <Property Name="DateStart" Type="DateTime" Precision="3" />
+    <Property Name="ApplyField" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Used" Type="Int32" DefaultValue="0" />
+    <Property Name="ConditionalPrice" Type="Int32" Nullable="false" />
+    <Property Name="ConditionalOperator" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="LimitUsed" Type="Int32" />
+    <Property Name="SubTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="Self.DiscountOrder" FromRole="Discount" ToRole="Order" />
+    <NavigationProperty Name="Products" Relationship="Self.DiscountProduct" FromRole="Discount" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Gallery">
+    <Key>
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="Source" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Source" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Gallery__Product__47DBAE45" FromRole="Gallery" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Permissions" Relationship="Self.GroupPermission" FromRole="Group" ToRole="Permission" />
+    <NavigationProperty Name="People" Relationship="Self.PeopleGroup" FromRole="Group" ToRole="People" />
+  </EntityType>
+  <EntityType Name="Import">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StaffId" Type="Int32" Nullable="false" />
+    <Property Name="ImportDate" Type="DateTime" Precision="3" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Person" Relationship="Self.FK__Import__StaffId__17F790F9" FromRole="Import" ToRole="People" />
+    <NavigationProperty Name="ImportProducts" Relationship="Self.FK__ImportPro__Impor__1DB06A4F" FromRole="Import" ToRole="ImportProduct" />
+  </EntityType>
+  <EntityType Name="ImportProduct">
+    <Key>
+      <PropertyRef Name="ImportId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ImportId" Type="Int64" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Int64" Nullable="false" />
+    <Property Name="Amount" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Import" Relationship="Self.FK__ImportPro__Impor__1DB06A4F" FromRole="ImportProduct" ToRole="Import" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__ImportPro__Produ__1F98B2C1" FromRole="ImportProduct" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderDate" Type="DateTime" Precision="3" />
+    <Property Name="CustomerId" Type="Int32" />
+    <Property Name="FeeShip" Type="Int32" />
+    <Property Name="ShipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Ward" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="District" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PaymentMethod" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Person" Relationship="Self.FK__Order__CustomerI__787EE5A0" FromRole="Order" ToRole="People" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__7B5B524B" FromRole="Order" ToRole="OrderDetail" />
+    <NavigationProperty Name="Discounts" Relationship="Self.DiscountOrder" FromRole="Order" ToRole="Discount" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Comments" Relationship="BookManagement.FK__Vote__OrderId__02FC7413" FromRole="Order" ToRole="Comment" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="OrderId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Amount" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Order" Relationship="Self.FK__OrderDeta__Order__7B5B524B" FromRole="OrderDetail" ToRole="Order" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__OrderDeta__Produ__5629CD9C" FromRole="OrderDetail" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Person">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Birth" Type="DateTime" Precision="0" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="GroupId" Type="Int32" />
+    <Property Name="Lock" Type="Boolean" />
+    <Property Name="Avatar" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Ward" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="District" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Carts" Relationship="Self.FK__Cart__UserId__681373AD" FromRole="People" ToRole="Cart" />
+    <NavigationProperty Name="Imports" Relationship="Self.FK__Import__StaffId__17F790F9" FromRole="People" ToRole="Import" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Order__CustomerI__787EE5A0" FromRole="People" ToRole="Order" />
+    <NavigationProperty Name="Groups" Relationship="Self.PeopleGroup" FromRole="People" ToRole="Group" />
+    <NavigationProperty Name="Comments" Relationship="BookManagement.FK__Vote__UserId__04E4BC85" FromRole="Person" ToRole="Comment" />
+  </EntityType>
+  <EntityType Name="Permission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Function" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Groups" Relationship="Self.GroupPermission" FromRole="Permission" ToRole="Group" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ImageSrc" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Price" Type="Int64" Nullable="false" />
+    <Property Name="SoonRelease" Type="Boolean" />
+    <Property Name="StockAvailable" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="AuthorId" Type="Int32" />
+    <Property Name="CoverId" Type="Int32" />
+    <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Table" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Int32" />
+    <Property Name="Discount" Type="Int32" DefaultValue="0" />
+    <Property Name="PublisherId" Type="Int32" />
+    <Property Name="Brand" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Origin" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Author" Relationship="Self.FK__Product__AuthorI__6FE99F9F" FromRole="Product" ToRole="Author" />
+    <NavigationProperty Name="Carts" Relationship="Self.FK__Cart__ProductId__671F4F74" FromRole="Product" ToRole="Cart" />
+    <NavigationProperty Name="Cover" Relationship="Self.FK__Product__Publish__5DCAEF64" FromRole="Product" ToRole="Cover" />
+    <NavigationProperty Name="Galleries" Relationship="Self.FK__Gallery__Product__47DBAE45" FromRole="Product" ToRole="Gallery" />
+    <NavigationProperty Name="ImportProducts" Relationship="Self.FK__ImportPro__Produ__1F98B2C1" FromRole="Product" ToRole="ImportProduct" />
+    <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__5629CD9C" FromRole="Product" ToRole="OrderDetail" />
+    <NavigationProperty Name="Publisher" Relationship="Self.FK__Product__AuthorI__46E78A0C" FromRole="Product" ToRole="Publisher" />
+    <NavigationProperty Name="Supplier" Relationship="Self.FK__Product__Supplie__656C112C" FromRole="Product" ToRole="Supplier" />
+    <NavigationProperty Name="Discounts" Relationship="Self.DiscountProduct" FromRole="Product" ToRole="Discount" />
+    <NavigationProperty Name="Categories" Relationship="Self.ProductCategory" FromRole="Product" ToRole="Category" />
+    <Property Name="IsGuarantee" Type="Boolean" />
+    <NavigationProperty Name="Comments" Relationship="BookManagement.FK__Vote__ProductId__03F0984C" FromRole="Product" ToRole="Comment" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__AuthorI__46E78A0C" FromRole="Publisher" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__Supplie__656C112C" FromRole="Supplier" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Product__AuthorI__6FE99F9F">
+    <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cart__ProductId__671F4F74">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cart__UserId__681373AD">
+    <End Role="People" Type="Self.Person" Multiplicity="1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Publish__5DCAEF64">
+    <End Role="Cover" Type="Self.Cover" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cover">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CoverId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Gallery__Product__47DBAE45">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Gallery" Type="Self.Gallery" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Gallery">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Import__StaffId__17F790F9">
+    <End Role="People" Type="Self.Person" Multiplicity="1" />
+    <End Role="Import" Type="Self.Import" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Import">
+        <PropertyRef Name="StaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ImportPro__Impor__1DB06A4F">
+    <End Role="Import" Type="Self.Import" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ImportProduct" Type="Self.ImportProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Import">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImportProduct">
+        <PropertyRef Name="ImportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ImportPro__Produ__1F98B2C1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="ImportProduct" Type="Self.ImportProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImportProduct">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order__CustomerI__787EE5A0">
+    <End Role="People" Type="Self.Person" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Order__7B5B524B">
+    <End Role="Order" Type="Self.Order" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Produ__5629CD9C">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__AuthorI__46E78A0C">
+    <End Role="Publisher" Type="Self.Publisher" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Publisher">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="PublisherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Supplie__656C112C">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="SupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DiscountOrder">
+    <End Role="Discount" Type="Self.Discount" Multiplicity="*" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+  </Association>
+  <Association Name="DiscountProduct">
+    <End Role="Discount" Type="Self.Discount" Multiplicity="*" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+  </Association>
+  <Association Name="GroupPermission">
+    <End Role="Group" Type="Self.Group" Multiplicity="*" />
+    <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+  </Association>
+  <Association Name="PeopleGroup">
+    <End Role="Group" Type="Self.Group" Multiplicity="*" />
+    <End Role="People" Type="Self.Person" Multiplicity="*" />
+  </Association>
+  <Association Name="ProductCategory">
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="BookManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="Carts" EntityType="Self.Cart" />
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Covers" EntityType="Self.Cover" />
+    <EntitySet Name="Discounts" EntityType="Self.Discount" />
+    <EntitySet Name="Galleries" EntityType="Self.Gallery" />
+    <EntitySet Name="Groups" EntityType="Self.Group" />
+    <EntitySet Name="Imports" EntityType="Self.Import" />
+    <EntitySet Name="ImportProducts" EntityType="Self.ImportProduct" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+    <EntitySet Name="People" EntityType="Self.Person" />
+    <EntitySet Name="Permissions" EntityType="Self.Permission" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="Publishers" EntityType="Self.Publisher" />
+    <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK__Product__AuthorI__6FE99F9F" Association="Self.FK__Product__AuthorI__6FE99F9F">
+      <End Role="Author" EntitySet="Authors" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cart__ProductId__671F4F74" Association="Self.FK__Cart__ProductId__671F4F74">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Cart" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cart__UserId__681373AD" Association="Self.FK__Cart__UserId__681373AD">
+      <End Role="People" EntitySet="People" />
+      <End Role="Cart" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Publish__5DCAEF64" Association="Self.FK__Product__Publish__5DCAEF64">
+      <End Role="Cover" EntitySet="Covers" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Gallery__Product__47DBAE45" Association="Self.FK__Gallery__Product__47DBAE45">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Gallery" EntitySet="Galleries" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Import__StaffId__17F790F9" Association="Self.FK__Import__StaffId__17F790F9">
+      <End Role="People" EntitySet="People" />
+      <End Role="Import" EntitySet="Imports" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ImportPro__Impor__1DB06A4F" Association="Self.FK__ImportPro__Impor__1DB06A4F">
+      <End Role="Import" EntitySet="Imports" />
+      <End Role="ImportProduct" EntitySet="ImportProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ImportPro__Produ__1F98B2C1" Association="Self.FK__ImportPro__Produ__1F98B2C1">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="ImportProduct" EntitySet="ImportProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order__CustomerI__787EE5A0" Association="Self.FK__Order__CustomerI__787EE5A0">
+      <End Role="People" EntitySet="People" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Order__7B5B524B" Association="Self.FK__OrderDeta__Order__7B5B524B">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Produ__5629CD9C" Association="Self.FK__OrderDeta__Produ__5629CD9C">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="OrderDetail" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__AuthorI__46E78A0C" Association="Self.FK__Product__AuthorI__46E78A0C">
+      <End Role="Publisher" EntitySet="Publishers" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Supplie__656C112C" Association="Self.FK__Product__Supplie__656C112C">
+      <End Role="Supplier" EntitySet="Suppliers" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="DiscountOrder" Association="Self.DiscountOrder">
+      <End Role="Discount" EntitySet="Discounts" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="DiscountProduct" Association="Self.DiscountProduct">
+      <End Role="Discount" EntitySet="Discounts" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="GroupPermission" Association="Self.GroupPermission">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="Permission" EntitySet="Permissions" />
+    </AssociationSet>
+    <AssociationSet Name="PeopleGroup" Association="Self.PeopleGroup">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="People" EntitySet="People" />
+    </AssociationSet>
+    <AssociationSet Name="ProductCategory" Association="Self.ProductCategory">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <EntitySet Name="Comments" EntityType="BookManagement.Comment" />
+    <AssociationSet Name="FK__Vote__OrderId__02FC7413" Association="BookManagement.FK__Vote__OrderId__02FC7413">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Vote__ProductId__03F0984C" Association="BookManagement.FK__Vote__ProductId__03F0984C">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Vote__UserId__04E4BC85" Association="BookManagement.FK__Vote__UserId__04E4BC85">
+      <End Role="Person" EntitySet="People" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="OrderId" />
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Rating" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Order" Relationship="BookManagement.FK__Vote__OrderId__02FC7413" FromRole="Comment" ToRole="Order" />
+    <NavigationProperty Name="Product" Relationship="BookManagement.FK__Vote__ProductId__03F0984C" FromRole="Comment" ToRole="Product" />
+    <NavigationProperty Name="Person" Relationship="BookManagement.FK__Vote__UserId__04E4BC85" FromRole="Comment" ToRole="Person" />
+  </EntityType>
+  <Association Name="FK__Vote__OrderId__02FC7413">
+    <End Type="BookManagement.Order" Role="Order" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BookManagement.Comment" Role="Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Vote__ProductId__03F0984C">
+    <End Type="BookManagement.Product" Role="Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BookManagement.Comment" Role="Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Vote__UserId__04E4BC85">
+    <End Type="BookManagement.Person" Role="Person" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BookManagement.Comment" Role="Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

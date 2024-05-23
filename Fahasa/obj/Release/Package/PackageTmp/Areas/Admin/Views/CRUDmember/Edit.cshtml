@@ -1,0 +1,176 @@
+﻿@model ShopOnline.Models.Member
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<div class="page-breadcrumb">
+    <div class="row">
+        <div class="col-7 align-self-center">
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Chỉnh sửa tài khoản</h4>
+            <div class="d-flex align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb m-0 p-0">
+                        <li class="breadcrumb-item"><a href="~/Admin/CRUDmember/Index" class="text-muted">Danh sách tài khoản</a></li>
+                        <li class="breadcrumb-item text-muted active" aria-current="page">Chỉnh sửa tài khoản</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Chỉnh sửa tài khoản</h3>
+                    @using (Html.BeginForm("Edit", "CRUDmember", FormMethod.Post, new { @id = "form-1", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-body">
+                            @Html.HiddenFor(model => model.dateOfJoin)
+                            @Html.HiddenFor(model => model.password)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="userName">Tài khoản</label>
+                                        @Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "form-control", @id = "userName", @readonly = "readonly" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstName">Họ</label>
+                                        @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control", @id = "firstName" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lastName">Tên</label>
+                                        @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control", @id = "lastName" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ</label>
+                                        @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control", @id = "address" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="birthday">Ngày sinh</label>
+                                        @*@Html.EditorFor(model => model.birthday, new { htmlAttributes = new { @class = "form-control", @id = "birthday", @type = "date", @Value = Model.birthday != null ? Model.birthday.Value.Date.ToString("yyyy-MM-dd") : null } })*@
+                                        @Html.EditorFor(model => model.birthday, new { htmlAttributes = new { @class = "form-control", @id = "birthday", @Value = @Model.birthday.Value.Date.ToString("yyyy/MM/dd") } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="identityNumber">CMND</label>
+                                        @Html.EditorFor(model => model.identityNumber, new { htmlAttributes = new { @class = "form-control", @id = "identityNumber", @type = "number" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control", @id = "phone", @type = "number" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="productName">Đã xác minh</label>
+                                        @Html.EditorFor(model => model.status, new { htmlAttributes = new { @class = "form-control", @id = "status" } })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="productName">Quyền</label>
+                                        @Html.DropDownList("roleId", null, htmlAttributes: new { @class = "form-control" })
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Ảnh</label>
+                                        <img src=@Url.Content(Model.avatar) class="img-thumbnail" width="20%" style="display:block; margin-bottom:10px" id="imagePreview" />
+                                        <div><label class="btn btn-primary mt-2" for="image">Chọn ảnh</label></div>
+                                        <input type="file" name="uploadFile" hidden class="form-control-file" id="image" accept="image/jpeg, image/png" onclick="defaultBtnActive()" />
+                                        <span class="form-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="text-right">
+                                <button type="submit" class="btn waves-effect waves-light btn-success">Xác nhận</button>
+                                <a href="~/Admin/CRUDmember/Index" class="btn btn-info">Trở về</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#firstName'),
+            Validator.isRequired('#lastName'),
+            Validator.isEmail('#email'),
+            Validator.isDate('#birthday'),
+            Validator.isRequired('#phone'),
+            Validator.isRequired('#address'),
+        ],
+    });
+</script>
+<script>
+    const inputImg = document.querySelector("#image");
+    const img = document.querySelector("#imagePreview");
+
+    function defaultBtnActive() {
+        inputImg.change();
+    }
+    inputImg.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                img.src = result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2f1c1235886f4ecd8b7940e31f48b225" Name="Diagram1">
+        <EntityTypeShape EntityType="BookManagement.Author" Width="1.5" PointX="3.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Cart" Width="1.5" PointX="8.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Category" Width="1.5" PointX="3.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Cover" Width="1.5" PointX="3.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Discount" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Gallery" Width="1.5" PointX="8.25" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Group" Width="1.5" PointX="1.5" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Import" Width="1.5" PointX="9" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.ImportProduct" Width="1.5" PointX="11.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Order" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.OrderDetail" Width="1.5" PointX="8.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Person" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Permission" Width="1.5" PointX="3.75" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Product" Width="1.5" PointX="6" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Publisher" Width="1.5" PointX="3.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.Supplier" Width="1.5" PointX="3.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookManagement.sysdiagram" Width="1.5" PointX="10.75" PointY="11.625" IsExpanded="true" />
+        <AssociationConnector Association="BookManagement.FK__Product__AuthorI__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Cart__ProductId__671F4F74" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Cart__UserId__681373AD" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Product__Publish__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Gallery__Product__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Import__StaffId__17F790F9" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__ImportPro__Impor__1DB06A4F" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__ImportPro__Produ__1F98B2C1" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Order__CustomerI__787EE5A0" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__OrderDeta__Order__7B5B524B" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__OrderDeta__Produ__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Product__AuthorI__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.FK__Product__Supplie__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.DiscountOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.DiscountProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.GroupPermission" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.PeopleGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="BookManagement.ProductCategory" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,330 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "EditProfie";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    var profileJson = ViewData["profileJson"] as string;
+    Person person = (Person)Session["infoAdmin"];
+}
+
+<style>
+    #upload-progress {
+        display: flex;
+        margin-top: 10px;
+    }
+
+    .flex-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="formProfile">
+                        <div class="form-body row">
+                            <div class="col-md-6 text-center">
+                                <div id="dropzone-external" class="flex-box dx-theme-border-color">
+                                    <img id="dropzone-image" src="@person.Avatar" hidden  alt="image" class="rounded-circle" width="290" style="aspect-ratio: 1; object-fit: cover"/>
+                                    <div id="upload-progress"></div>
+                                </div>
+                                <div id="file-uploader"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="form"></div>
+                            </div>
+                            <div class="form-actions col-md-12 text-center">
+                                <div class="text-right">
+                                    <button type="button" id="submitFormProfileBtn" class="btn btn-info">Lưu thay đổi</button>
+                                    <a href="/Admin/Dashboard" class="btn btn-dark">Hủy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/redux@4.2.1/dist/redux.min.js"></script>
+<script>
+    const profileJson = @Html.Raw(profileJson)
+    axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        headers: {
+            Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+        }
+    }).then(({ data }) => {
+        formWidget.option("items[1].items[0].editorOptions.dataSource", data.data)
+        formWidget.option("items[1].items[0].editorOptions.value", profileJson.Province)
+
+        const p = data.data.find(x => x.ProvinceName == profileJson.Province)
+
+        axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + p.ProvinceID, {
+            headers: {
+                Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+            }
+        }).then(({ data }) => {
+            formWidget.option("items[1].items[1].editorOptions.dataSource", data.data)
+            formWidget.option("items[1].items[1].editorOptions.value", profileJson.District)
+
+
+            const p = data.data.find(x => x.DistrictName == profileJson.District)
+
+            axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + p.DistrictID, {
+                headers: {
+                    Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                }
+            }).then(({ data }) => {
+                formWidget.option("items[1].items[2].editorOptions.dataSource", data.data)
+                formWidget.option("items[1].items[2].editorOptions.value", profileJson.Ward)
+            });
+        });
+    });
+
+    const formWidget = $('#form')
+        .dxForm({
+            formData: profileJson,
+            readOnly: false,
+            showColonAfterLabel: true,
+            showValidationSummary: true,
+            validationGroup: 'customerData',
+            items: [{
+                itemType: 'group',
+                caption: "Chỉnh sửa thông tin",
+                items: [
+                    {
+                        dataField: 'Avatar',
+                        visible: false
+                    }, {
+                        dataField: 'Name',
+                        label: { text: "Tên" }
+                    }, {
+                        dataField: 'Username', label: { text: "Tên đăng nhập" },
+                        editorOptions: {
+                            disabled: true,
+                        },
+                    }, {
+                        dataField: 'Gender',
+                        editorType: 'dxSelectBox',
+                        editorOptions: {
+                            dataSource: ["Nam", "Nữ"],
+                        }, label: { text: "Giới tính" }
+                    }, {
+                        dataField: 'Birth', label: { text: "Ngày sinh" },
+                        editorType: "dxDateBox",
+                        
+                            editorOptions: {
+                            max: (() => {
+                                const date = new Date();
+                                date.setFullYear(date.getFullYear() - 18)
+                                return date
+                            })()
+                        }
+                    }, {
+                        dataField: 'Email',
+                        label: { text: "Email" },
+                        editorOptions: {
+                            disabled: true,
+                        },
+                        validationRules: [
+                            {
+                                type: 'required',
+                                message: 'Email là thông tin bắt buộc',
+                            },
+                            {
+                                type: 'email',
+                                message: 'Email không hợp lệ',
+                            },
+                        ],
+                    }, {
+                        dataField: 'Phone', label: { text: "Số điện thoại" },
+                        validationRules: [{ type: 'required' }, { type: 'pattern', pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/g }],
+                        editorOptions: {
+                            mask: '0000 000 000',
+                        },
+                    },
+                ],
+            }, {
+                itemType: 'group',caption: "Địa chỉ", items: [{
+                    dataField: 'Province', label: {
+                        text: "Tỉnh/Thành phố"
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: {},
+                        displayExpr: "ProvinceName",
+                        valueExpr: "ProvinceName",
+                        onValueChanged: ({ value }) => {
+
+                            formWidget.option("items[1].items[1].editorOptions.dataSource", [])
+                            formWidget.option("items[1].items[1].editorOptions.value", "")
+                            formWidget.option("items[1].items[2].editorOptions.dataSource", [])
+                            formWidget.option("items[1].items[2].editorOptions.value", "")
+
+                            const provinces = formWidget.option("items[1].items[0].editorOptions.dataSource")
+                            const p = provinces.find(x => x.ProvinceName == value)
+
+                            if (p?.ProvinceID)
+                                axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + p.ProvinceID, {
+                                    headers: {
+                                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                                    }
+                                }).then(({ data }) => {
+                                    formWidget.option("items[1].items[1].editorOptions.dataSource", data.data)
+                                    formWidget.option("items[1].items[1].editorOptions.value", profileJson.District)
+                                });
+                        }
+                    }
+                }, {
+                        dataField: 'District', label: {
+                            text: "Quận/Huyện"
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: {},
+                        displayExpr: "DistrictName",
+                        valueExpr: "DistrictName",
+                        onValueChanged: ({ value }) => {
+
+                            formWidget.option("items[1].items[2].editorOptions.dataSource", [])
+                            formWidget.option("items[1].items[2].editorOptions.value", "")
+                            const districts = formWidget.option("items[1].items[1].editorOptions.dataSource")
+                            const p = districts.find(x => x.DistrictName == value)
+
+                            if (p?.DistrictID)
+                                axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + p.DistrictID, {
+                                    headers: {
+                                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                                    }
+                                }).then(({ data }) => {
+                                    formWidget.option("items[1].items[2].editorOptions.dataSource", data.data)
+                                    formWidget.option("items[1].items[2].editorOptions.value", profileJson.Ward)
+                                });
+                        }
+                    }
+                    }, {
+                        dataField: 'Ward', label: {
+                            text: "Phường/Xã"
+                    }, editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: {},
+                        displayExpr: "WardName",
+                        valueExpr: "WardName",
+                        onValueChanged: ({ value }) => {
+
+                        }
+                    }
+                    }, {
+                        dataField: 'Street', label: {
+                            text: "Đường"
+                        }
+                    },] }],
+        })
+        .dxForm('instance');
+
+
+    $('#file-uploader').dxFileUploader({
+        dialogTrigger: '#dropzone-external',
+        dropZone: '#dropzone-external',
+        multiple: false,
+        allowedFileExtensions: ['.jpg', '.jpeg', '.gif', '.png'],
+        uploadMode: 'instantly',
+        uploadUrl: '/Admin/UploadImage',
+        name: "imageFile",
+        visible: false,
+        onDropZoneEnter(e) {
+            if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, true); }
+        },
+        onDropZoneLeave(e) {
+            if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, false); }
+        },
+        onUploaded(e) {
+            console.log(e)
+            const { file, request } = e;
+
+            const reqObj = JSON.parse(request.response)
+            formWidget.option("formData", { ...formWidget.option("formData"), Avatar: reqObj.url })
+
+            const fileReader = new FileReader();
+            fileReader.onload = function () {
+                toggleDropZoneActive(document.getElementById('dropzone-external'), false);
+                const dropZoneImage = document.getElementById('dropzone-image');
+                dropZoneImage.src = fileReader.result;
+            };
+            fileReader.readAsDataURL(file);
+            uploadProgressBar.option({
+                visible: false,
+                value: 0,
+            });
+        },
+        onProgress(e) {
+            uploadProgressBar.option('value', (e.bytesLoaded / e.bytesTotal) * 100);
+        },
+        onUploadStarted() {
+            toggleImageVisible(false);
+            uploadProgressBar.option('visible', true);
+        },
+    });
+
+    const uploadProgressBar = $('#upload-progress').dxProgressBar({
+        min: 0,
+        max: 100,
+        width: '30%',
+        showStatus: false,
+        visible: false,
+    }).dxProgressBar('instance');
+
+    function toggleDropZoneActive(dropZone, isActive) {
+        if (isActive) {
+            dropZone.classList.add('dx-theme-accent-as-border-color');
+            dropZone.classList.remove('dx-theme-border-color');
+            dropZone.classList.add('dropzone-active');
+        } else {
+            dropZone.classList.remove('dx-theme-accent-as-border-color');
+            dropZone.classList.add('dx-theme-border-color');
+            dropZone.classList.remove('dropzone-active');
+        }
+    }
+
+    function toggleImageVisible(visible) {
+        const dropZoneImage = document.getElementById('dropzone-image');
+        dropZoneImage.hidden = !visible;
+    }
+
+    document.getElementById('dropzone-image').onload = function () { toggleImageVisible(true); };
+
+
+    const submitFormProfileBtn = document.querySelector("#submitFormProfileBtn")
+
+    const toastDx = $('#toast').dxToast({ displayTime: 4000 }).dxToast('instance');
+
+    submitFormProfileBtn.addEventListener("click", (e) => {
+        const formProfile = document.forms["formProfile"]
+        const formData = new FormData(formProfile)
+
+        const values = {}
+        for (const entry of formData) {
+            const [fieldName, fieldValue] = entry;
+            values[fieldName] = fieldValue;
+            console.log(`${fieldName}: ${fieldValue}`);
+        }
+
+        axios({
+            url: "/Admin/DashBoard/EditProfile",
+            method: "POST",
+            data: {
+                values: JSON.stringify(values)
+            }
+        }).then(res => {
+            toastDx.option({ message: "Thay đổi thông tin thành công!!!", type: 'success' });
+            toastDx.show();
+        }).catch(() => {
+
+            toastDx.option({ message: "Thay đổi thông tin thất bại. Vui lòng kiểm tra lại!!!", type: 'error' });
+            toastDx.show();
+        })
+    })
+</script>

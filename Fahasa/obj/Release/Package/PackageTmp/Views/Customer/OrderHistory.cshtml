@@ -1,0 +1,873 @@
+﻿@using Fahasa.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var orders = ViewData["personOrder"] as List<Order>;
+}
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<style>
+    .KrPQEI,
+    ._0RxYUS {
+        display: flex;
+        align-items: center;
+    }
+
+    .KrPQEI {
+        padding: 0 0 12px;
+        justify-content: flex-end;
+    }
+
+    .qCUYY8 {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    ._7wKGws,
+    ._9Ro5mP,
+    .yHlRfY {
+        margin: 0 0 0 8px;
+    }
+
+    ._9Ro5mP {
+        max-width: 200px;
+        margin-left: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    ._7wKGws > .stardust-button,
+    .yHlRfY > .stardust-button {
+        padding: 4px 8px;
+        font-size: 12px;
+        text-transform: capitalize;
+        outline: 0;
+        border-radius: 2px;
+        border: 1px solid transparent;
+    }
+
+        ._7wKGws > .stardust-button:hover,
+        .yHlRfY > .stardust-button:hover {
+            border: 1px solid transparent;
+        }
+
+        ._7wKGws > .stardust-button:not(.stardust-button--primary),
+        .yHlRfY > .stardust-button:not(.stardust-button--primary) {
+            color: #555;
+            border: 1px solid rgba(0, 0, 0, 0.09);
+        }
+
+            ._7wKGws > .stardust-button:not(.stardust-button--primary):hover,
+            .yHlRfY > .stardust-button:not(.stardust-button--primary):hover {
+                background-color: rgba(0, 0, 0, 0.02);
+                border: 1px solid rgba(0, 0, 0, 0.09);
+            }
+
+        ._7wKGws > .stardust-button > span,
+        ._7wKGws > .stardust-button > svg,
+        .yHlRfY > .stardust-button > span,
+        .yHlRfY > .stardust-button > svg {
+            vertical-align: middle;
+        }
+
+        ._7wKGws > .stardust-button > span,
+        .yHlRfY > .stardust-button > span {
+            margin: 0 0 0 4px;
+        }
+
+    .EQko8g {
+        padding: 0 0 0 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    ._7w0r1r {
+        padding: 6px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    .x7nENX {
+        padding: 12px 0 0;
+        align-items: center;
+        flex-wrap: nowrap;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .aybVBK,
+    .x7nENX {
+        display: flex;
+        word-wrap: break-word;
+    }
+
+    .aybVBK {
+        padding: 0 12px 0 0;
+        flex: 1;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+    }
+
+    .rGP9Yd {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        border: 1px solid #e1e1e1;
+        background: #e1e1e1;
+    }
+
+    ._7uZf6Q {
+        min-width: 0;
+        padding: 0 0 0 12px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        word-wrap: break-word;
+    }
+
+    .iJlxsT {
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        margin: 0 0 5px;
+        font-size: 16px;
+        line-height: 22px;
+        max-height: 48px;
+    }
+
+    .x5GTyN {
+        vertical-align: middle;
+    }
+
+    .vb0b-P {
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    ._3F1-5M,
+    .vb0b-P {
+        margin: 0 0 5px;
+    }
+
+    ._9UJGhr {
+        text-align: right;
+    }
+
+    .-x3Dqh,
+    .j2En5\+ {
+        vertical-align: middle;
+        font-size: 14px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .OkfGBc {
+        color: #ee4d2d;
+    }
+
+    .j2En5\+ {
+        margin: 0 4px 0 0;
+        -webkit-text-decoration-line: line-through;
+        -moz-text-decoration-line: line-through;
+        text-decoration-line: line-through;
+        color: #000;
+        opacity: 0.26;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .rjqzk1 {
+        margin-left: 12px;
+    }
+
+    .Cde7Oe {
+        height: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+    }
+
+    .FbLutl:last-child .Cde7Oe {
+        display: none;
+    }
+
+    .hiXKxx {
+        margin-bottom: 12px;
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+        border-radius: 0.125rem;
+    }
+
+        .hiXKxx:last-child {
+            margin-bottom: 0;
+        }
+
+    .V\+w7Xs {
+        line-height: 24px;
+        color: #ee4d2d;
+        text-align: right;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .B8\+ewx,
+    .FycaKn {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+    }
+
+    .B8\+ewx {
+        height: 10px;
+    }
+
+    .x0QT2k {
+        padding: 12px 24px;
+        background: #fff;
+    }
+
+        .x0QT2k:first-child {
+            padding-top: 24px;
+        }
+
+        .x0QT2k:last-child .B8\+ewx {
+            display: none;
+        }
+
+    ._0OiaZ- {
+        margin: 10px 0 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.09);
+    }
+
+        ._0OiaZ-:first-child {
+            margin: 0;
+            border: 0;
+        }
+
+    .qP6Mvo {
+        display: flex;
+        align-items: center;
+        text-align: right;
+    }
+
+        .qP6Mvo .shopee-drawer {
+            margin: 0 0 0 6px;
+            display: inline-flex;
+            vertical-align: middle;
+        }
+
+        .qP6Mvo .icon-free-shipping-line {
+            margin: 0 4px 1px 0;
+            vertical-align: middle;
+            font-size: 1rem;
+            color: #00bfa5;
+            stroke: #26aa99;
+        }
+
+        .KmBIg2,
+        .qP6Mvo .icon-help {
+            vertical-align: middle;
+        }
+
+    .KmBIg2 {
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .nkmfr2 {
+        text-decoration: none;
+        color: rgba(0, 0, 0, 0.87);
+        color: #26aa99;
+        vertical-align: middle;
+    }
+
+    .kvXy0c {
+        padding: 24px 24px 12px;
+        background: #fffefb;
+    }
+
+    .\-78s2g {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .IlORNJ {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin: 0 5px 0 0;
+        line-height: 0;
+    }
+
+    ._0NMXyN {
+        margin: 0 10px 0 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    .DeWpya {
+        color: #ee4d2d;
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .AM4Cxf {
+        padding: 12px 24px 24px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        align-content: center;
+        background: #fffefb;
+    }
+
+    .qtUncs {
+        min-width: 300px;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        grid-gap: 4px;
+        gap: 4px;
+        flex-grow: 1;
+        word-wrap: break-word;
+        text-align: left;
+        font-size: 12px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    .an9g3V {
+        color: #ee4d2d;
+    }
+
+    .EOjXew {
+        display: flex;
+    }
+
+    .PF0-AU,
+    .PgtIur {
+        margin: 0 0 0 10px;
+        display: flex;
+        align-items: center;
+        text-overflow: ellipsis;
+    }
+
+    ._3j3oE1 {
+        display: none;
+        position: absolute;
+        top: 39px;
+        right: 0;
+        border: 1px solid #ee4d2d;
+        background: #fff;
+        z-index: 1;
+    }
+
+    .y0\+T8e {
+        display: block;
+    }
+
+    .JMmT2C {
+        cursor: pointer;
+    }
+
+    .OwGaHA .shopee-drawer {
+        display: inline-flex;
+    }
+
+    .M7wYu\+ {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        position: relative;
+    }
+
+    .g1E\+id {
+        min-height: 640px;
+    }
+
+        .g1E\+id .shopee-svg-icon {
+            min-width: 16px;
+        }
+
+    ._5x4I2b {
+        vertical-align: middle;
+    }
+
+    .B3m-K3 > button {
+        width: auto;
+    }
+
+    .WgYvse {
+        min-width: 150px;
+        min-height: 40px;
+        padding: 8px 20px;
+        outline: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        border-radius: 2px;
+        outline: 0;
+    }
+
+        .WgYvse,
+        .WgYvse:hover {
+            border: 1px solid transparent;
+        }
+
+            .WgYvse:not(.stardust-button--primary) {
+                color: #555;
+                border: 1px solid rgba(0, 0, 0, 0.09);
+            }
+
+                .WgYvse:not(.stardust-button--primary):hover:not(.ToSnPt) {
+                    background-color: rgba(0, 0, 0, 0.02);
+                    border: 1px solid rgba(0, 0, 0, 0.09);
+                }
+
+    .Dk3zTF:hover {
+        text-decoration: underline;
+    }
+
+    h1.a11y-hidden,
+    h2.a11y-hidden,
+    h3.a11y-hidden {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+    /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+    html {
+        font-family: sans-serif;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        margin: 0;
+    }
+
+    main,
+    section {
+        display: block;
+    }
+
+    [hidden] {
+        display: none;
+    }
+
+    a {
+        background-color: initial;
+    }
+
+        a:active,
+        a:hover {
+            outline: 0;
+        }
+
+    b {
+        font-weight: 700;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin: 0.67em 0;
+    }
+
+    img {
+        border: 0;
+    }
+
+    svg:not(:root) {
+        overflow: hidden;
+    }
+
+    button {
+        color: inherit;
+        font: inherit;
+        margin: 0;
+    }
+
+    button {
+        overflow: visible;
+    }
+
+    button {
+        text-transform: none;
+    }
+
+    button {
+        -webkit-appearance: button;
+        cursor: pointer;
+    }
+
+        button[disabled] {
+            cursor: default;
+        }
+
+        button::-moz-focus-inner {
+            border: 0;
+            padding: 0;
+        }
+
+    th {
+        padding: 0;
+    }
+
+    .container {
+        margin-right: auto;
+        margin-left: auto;
+        width: 1200px;
+    }
+
+    body {
+        text-size-adjust: none;
+        -webkit-text-size-adjust: none;
+    }
+
+    body,
+    html {
+        font-family: Helvetica Neue, Helvetica, Arial, æ–‡æ³‰é©›æ­£é»‘, WenQuanYi Zen Hei, Hiragino Sans GB, å„·é»‘ Pro, LiHei Pro, Heiti TC, å¾®è»Ÿæ­£é»‘é«”, Microsoft JhengHei UI, Microsoft JhengHei, sans-serif;
+        color: rgba(0, 0, 0, 0.8);
+        line-height: 1.2;
+    }
+
+    .stardust-button {
+        font-family: inherit !important;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 3px;
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    :root {
+        --focus-indicator-color: rgba(0, 0, 0, 0.87);
+        --focus-indicator-stroke-width: 2px;
+        --focus-indicator-spacing: 4px;
+        --focus-indicator-border-radius: 2px;
+        --brand-primary-color: #ee4d2d;
+        --brand-primary-light-color: rgba(255, 87, 34, 0.1);
+    }
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .shopee-svg-icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+        position: relative;
+    }
+
+    .icon-order-order,
+    .icon-order-shipping {
+        stroke: currentColor;
+    }
+
+    .icon-line {
+        display: inline-block;
+        background: url(https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/e7e8c8a24b2e1ae6fb9c4076d42140aa.png) no-repeat;
+        background-size: contain;
+        overflow: hidden;
+        text-indent: -9999px;
+        text-align: left;
+        width: 22px;
+        height: 22px;
+    }
+
+    .icon-vn-shipping {
+        background-position: 0 -122px;
+    }
+
+    .shopee-guarantee-icon {
+        background-position: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        background-image: url(https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/67454c89080444c5997b53109072c9e0.png);
+    }
+
+    .order-card__content {
+        padding: 1.25rem 1.25rem 0;
+    }
+
+    .order-card__container {
+        border-bottom: 0;
+    }
+
+    .order-card__container {
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+        border-radius: 0.125rem;
+        overflow: hidden;
+        overflow: visible;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    ._7w24N1 {
+        color: #fff;
+        background-color: #ee4d2d;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.09);
+    }
+
+        ._7w24N1:active {
+            background-color: #e2492b;
+        }
+
+    .w7M\+6q {
+        min-height: calc(100vh - 185px);
+    }
+
+    ._9p\+-Af {
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        color: #ee4d2d;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 1.875rem 1.875rem 0;
+        z-index: 1;
+    }
+
+    .t02\+y- {
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+    }
+
+        .t02\+y-:before {
+            display: none;
+            content: none;
+            border-bottom-color: transparent;
+        }
+
+    ._5217T- {
+        margin: 0 0.4375rem;
+    }
+
+    .a68\+0d {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        -ms-grid-column-span: 3;
+        height: 1.25rem;
+    }
+
+    .n3t31Q {
+        padding-bottom: 0.625rem;
+    }
+
+    .ie3A\+n {
+        display: inline;
+        line-height: 14px;
+        font-size: 0.75rem;
+    }
+
+    .O2KPzo {
+        width: 100%;
+        height: 0;
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.09);
+        position: relative;
+    }
+</style>
+
+<div class="main">
+    <div class="container-1">
+        <div class="container-inner">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <div class="block block-account">
+                        <div class="block-title">
+                            <strong><span>Tài khoản</span></strong>
+                        </div>
+                        <div class="block-content">
+                            <ul>
+                                <li><a href="/Customer">Thông tin tài khoản</a></li>
+                                <li class="current"><strong><a href="/Customer/OrderHistory">Đơn hàng của tôi</a></strong></li>
+                                <li><a href="/User/Logout">Thoát tài khoản</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="my-account p-0 m-0 bg-transparent">
+                        @foreach (var item in orders)
+                        {
+                            var calcOrder = Fahasa.Ultis.CartUltis.calcOrder(((long)item.OrderDetails.Sum(x => x.Amount * x.Price)), item.Discounts as List<Discount>, ((int)item.FeeShip));
+                            <div class="hiXKxx">
+                                <div>
+                                    <div class="x0QT2k">
+                                        <section>
+                                            <h3 class="a11y-hidden"></h3>
+                                            <div class="KrPQEI justify-content-between">
+
+                                                <div>
+                                                    @Html.Raw(item.OrderDate.Value)
+                                                </div>
+
+                                                <div class="EQko8g">
+                                                    <div class="qP6Mvo">
+                                                        <a class="KmBIg2" href="@Html.Raw("https://tracking.ghn.dev/?order_code=" + item.ShipCode)">
+                                                            <span class="nkmfr2">
+                                                                <svg enable-background="new 0 0 15 15"
+                                                                     viewBox="0 0 15 15"
+                                                                     x="0"
+                                                                     y="0"
+                                                                     class="shopee-svg-icon icon-free-shipping-line">
+                                                                    <g>
+                                                                        <line fill="none"
+                                                                              stroke-linejoin="round"
+                                                                              stroke-miterlimit="10"
+                                                                              x1="8.6"
+                                                                              x2="4.2"
+                                                                              y1="9.8"
+                                                                              y2="9.8"></line>
+                                                                        <circle cx="3"
+                                                                                cy="11.2"
+                                                                                fill="none"
+                                                                                r="2"
+                                                                                stroke-miterlimit="10"></circle>
+                                                                        <circle cx="10"
+                                                                                cy="11.2"
+                                                                                fill="none"
+                                                                                r="2"
+                                                                                stroke-miterlimit="10"></circle>
+                                                                        <line fill="none"
+                                                                              stroke-miterlimit="10"
+                                                                              x1="10.5"
+                                                                              x2="14.4"
+                                                                              y1="7.3"
+                                                                              y2="7.3"></line>
+                                                                        <polyline fill="none"
+                                                                                  points="1.5 9.8 .5 9.8 .5 1.8 10 1.8 10 9.1"
+                                                                                  stroke-linejoin="round"
+                                                                                  stroke-miterlimit="10"></polyline>
+                                                                        <polyline fill="none"
+                                                                                  points="9.9 3.8 14 3.8 14.5 10.2 11.9 10.2"
+                                                                                  stroke-linejoin="round"
+                                                                                  stroke-miterlimit="10"></polyline>
+                                                                    </g>
+                                                                </svg>
+                                                                @item.Status
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div class="FycaKn"></div>
+                                        <section>
+                                            <h3 class="a11y-hidden"></h3>
+                                            @foreach (var item2 in item.OrderDetails)
+                                            {
+                                                <a aria-label="" href="/Products/Details/@item2.Product.Id">
+                                                    <div>
+                                                        <div class="_0OiaZ-">
+                                                            <div class="FbLutl">
+                                                                <div>
+                                                                    <section>
+                                                                        <div class="x7nENX">
+                                                                            <div class="aybVBK">
+                                                                                <img src="@item2.Product.ImageSrc"
+                                                                                     class="rGP9Yd"
+                                                                                     alt=""
+                                                                                     tabindex="0" />
+                                                                                <div class="_7uZf6Q">
+                                                                                    <div>
+                                                                                        <div class="iJlxsT">
+                                                                                            <span class="x5GTyN" tabindex="0">@item2.Product.Name</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="_3F1-5M" tabindex="0">@Html.Raw("x")@item2.Amount</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="_9UJGhr" tabindex="0">
+                                                                                <div class="rjqzk1">
+                                                                                    <span class="j2En5+">@Fahasa.Ultis.PriceUltis.getShow(item2.Product.Price)</span><span class="-x3Dqh OkfGBc">@Fahasa.Ultis.PriceUltis.getShowDiscount(item2.Product.Price, item2.Product.Discount)</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+                                                                </div>
+                                                                <div class="Cde7Oe"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            }
+                                        </section>
+                                        <div class="B8+ewx"></div>
+                                    </div>
+                                </div>
+                                <div class="O2KPzo">
+                                    <div class="mn7INg xFSVYg"></div>
+                                    <div class="mn7INg EfbgJE"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center" style=" background: #fffefb;">
+                                    <div class="AM4Cxf">
+                                        <section class="EOjXew">
+                                            <h3 class="a11y-hidden"></h3>
+                                            <div class="PgtIur">
+                                                <div>
+                                                    @if (item.Status == "Chờ lấy hàng")
+                                                    {
+                                                        <button onclick="cancelOrder(@item.Id)" class="stardust-button stardust-button--secondary WgYvse">
+                                                            Hủy đơn hàng
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div class="kvXy0c">
+                                        <div class="-78s2g">
+                                            <label class="_0NMXyN">Thành tiền:</label>
+                                            <div class="DeWpya" tabindex="0" aria-label="Thành tiền: ₫25.300">@Fahasa.Ultis.PriceUltis.getShow(calcOrder.totalPaid)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const toastDx = $('#toast').dxToast({ displayTime: 4000 }).dxToast('instance');
+
+    function cancelOrder(id) {
+        if (confirm("Bạn chắc chắn muốn hủy đơn hàng này???")) {
+            axios(`/Order/Cancel?orderId=${id}`).then(() => {
+
+                window.location.reload()
+
+            }).catch(() => {
+                toastDx.option({ message: "Thực hiện không thành công!!! Vui lòng liên hệ nhân viên để được hỗ trợ.", type: 'error' });
+                toastDx.show();
+            })
+        }
+    }
+</script>
+

@@ -1,0 +1,304 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Nhân viên</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Nhân viên</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Nhân viên</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+
+@section scripts{
+    <script>
+
+        const url = window.location.origin;
+
+        $(document).ready(function () {
+            Load();
+        });
+
+        function tagBoxEditorTemplate(cellElement, cellInfo) {
+            return $('<div>').dxTagBox({
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: 'Id',
+                    loadUrl: `${url}/Admin/UserGroup/GetUserGroupsWithoutPermission`,
+                }),
+                value: cellInfo.value,
+                displayExpr: 'Name',
+                showSelectionControls: true,
+                applyValueMode: 'useButtons',
+                searchEnabled: true,
+                onValueChanged(e) {
+                    cellInfo.setValue(e.value);
+                },
+                onSelectionChanged() {
+                    cellInfo.component.updateDimensions();
+                },
+            });
+        }
+
+        function Load() {
+            $(() => {
+                const url = window.location.origin;
+                $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "People" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/People/GetPeoples`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/People/Add`,
+                        updateUrl: `${url}/Admin/People/Update`,
+                        deleteUrl: `${url}/Admin/People/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    wordWrapEnabled: true,
+                    columnMinWidth: 50,
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                         @if(permissions.Find(p => p.Name == "People" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "People" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "People" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        popup: {
+                            title: 'Nhân viên',
+                            showTitle: true,
+                            width: 800,
+                            height: 'auto',
+                        },
+                        form: {
+                            items: [
+                                {
+                                    itemType: 'group',
+                                    colCount: 1,
+                                    colSpan: 2,
+                                    items: ['Avatar', 'Username', 'Password', 'Name', {
+                                        dataField: 'Gender',
+                                        editorType: 'dxSelectBox',
+                                    }, 'Birth', 'Phone', 'Email',
+                                        {
+                                            dataField: 'Lock',
+                                            editorType: 'dxSelectBox',
+                                            editorOptions: {
+                                                dataSource: ["False", "True"],
+                                            }
+                                        }, 'Groups'
+                                    ],
+                                },
+                            ]
+                        },
+                    },
+
+                    columnResizingMode: 'widget',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            sortOrder: 'desc',
+                            disabled: true,
+                            visible: false,
+                        },
+                        {
+                            dataField: 'Avatar',
+                            caption: 'Ảnh',
+                            dataType: 'string',
+                            width: 50,
+                            cellTemplate(container, options) {
+                                $('<div>')
+                                    .append($('<img>', {
+                                        src: options.value, class: 'w-100 rounded-circle', style: 'aspect-ratio: 1 / 1; object-fit: cover;'
+                                    }))
+                                    .appendTo(container);
+                            },
+                            allowFiltering: false,
+                            editCellTemplate: (cellElement, cellInfo) => {
+                                console.log([cellElement, cellInfo])
+                                return $('<div>').dxFileUploader({
+                                    accept: 'image/*',
+                                    uploadMode: 'instantly',
+                                    name: 'imageFile',
+                                    uploadUrl: `${url}/Admin/UploadImage`,
+                                    onUploaded: (e) => {
+                                        cellInfo.setValue(JSON.parse(e.request.response).url)
+                                    }
+                                });
+                            },
+                        },
+                        {
+                            dataField: 'Username',
+                            caption: 'Tên tài khoản',
+                            dataType: 'string',
+                            width: 150,
+                            validationRules: [{ type: 'required' }, { type: "stringLength", min: 6 }],
+                        },
+                        {
+                            dataField: 'Password',
+                            caption: 'Mật khẩu',
+                            dataType: 'string',
+                            visible: false,
+                        },
+                        {
+                            dataField: 'Name',
+                            caption: 'Tên',
+                            width: 150,
+                            validationRules: [{ type: 'required' }],
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'Gender',
+                            caption: 'Giới tính',
+                            width: 100,
+                            validationRules: [{ type: 'required' }],
+                            dataType: 'string',
+                            editorOptions: {
+                                dataSource: ["Nam", "Nữ"],
+                            }
+
+                        },
+                        {
+                            dataField: 'Street',
+                            caption: 'Số nhà',
+                            width: 150,
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'Ward',
+                            caption: 'Phường/Xã',
+                            width: 120,
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'District',
+                            caption: 'Quận/Huyện',
+                            width: 120,
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'Province',
+                            caption: 'Tỉnh/Thành phố',
+                            width: 120,
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'Birth',
+                            caption: 'Ngày sinh',
+                            validationRules: [{ type: 'required' }],
+                            width: 120,
+                            dataType: 'date',
+                            editorOptions: {
+                                max: (() => {
+                                    const date = new Date();
+                                    date.setFullYear(date.getFullYear() - 18)
+                                    return date
+                                })()
+                            }
+                        },
+                        {
+                            dataField: 'Phone',
+                            caption: 'Số điện thoại',
+                            width: 120,
+                            validationRules: [{ type: 'required' }, { type: 'pattern', pattern: /(0[1-9]{1})+([0-9]{8})/ }],
+                            editorOptions: {
+                                mask: '0000 000 000',
+                            },
+
+                            dataType: 'string'
+                        },
+                        {
+                            dataField: 'Email',
+                            caption: 'Email',
+                            validationRules: [{ type: 'required' }, { type: "email" }],
+                            width: 150,
+                            dataType: 'string'
+                        },
+                        {
+                            dataField: 'Lock',
+                            caption: 'Khóa',
+                            width: 100,
+                            dataType: 'string',
+                        },
+                        {
+                            dataField: 'Groups',
+                            caption: 'Quyền',
+                            width: 150,
+                            editCellTemplate: tagBoxEditorTemplate,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/UserGroup/GetUserGroupsWithoutPermission`,
+                                    useDefaultSearch: false,
+                                    loadMode: 'raw'
+                                }),
+                                displayExpr: 'Name',
+                            },
+                            cellTemplate(container, options) {
+                                const noBreakSpace = '\u00A0';
+                                const text = (options.value || []).map((element) => {
+                                    return element.Name
+                                }).join(', ');
+                                container.text(text || noBreakSpace).attr('title', text);
+                            },
+                        },
+                    ],
+                });
+            });
+        }</script>
+}

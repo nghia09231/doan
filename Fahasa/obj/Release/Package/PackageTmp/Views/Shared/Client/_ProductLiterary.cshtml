@@ -1,0 +1,153 @@
+﻿@using Fahasa;
+@model dynamic
+@{
+}
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Văn học</div>
+        
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.Literatures)
+            {
+
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Văn học">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Văn phòng phẩm - Dụng Cụ</div>
+       
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.Stationeries)
+            {
+
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Văn phòng phẩm - Dụng Cụ">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Khoa học kỹ thuật</div>
+        
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.ScienceTechnology)
+            {
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Khoa học kỹ thuật">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Giáo khoa - Tham khảo</div>
+        
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.ReferenceBooks)
+            {
+
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Giáo khoa - Tham khảo">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Dụng cụ học sinh</div>
+        
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.SchoolSupplies)
+            {
+
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Dụng cụ học sinh">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Foreign books</div>
+     
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.ForeignBooks)
+            {
+
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Foreign books">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Other languages</div>
+        
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.OtherLanguages)
+            {
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Other languages">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="feature">
+    <div class="feature-header">
+        <div class="feature-title">Đồ Chơi</div>
+       
+    </div>
+    <div class="feature-products">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 p-2 justify-content-center">
+            @foreach (Fahasa.Models.Product item in Model.Toys)
+            {
+                @Html.Partial("Client/_Product", item)
+            }
+        </div>
+        <div class="tabs-xem-them fhs_bar_bottom mobile_link" style="">
+            <a  href="/Products/Search?cate=Đồ Chơi">Xem Thêm</a>
+        </div>
+    </div>
+</div>
+

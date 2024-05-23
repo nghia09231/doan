@@ -1,0 +1,818 @@
+﻿@using System.Globalization
+@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Sản phẩm</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Danh sách sản phẩm</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+<div id="popup">
+    <div class="popup-content">
+
+    </div>
+</div>
+<div id="popup-product">
+    <div class="popup-content">
+
+    </div>
+</div>
+
+<form id="importExcelForm" class="d-none" enctype="multipart/form-data">
+    <input name="file" id="importExcelForm_file" type="file" hidden />
+</form>
+
+<style>
+    .data-table {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        line-height: 1.428571429;
+        color: #333333;
+        font-weight: 400;
+        font-family: nunito-sans, sans-serif, Helvetica, Arial;
+        text-align: left;
+        box-sizing: border-box;
+        padding: 0;
+        border-collapse: collapse;
+        max-width: 100%;
+        border-spacing: 0;
+        empty-cells: show;
+        font-size: 100%;
+        margin: 10px 0;
+        background: transparent;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+
+    .table-label {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        font-family: nunito-sans, sans-serif, Helvetica, Arial;
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+        box-sizing: border-box;
+        margin: 0;
+        display: table-cell;
+        padding-left: 0 !important;
+        line-height: 1.6;
+        text-align: left;
+        white-space: nowrap;
+        vertical-align: baseline;
+        color: #777;
+        font-weight: normal;
+        padding: 4px;
+        border: none;
+        font-size: 1.1em;
+    }
+</style>
+
+@section htmlEditorScript{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-minifier/4.0.0/htmlminifier.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-quill/1.6.2/dx-quill.min.js" integrity="sha512-fIUDyhR9ElipkcKvGZbRgnnRKoTDPoHFlBbqa4NVz/p5xc2ohBGonu5cHnUp1y05IHiyv2diNUVdrzhldNx66A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.9/jspdf.plugin.autotable.min.js"></script>
+}
+@section scripts{
+    <script>
+
+        const url = window.location.origin;
+
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        $(document).ready(function () {
+            LoadProducts();
+        });
+
+        function tagBoxEditorTemplate(cellElement, cellInfo) {
+            console.log(cellInfo)
+            return $('<div>').dxTagBox({
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: 'Id',
+                    loadUrl: `${url}/Admin/Category/GetCategories`,
+                }),
+                value: cellInfo.value,
+                displayExpr: 'Name',
+                showSelectionControls: true,
+                applyValueMode: 'useButtons',
+                searchEnabled: true,
+                onValueChanged(e) {
+                    cellInfo.setValue(e.value);
+                },
+                onSelectionChanged() {
+                    cellInfo.component.updateDimensions();
+                },
+            });
+        }
+
+        function LoadProducts() {
+            $(() => {
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "Product" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Product/Load`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/Product/Add`,
+                        updateUrl: `${url}/Admin/Product/Update`,
+                        deleteUrl: `${url}/Admin/Product/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: true,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                         @if(permissions.Find(p => p.Name == "Product" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Product" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Product" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        popup: {
+                            title: 'Sản phẩm',
+                            showTitle: true,
+                            width: 800,
+                            height: 'auto',
+                        },
+                        form: {
+                            items: [
+                                {
+                                    itemType: 'group',
+                                    colCount: 1,
+                                    colSpan: 2,
+                                    items: ['Name', 'Categories', 'ImageSrc', {
+                                        dataField: 'Price',
+                                        editorType: 'dxNumberBox',
+                                        isRequired: true,
+                                        editorOptions: {
+                                            value: 0,
+                                            showClearButton: true,
+                                            showSpinButtons: true,
+                                            min: 0,
+                                            mode: 'number',
+                                        },
+                                    }, {
+                                        dataField: 'Amount',
+                                        editorType: 'dxNumberBox',
+                                        isRequired: true,
+                                        editorOptions: {
+                                            value: 0,
+                                            showClearButton: true,
+                                            showSpinButtons: true,
+                                            min: 0,
+                                            mode: 'number',
+                                        },
+                                        }, {
+                                        dataField: 'Discount',
+                                            editorType: 'dxNumberBox',
+                                            editorOptions: {
+                                                value: 0,
+                                                showClearButton: true,
+                                                showSpinButtons: true,
+                                                min: 0,
+                                                mode: 'number',
+                                            },
+                                        }, 'Brand', 'Origin',],
+                                }, {
+                                    itemType: 'group',
+                                    colCount: 1,
+                                    colSpan: 2,
+                                    items: [
+                                        {
+                                            dataField: 'SoonRelease',
+                                            editorType: 'dxSelectBox',
+                                            editorOptions: {
+                                                dataSource: ["false", "true"],
+                                                value: "false"
+                                            }
+                                        }, {
+                                            dataField: 'SupplierId',
+                                        }, {
+                                            dataField: 'AuthorId',
+                                        }, {
+                                            dataField: 'CoverId',
+                                        }, {
+                                            dataField: 'PublisherId',
+                                        }
+                                    ],
+                                }],
+                        },
+                    },
+                    wordWrapEnabled: true,
+                    columnResizingMode: 'widget',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'ImageSrc',
+                            caption: 'Ảnh',
+                            cellTemplate(container, options) {
+                                $('<div>')
+                                    .append($('<img>', { src: options.value, class: 'w-100' }))
+                                    .appendTo(container);
+                            },
+                            width: 100,
+                            fixed: true,
+                            allowFiltering: false,
+                            editCellTemplate: (cellElement, cellInfo) => {
+                                console.log([cellElement, cellInfo])
+                                return $('<div>').dxFileUploader({
+                                    accept: 'image/*',
+                                    uploadMode: 'instantly',
+                                    name: 'imageFile',
+                                    uploadUrl: `${url}/Admin/UploadImage`,
+                                    onUploaded: (e) => {
+                                        cellInfo.setValue(JSON.parse(e.request.response).url)
+                                    }
+                                });
+                            },
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'Categories',
+                            caption: "Loại",
+                            width: 200,
+                            editCellTemplate: tagBoxEditorTemplate,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Category/GetCategories`,
+                                }),
+                                displayExpr: 'Name',
+                            },
+                            validationRules: [{ type: 'required' }],
+                            cellTemplate(container, options) {
+                                const noBreakSpace = '\u00A0';
+                                const text = (options.value || []).map((element) => {
+                                    return element.Name
+                                }).join(', ');
+                                container.text(text || noBreakSpace).attr('title', text);
+                            },
+                        }, {
+                            dataField: 'Name',
+                            caption: 'Tên sản phẩm',
+                            dataType: 'string',
+                            width: 320,
+                            fixed: true,
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'Price',
+                            caption: 'Giá',
+                            format: 'fixedPoint',
+                            dataType: 'number',
+                            width: 100,
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'SoonRelease',
+                            caption: 'Sắp phát hành',
+                            dataType: 'string',
+                            width: 140,
+                        }, {
+                            dataField: 'StockAvailable',
+                            caption: 'Trạng thái kho',
+                            dataType: 'string',
+                            width: 140,
+                        }, {
+                            dataField: 'SupplierId',
+                            caption: 'Nhà cung cấp',
+                            dataType: 'string',
+                            width: 120,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Supplier/GetSuppliers`,
+                                    useDefaultSearch: false,
+                                    loadMode: 'raw'
+                                }),
+                                displayExpr: 'Name',
+                                valueExpr: 'Id',
+                            }
+                        }, {
+                            dataField: 'AuthorId',
+                            caption: 'Tác giả',
+                            dataType: 'string',
+                            width: 160,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Author/GetAuthors`,
+                                    useDefaultSearch: false,
+                                    loadMode: 'raw'
+                                }),
+                                displayExpr: 'Name',
+                                valueExpr: 'Id',
+                            }
+                        }, {
+                            dataField: 'CoverId',
+                            caption: 'Loại bìa',
+                            dataType: 'string',
+                            width: 120,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Cover/GetCovers`,
+                                    useDefaultSearch: false,
+                                    loadMode: 'raw'
+                                }),
+                                displayExpr: 'Name',
+                                valueExpr: 'Id',
+                            }
+                        }, {
+                            dataField: 'Amount',
+                            caption: 'Số lượng',
+                            dataType: 'number',
+                            width: 100,
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'Discount',
+                            caption: 'Giảm giá (%)',
+                            dataType: 'number',
+                            width: 120,
+                        }, {
+                            dataField: 'PublisherId',
+                            caption: 'Nhà xuất bản',
+                            dataType: 'string',
+                            width: 120,
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/Publisher/GetPublishers`,
+                                    useDefaultSearch: false,
+                                    loadMode: 'raw'
+                                }),
+                                displayExpr: 'Name',
+                                valueExpr: 'Id',
+                            }
+                        }, {
+                            dataField: 'Brand',
+                            caption: 'Thương hiệu',
+                            dataType: 'string',
+                            width: 120,
+                        }, {
+                            dataField: 'Origin',
+                            caption: 'Xuất xứ',
+                            dataType: 'string',
+                            width: 100,
+                        },
+                        {
+                            type: 'buttons',
+                            width: 'auto',
+                            buttons: ['edit', 'delete', {
+                                hint: 'Hiển thị Thông tin sản phẩm',
+                                icon: 'detailslayout',
+                                onClick(e) {
+                                    const popup = $('#popup')
+                                        .dxPopup({
+                                            width: 600,
+                                            height: 'auto',
+                                            visible: false,
+                                            title: 'Thông tin sản phẩm',
+                                            hideOnOutsideClick: true,
+                                            showCloseButton: true,
+                                            resizeEnabled: true,
+                                            toolbarItems: [{
+                                                widget: 'dxButton',
+                                                toolbar: 'bottom',
+                                                location: 'after',
+                                                options: {
+                                                    text: 'Chỉnh sửa',
+                                                    onClick() {
+                                                        const popupProduct = $('#popup-product')
+                                                            .dxPopup({
+                                                                width: 600,
+                                                                height: 'auto',
+                                                                visible: false,
+                                                                resizeEnabled: true,
+                                                                fullScreen: true,
+                                                                title: 'Thông tin sản phẩm',
+                                                                hideOnOutsideClick: true,
+                                                                showCloseButton: true,
+                                                                wrapperAttr: {
+                                                                    class: 'content-no-padding'
+                                                                },
+                                                                contentTemplate() {
+                                                                    const $scrollView = $('<div/>');
+
+                                                                    const editorInstance = $scrollView.dxHtmlEditor({
+                                                                        height: '100%',
+                                                                        value: e.row.data.Table,
+                                                                        toolbar: {
+                                                                            items: [
+                                                                                'undo', 'redo', 'separator',
+                                                                                {
+                                                                                    name: 'size',
+                                                                                    acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
+                                                                                    options: { inputAttr: { 'aria-label': 'Font size' } },
+                                                                                },
+                                                                                {
+                                                                                    name: 'font',
+                                                                                    acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
+                                                                                    options: { inputAttr: { 'aria-label': 'Font family' } },
+                                                                                },
+                                                                                'separator', 'bold', 'italic', 'strike', 'underline', 'separator',
+                                                                                'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'separator',
+                                                                                'orderedList', 'bulletList', 'separator',
+                                                                                {
+                                                                                    name: 'header',
+                                                                                    acceptedValues: [false, 1, 2, 3, 4, 5],
+                                                                                    options: { inputAttr: { 'aria-label': 'Header' } },
+                                                                                }, 'separator',
+                                                                                'color', 'background', 'separator',
+                                                                                'link', 'separator',
+                                                                                'clear', 'codeBlock', 'blockquote', 'separator',
+                                                                                'insertTable', 'deleteTable',
+                                                                                'insertRowAbove', 'insertRowBelow', 'deleteRow',
+                                                                                'insertColumnLeft', 'insertColumnRight', 'deleteColumn',
+                                                                                {
+                                                                                    widget: 'dxButton',
+                                                                                    options: {
+                                                                                        text: 'Lưu',
+                                                                                        stylingMode: 'text',
+                                                                                        onClick() {
+                                                                                            axios({
+                                                                                                url: `${url}/Admin/Product/SaveTable`,
+                                                                                                method: 'POST',
+                                                                                                data: {
+                                                                                                    Id: e.row.data.Id,
+                                                                                                    Table: editorInstance.option('value')
+                                                                                                }
+                                                                                            }).then(() => {
+                                                                                                dataGrid.refresh()
+                                                                                                toast.option({ message: "Lưu thành công!!!", type: "success" });
+                                                                                                toast.show();
+                                                                                            }).catch(() => {
+                                                                                                toast.option({ message: "Lưu thât bại!!!", type: "error" });
+                                                                                                toast.show();
+                                                                                            })
+                                                                                        },
+                                                                                    },
+                                                                                },
+                                                                            ],
+                                                                        },
+                                                                        mediaResizing: {
+                                                                            enabled: true,
+                                                                        },
+                                                                    }).dxHtmlEditor('instance');
+                                                                    return $scrollView;
+                                                                }
+                                                            })
+                                                            .dxPopup('instance');
+                                                        popup.hide()
+                                                        popupProduct.show()
+                                                    },
+                                                },
+                                            }],
+                                            contentTemplate() {
+                                                const $scrollView = $('<div/>');
+
+                                                $scrollView.append($('<div/>').html(e.row.data.Table));
+
+
+                                                return $scrollView;
+                                            }
+                                        })
+                                        .dxPopup('instance');
+
+                                    popup.show()
+                                },
+                            }, {
+                                    hint: 'Hiển thị Mô tả',
+                                    icon: 'description',
+                                    onClick(e) {
+                                        const popup = $('#popup')
+                                            .dxPopup({
+                                                width: 600,
+                                                height: 'auto',
+                                                visible: false,
+                                                title: 'Mô tả sản phẩm',
+                                                hideOnOutsideClick: true,
+                                                showCloseButton: true,
+                                                resizeEnabled: true,
+                                                toolbarItems: [{
+                                                    widget: 'dxButton',
+                                                    toolbar: 'bottom',
+                                                    location: 'after',
+                                                    options: {
+                                                        text: 'Chỉnh sửa',
+                                                        onClick() {
+                                                            const popupProduct = $('#popup-product')
+                                                                .dxPopup({
+                                                                    width: 600,
+                                                                    height: 'auto',
+                                                                    visible: false,
+                                                                    resizeEnabled: true,
+                                                                    fullScreen: true,
+                                                                    title: 'Mô tả sản phẩm',
+                                                                    hideOnOutsideClick: true,
+                                                                    showCloseButton: true,
+                                                                    wrapperAttr: {
+                                                                        class: 'content-no-padding'
+                                                                    },
+                                                                    contentTemplate() {
+                                                                        const $scrollView = $('<div/>');
+
+                                                                        const editorInstance = $scrollView.dxHtmlEditor({
+                                                                            height: '100%',
+                                                                            value: e.row.data.Desc,
+                                                                            toolbar: {
+                                                                                items: [
+                                                                                    'undo', 'redo', 'separator',
+                                                                                    {
+                                                                                        name: 'size',
+                                                                                        acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
+                                                                                        options: { inputAttr: { 'aria-label': 'Font size' } },
+                                                                                    },
+                                                                                    {
+                                                                                        name: 'font',
+                                                                                        acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
+                                                                                        options: { inputAttr: { 'aria-label': 'Font family' } },
+                                                                                    },
+                                                                                    'separator', 'bold', 'italic', 'strike', 'underline', 'separator',
+                                                                                    'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'separator',
+                                                                                    'orderedList', 'bulletList', 'separator',
+                                                                                    {
+                                                                                        name: 'header',
+                                                                                        acceptedValues: [false, 1, 2, 3, 4, 5],
+                                                                                        options: { inputAttr: { 'aria-label': 'Header' } },
+                                                                                    }, 'separator',
+                                                                                    'color', 'background', 'separator',
+                                                                                    'link', 'separator',
+                                                                                    'clear', 'codeBlock', 'blockquote', 'separator',
+                                                                                    'insertTable', 'deleteTable',
+                                                                                    'insertRowAbove', 'insertRowBelow', 'deleteRow',
+                                                                                    'insertColumnLeft', 'insertColumnRight', 'deleteColumn',
+                                                                                    {
+                                                                                        widget: 'dxButton',
+                                                                                        options: {
+                                                                                            text: 'Lưu',
+                                                                                            stylingMode: 'text',
+                                                                                            onClick() {
+                                                                                                axios({
+                                                                                                    url: `${url}/Admin/Product/SaveDesc`,
+                                                                                                    method: 'POST',
+                                                                                                    data: {
+                                                                                                        Id: e.row.data.Id,
+                                                                                                        Desc: editorInstance.option('value')
+                                                                                                    }
+                                                                                                }).then(() => {
+                                                                                                    dataGrid.refresh()
+                                                                                                    toast.option({ message: "Lưu thành công!!!", type: "success" });
+                                                                                                    toast.show();
+                                                                                                }).catch(() => {
+                                                                                                    toast.option({ message: "Lưu thât bại!!!", type: "error" });
+                                                                                                    toast.show();
+                                                                                                })
+                                                                                            },
+                                                                                        },
+                                                                                    },
+                                                                                ],
+                                                                            },
+                                                                            mediaResizing: {
+                                                                                enabled: true,
+                                                                            },
+                                                                        }).dxHtmlEditor('instance');
+                                                                        return $scrollView;
+                                                                    }
+                                                                })
+                                                                .dxPopup('instance');
+                                                            popup.hide()
+                                                            popupProduct.show()
+                                                        },
+                                                    },
+                                                }],
+                                                contentTemplate() {
+                                                    const $scrollView = $('<div/>');
+
+                                                    $scrollView.append($('<div/>').html(e.row.data.Desc));
+
+
+                                                    return $scrollView;
+                                                }
+                                            })
+                                            .dxPopup('instance');
+
+                                        popup.show()
+                                    }
+                                }, {
+                                    hint: 'Hiển thị Mô tả',
+                                    icon: 'image',
+                                    onClick(e) {
+                                        const popup = $('#popup')
+                                            .dxPopup({
+                                                width: 600,
+                                                visible: false,
+                                                wrapperAttr: {
+                                                    class: "content-overflow-hidden"
+                                                },
+                                                title: 'Thông tin sản phẩm',
+                                                hideOnOutsideClick: true,
+                                                showCloseButton: true,
+                                                resizeEnabled: true,
+                                                contentTemplate() {
+
+                                                    const dataGalleries = $('<div>').dxDataGrid({
+                                                        dataSource: e.row.data.Galleries,
+                                                        keyExpr: 'Source',
+                                                        editing: {
+                                                            mode: 'row',
+                                                            allowUpdating: false,
+                                                            allowDeleting: true,
+                                                            allowAdding: false,
+                                                            useIcons: true
+                                                        },
+                                                        elementAttr: {
+                                                            class: 'pb-5 no-free-space'
+                                                        },
+                                                        height: '100%',
+                                                        columnResizingMode: 'widget',
+                                                        allowColumnResizing: true,
+                                                        onRowRemoving(e2) {
+                                                            axios({
+                                                                url: `${url}/Admin/Product/DeleteGallery`,
+                                                                method: 'POST',
+                                                                data: {
+                                                                    Id: e.row.data.Id,
+                                                                    Source: e2.data.Source
+                                                                }
+                                                            }).then(() => {
+                                                                toast.option({ message: "Lưu thành công!!!", type: "success" });
+                                                                toast.show();
+                                                            }).catch((e) => {
+                                                                e2.cancel = true
+                                                                toast.option({ message: "Lưu thât bại!!!", type: "error" });
+                                                                toast.show();
+                                                            })
+                                                        },
+                                                        columns: [{
+                                                            alignment: 'center',
+                                                            dataField: 'Source',
+                                                            cellTemplate(container, options) {
+                                                                $('<div>')
+                                                                    .append($('<img>', { src: options.value, style: "width: 100px;height: 100px" }))
+                                                                    .appendTo(container);
+                                                            },
+                                                        }, {
+                                                            type: 'buttons',
+                                                            width: 'auto',
+                                                            buttons: [{
+                                                                hint: 'Xóa',
+                                                                icon: 'trash',
+                                                                onClick(e2) {
+                                                                    const dataGalleriesInstance = dataGalleries.dxDataGrid('instance')
+                                                                    dataGalleriesInstance.deleteRow(e2.row.rowIndex)
+                                                                }
+                                                            }]
+                                                        }],
+                                                        showBorders: true,
+                                                        showRowLines: true,
+                                                    })
+
+                                                    return $('<div>').addClass('d-flex flex-column h-100').append($('<div>').dxFileUploader({
+                                                        accept: 'image/*',
+                                                        multiple: true,
+                                                        name: 'imageFile',
+                                                        uploadUrl: `${url}/Admin/UploadImage`,
+                                                        onUploaded: (e2) => {
+                                                            axios({
+                                                                url: `${url}/Admin/Product/AddGallery`,
+                                                                method: 'POST',
+                                                                data: {
+                                                                    Id: e.row.data.Id,
+                                                                    Source: JSON.parse(e2.request.response).url
+                                                                }
+                                                            }).then(() => {
+                                                                const dataGalleriesInstance = dataGalleries.dxDataGrid('instance')
+                                                                var dataSource = dataGalleriesInstance.getDataSource();
+                                                                dataSource.store().insert({
+                                                                    Source: JSON.parse(e2.request.response).url
+                                                                }).then(function () {
+                                                                    dataSource.reload();
+                                                                    dataGalleriesInstance.saveEditData()
+                                                                })
+                                                                toast.option({ message: "Lưu thành công!!!", type: "success" });
+                                                                toast.show();
+                                                            }).catch((e) => {
+                                                                console.log(e)
+                                                                toast.option({ message: "Lưu thât bại!!!", type: "error" });
+                                                                toast.show();
+                                                            })
+                                                        }
+                                                    })).append(dataGalleries)
+                                                }
+                                            })
+                                            .dxPopup('instance');
+
+                                        popup.show()
+                                    },
+                                }],
+                        }
+                    ],
+                    toolbar: {
+                        items: [
+                            'groupPanel',
+                            @if(permissions.Find(p => p.Name == "Product" && p.Function == "Create") != null)
+                            {
+                                @Html.Raw(@"{
+                                    location: 'after',
+                                    widget: 'dxButton',
+                                    options: {
+                                        icon: 'file',
+                                        onClick(e) {
+                                            const handle = (e) => {
+                                                const form = document.querySelector('#importExcelForm')
+                                                const formData = new FormData(form)
+
+                                                axios({
+                                                    url: '/Admin/Product/UploadExcel',
+                                                    method: 'POST',
+                                                    data: formData
+                                                }).then(() => {
+                                                    toast.option({ message: 'Lưu thành công!!!', type: 'success' });
+                                                    toast.show();
+                                                    dataGrid.refresh()
+                                                }
+                                                ).catch((e) => {
+                                                    console.log(e)
+                                                    toast.option({ message: 'Lưu thât bại!!!', type: 'error' });
+                                                    toast.show();
+                                                })
+                                                            
+                                                    document.querySelector('#importExcelForm_file').value = null
+                                                document.querySelector('#importExcelForm_file').removeEventListener('change', handle)
+                                            }
+                                            document.querySelector('#importExcelForm_file').addEventListener('change', handle)
+                                            document.querySelector('#importExcelForm_file').click()
+                                        },
+                                    },
+                                },")
+                            }
+                            
+                            'addRowButton',
+                            'searchPanel',]
+                    },
+                }).dxDataGrid('instance');
+            })
+        }
+
+
+    </script>
+}
+
+@*Desc = x.Desc,
+    Table = x.Table,*@

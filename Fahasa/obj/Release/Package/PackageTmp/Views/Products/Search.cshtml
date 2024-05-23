@@ -1,0 +1,1020 @@
+﻿@using Fahasa.Models
+@{
+    ViewBag.Title = "Tìm kiếm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var brands = ViewData["brands"] as List<string>;
+    var origins = ViewData["origins"] as List<string>;
+    var publishers = ViewData["publishers"] as List<Publisher>;
+    var suppliers = ViewData["suppliers"] as List<Supplier>;
+    var authors = ViewData["authors"] as List<Author>;
+    var covers = ViewData["covers"] as List<Cover>;
+    var categories = ViewData["categories"] as List<Category>;
+    var prices = ViewData["prices"] as List<FilterPrice>;
+    var products = ViewData["products"] as List<Product>;
+    var first = int.Parse(ViewData["first"].ToString());
+    var last = int.Parse(ViewData["last"].ToString());
+    var current = int.Parse(ViewData["current"].ToString());
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/redux@4.2.1/dist/redux.min.js"></script>
+@Styles.Render("~/Content/search.css")
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<style>
+    .dx-slider-handle {
+        background-color: #337ab7;
+        width: 14px;
+        height: 14px;
+        transform: translateY(50%);
+        border-radius: 50%;
+    }
+
+    .dx-texteditor.dx-state-active.dx-editor-filled,
+    .dx-texteditor.dx-state-active.dx-editor-outlined,
+    .dx-texteditor.dx-state-active.dx-editor-underlined,
+    .dx-texteditor.dx-state-focused.dx-editor-filled,
+    .dx-texteditor.dx-state-focused.dx-editor-outlined,
+    .dx-texteditor.dx-state-focused.dx-editor-underlined,
+    .dx-texteditor.dx-state-hover.dx-editor-filled,
+    .dx-texteditor.dx-state-hover.dx-editor-outlined,
+    .dx-texteditor.dx-state-hover.dx-editor-underlined {
+        border-color: #C92127;
+    }
+
+    .dx-slider-range.dx-slider-range-visible {
+        border: 1px solid #C92127;
+        background: #C92127;
+    }
+
+    .dx-slider-handle,
+    .dx-slider .dx-state-focused.dx-slider-handle:not(.dx-state-active),
+    .dx-slider .dx-state-hover.dx-slider-handle:not(.dx-state-active),
+    .dx-slider .dx-state-active.dx-slider-handle {
+        background: #C92127;
+    }
+
+    .block.block-layered-nav.show .block-content {
+        display: block;
+    }
+
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</style>
+
+<div class="main">
+    <div class="col-main">
+        <div class="container-1">
+            <div class="container-inner">
+                <div class="d-flex justify-content-center flex-wrap">
+                    <div class="col-left sidebar col-lg-3 col-md-3 col-sm-12 col-xs-12 left-panel" style="padding-left: 0px;">
+                        <div class="mb-left w-100">
+                            <div class="mb-mana-catalogsearch-leftnav">
+                                <div class="block block-layered-nav">
+                                    <div class="block-title">
+                                        <strong>
+                                            <span>Lọc theo</span>
+                                        </strong>
+                                        <span class="left-sidebar-action">▼</span>
+                                    </div>
+                                    <div class="block-content catalog-list catalog-list-default">
+                                        <dl class="narrow-by-list" id="narrow-by-list-cat_1">
+                                            <dt class="even" data-id="m_left_book_layout_filter">Danh mục chính</dt>
+                                            <dd class="even">
+                                                <ol class="m-filter-css-checkboxes auto-maxheight" id="list-category-filter">
+                                                    @{ List<string> categories2 = new List<string> {
+                                                           "Sách tiếng Việt",
+                                                           "Foreign books",
+                                                           "Văn phòng phẩm - Dụng Cụ Học Sinh",
+                                                           "Đồ Chơi",
+                                                           "Bách Hóa Tổng Hợp",
+                                                           "Lưu Niệm",
+                                                           "Làm Đẹp - Sức Khỏe",
+                                                           "Sản Phẩm Hội Sách"
+                                                       }; }
+
+                                                    @foreach (var item in categories2)
+                                                    {
+                                                        <li>
+                                                            <label for="categories_@item" key="categories" value="@item" class="d-flex">
+                                                                <input type="checkbox" class="checkbox-attr" id="categories_@item" onchange="addFilterActionDom('#list-category-filter', 'any')">
+                                                                <span key="categories" value="@item" class="cursor-pointer m-checkbox-unchecked flex-fill" title="@item">@item</span>
+                                                            </label>
+                                                        </li>
+                                                    }
+                                                </ol>
+                                            </dd>
+                                            <strong onclick="toggleContent('#narrow-by-list-cat_1')">Xem thêm ▼</strong>
+                                        </dl>
+                                        <dl class="narrow-by-list" id="narrow-by-list-price">
+                                            <dt class="even" data-id="m_left_book_layout_filter">Giá</dt>
+                                            <dd class="even">
+                                                <ol class="m-filter-css-checkboxes auto-maxheight" id="list-price-filter">
+                                                    @for (int i = 0; i < prices.Count; i++)
+                                                    {
+                                                        var item = prices[i];
+                                                        if (i == prices.Count - 1)
+                                                        {
+                                                            <li>
+                                                                <label for="price_@i" key="price" value="@Newtonsoft.Json.JsonConvert.SerializeObject(item)" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" hidden name="price" id="price_@i" checked="checked" onchange="addFilterActionDom('#list-price-filter', 'any', this)">
+                                                                    <span class="cursor-pointer m-checkbox-unchecked flex-fill" title="@item.text">@item.text</span>
+                                                                </label>
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <label for="price_@i" key="price" value="@Newtonsoft.Json.JsonConvert.SerializeObject(item)" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" hidden name="price" id="price_@i" onchange="addFilterActionDom('#list-price-filter', 'any', this)">
+                                                                    <span class="cursor-pointer m-checkbox-unchecked flex-fill" title="@item.text">@item.text</span>
+                                                                </label>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                </ol>
+                                            </dd>
+
+                                            <p> Hoặc chọn mức giá phù hợp </p>
+                                            <div class="dx-fieldset m-0">
+                                                <div class="d-flex">
+                                                    <div class="dx-field-value">
+                                                        <div id="start-value"></div>
+                                                    </div>
+                                                    <div class="dx-field-value">
+                                                        <div id="end-value"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="dx-field">
+                                                    <div id="slider-on-handle-move"></div>
+                                                </div>
+                                            </div>
+                                            @*<form id="price-range-input">
+                                                    <input name="min" value="0" type="text" onchange="onChangeSubmitPrice(this)"
+                                                           onkeyup="onChangeMoney(this)" class="form-control range-input min-input">
+                                                    <div class="range-input-separator"> - </div>
+                                                    <input name="max" value="0" type="text" onchange="onChangeSubmitPrice(this)"
+                                                           onkeyup="onChangeMoney(this)" class="form-control range-input max-input">
+                                                </form>
+                                                <div id="price-range" class="range-slider">
+                                                    <input type="range" min="0" max="10000000"
+                                                           step="1000" value="25" disabled="">
+                                                    <input type="range" min="0" max="10000000" step="1000"
+                                                           value="75" disabled="">
+                                                    <div role="slider" class="range-slider__thumb" data-lower="" style="left: calc(0% + 8px);"
+                                                         aria-valuemin="0" aria-valuemax="10000000" aria-valuenow="0" aria-valuetext="0"
+                                                         aria-disabled="false" tabindex="0"></div>
+                                                    <div role="slider" class="range-slider__thumb" data-upper="" style="left: calc(0% + 8px);"
+                                                         aria-valuemin="0" aria-valuemax="10000000" aria-valuenow="0" aria-valuetext="0"
+                                                         aria-disabled="false" tabindex="0"></div>
+                                                    <div class="range-slider__range" style="left: 3.28061%; width: 0%;"></div>
+                                                </div>*@
+                                            <div id="price-range-result"></div>
+                                        </dl>
+                                        @if (brands.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-brand">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Thương hiệu</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-brand-filter">
+                                                        @foreach (var item in brands)
+                                                        {
+                                                            <li>
+                                                                <label for="brand_@item" key="brand" value="@item" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="brand_@item" onchange="addFilterActionDom('#list-brand-filter', 'any')">
+                                                                    <span key="brand" value="@item" class="cursor-pointer m-checkbox-unchecked flex-fill" title="@item">@item</span>
+                                                                </label>
+                                                            </li>
+                                                        }
+                                                    </ol>
+                                                </dd>
+                                                @if (brands.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-brand')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                        @if (suppliers.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-noi_san_xuat">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Nơi sản xuất</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-supplier-filter">
+                                                        @foreach (var item in suppliers)
+                                                        {
+                                                            <li>
+                                                                <label key="supplier" for="supplier_@item.Id" value="@item.Id" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="supplier_@item.Id" onchange="addFilterActionDom('#list-supplier-filter', 'any')"><span class="cursor-pointer m-checkbox-unchecked  flex-fill"
+                                                                                                                                                                                                            title="@item.Name">@item.Name</span>
+                                                                                                                                                                                                        </label>
+                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                }
+                                                    </ol>
+                                                </dd>
+                                                @if (suppliers.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-noi_san_xuat')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                        @if (origins.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-origin">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Xuất xứ</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-origin-filter">
+                                                        @foreach (var item in origins)
+                                                        {
+                                                            <li>
+                                                                <label for="origin_@item" key="origin" value="@item" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="origin_@item" onchange="addFilterActionDom('#list-origin-filter', 'any')"><span class="cursor-pointer m-checkbox-unchecked  flex-fill"
+                                                                                                                                                                                                     title="@item">@item</span>
+                                                                                                                                                                                                </label>
+                                                                                                                                                                                            </li>
+                                                                                                                                                                                        }
+                                                    </ol>
+                                                </dd>
+                                                @if (origins.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-origin')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                        @if (publishers.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-publisher">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Nhà phát hành</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-publisher-filter">
+                                                        @foreach (var item in publishers)
+                                                        {
+                                                            <li>
+                                                                <label for="publisher_@item.Id" key="publisher" value="@item.Id" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="publisher_@item.Id" onchange="addFilterActionDom('#list-publisher-filter', 'any')"><span class="cursor-pointer m-checkbox-unchecked  flex-fill"
+                                                                                                                                                                                                              title="@item.Name">@item.Name</span>
+                                                                                                                                                                                                        </label>
+                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                }
+                                                    </ol>
+                                                </dd>
+                                                @if (publishers.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-publisher')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                        @if (authors.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-author">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Tác giả</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-author-filter">
+                                                        @foreach (var item in authors)
+                                                        {
+                                                            <li>
+                                                                <label for="author_@item.Id" key="author" value="@item.Id" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="author_@item.Id" onchange="addFilterActionDom('#list-author-filter', 'any')"><span class="cursor-pointer m-checkbox-unchecked  flex-fill"
+                                                                                                                                                                                                        title="@item.Name">@item.Name</span>
+                                                                                                                                                                                                    </label>
+                                                                                                                                                                                                </li>
+                                                                                                                                                                                            }
+                                                    </ol>
+                                                </dd>
+                                                @if (authors.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-author')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                        @if (covers.Count > 0)
+                                        {
+                                            <dl class="narrow-by-list" id="narrow-by-list-covers">
+                                                <dt class="even" data-id="m_left_book_layout_filter">Bảo hành</dt>
+                                                <dd class="even">
+                                                    <ol class="m-filter-css-checkboxes auto-maxheight" id="list-cover-filter">
+                                                        @foreach (var item in covers)
+                                                        {
+                                                            <li>
+                                                                <label for="cover_@item.Id" key="cover" value="@item.Id" class="d-flex">
+                                                                    <input type="checkbox" class="checkbox-attr" id="cover_@item.Id" onchange="addFilterActionDom('#list-cover-filter', 'any')"><span class="cursor-pointer m-checkbox-unchecked  flex-fill"
+                                                                                                                                                                                                      title="@item.Name">@item.Name</span>
+                                                                                                                                                                                                </label>
+                                                                                                                                                                                            </li>
+                                                                                                                                                                                        }
+                                                    </ol>
+                                                </dd>
+
+                                                @if (covers.Count > 6)
+                                                {
+                                                    <strong onclick="toggleContent('#narrow-by-list-covers')">Xem thêm ▼</strong>
+                                                }
+                                            </dl>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-lg-9 col-md-9 col-sm-12 col-xs-12 col-fhs-main-body">
+                        <ul id="admin_messages"></ul>
+                        <div class="mb-content">
+                            <div class="mb-search-result">
+                                <div class="page-title">
+                                    <h1 id="count-search">
+                                        Kết quả tìm kiếm với: @ViewData["q"] <strong>(@ViewData["count"] kết quả)</strong>
+                                    </h1>
+                                </div>
+                                <div class="category-products row">
+                                    <div class="toolbar-top m-0">
+                                        <div class="toolbar  col-sm-12 col-xs-12 col-md-12 ">
+                                            <div class="sorter col-sm-6 col-xs-12 col-md-6 ">
+                                                <p class="view-mode"></p>
+                                                <div class="abc-xyz">
+                                                    <div class="dropdownfhs-text hidden-xs">
+                                                        <p>Sắp xếp theo :</p>
+                                                    </div>
+                                                    <div class="sort-by dropdownfhs dropdownfhs-select">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pager col-sm-6 col-xs-12 col-md-6 hidden-xs">
+                                                <div class="hidden-sm hidden-xs">
+                                                    <div class="limiter hidden1-xs">
+                                                        <div class="select-sort-by dropdownfhs">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="products-grid fhs-top ms-0 p-4" id="productShowGrid">
+
+                                        @foreach (var item in products)
+                                        {
+                                            <li>
+                                                @Html.Partial("Client/_SearchProduct", item);
+                                            </li>
+                                        }
+
+                                    </ul>
+                                    <div class="loadpanel"></div>
+                                    <div class="toolbar-bottom">
+                                        <div class="toolbar  col-sm-12 col-xs-12 col-md-12 ">
+                                            <div class="pager col-sm-8 col-xs-12 col-md-10">
+                                                <div class="col-sm-12 col-xs-12 col-md-12" style="margin-top: -3px;">
+                                                    <style>
+                                                        .toolbar .pager .pages li.current {
+                                                            width: 40px;
+                                                        }
+                                                    </style>
+                                                    <div class="pages">
+                                                        <ol id="pagination-search">
+                                                            @if (current != first)
+                                                            {
+                                                                <li onclick="setPaginationPage(1)"><a href="#"><<</a></li>
+                                                            }
+                                                            @for (int i = first; i <= last; i++)
+                                                            {
+                                                                if (current == i)
+                                                                {
+                                                                    <li class="current"><a href="#">@i</a></li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li onclick="setPaginationPage(@i)"><a href="#">@i</a></li>
+                                                                }
+                                                            }
+
+                                                            @if (current != last && last != 0)
+                                                            {
+                                                                <li onclick="setPaginationPage(@last)"><a href="#">>></a></li>
+                                                            }
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="loadingSearch" style="display: none;"></div>
+
+                <link rel="stylesheet" type="text/css"
+                      href="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/css/range-slider.css?q=102535" media="all">
+                @Html.Raw(@"<style>
+          .auto-maxheight {
+            max-height: 240px;
+            overflow: hidden;
+          }
+
+
+          .narrow-by-list strong {
+            margin: 5px;
+            color: #C92127;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+          }
+
+          .cursor-pointer {
+            cursor: pointer;
+          }
+
+          #price-range .range-slider__range {
+            background: #FDC830;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient(to left, #C92127, #ffaa12);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to left, #C92127, #ffaa12);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+          }
+
+          #price-range .range-slider__thumb {
+            /* CSS for thumbs */
+            width: 16px;
+            height: 16px;
+            background-color: #C92127;
+            border: 1.5px solid white;
+          }
+
+          #price-range .range-slider__thumb[data-lower] {
+            /* CSS for lower thumb */
+            background-color: #ffaa12;
+
+          }
+
+          #price-range .range-slider__thumb[data-upper] {
+            /* CSS for upper thumb */
+            background-color: #C92127;
+          }
+
+          #price-range input {
+            display: none;
+          }
+
+          .range-input {
+            display: inline-block;
+            position: relative;
+            width: 40%;
+            text-align: center;
+          }
+
+          .range-input-separator {
+            display: inline-block;
+            width: 10%;
+            text-align: center;
+          }
+
+          #price-range-input {
+            margin-bottom: 10px;
+            display: block;
+          }
+
+          .product-item {
+            transition: 0.1s;
+            height: 360px !important;
+          }
+
+          .product-item:hover {
+            box-shadow: 0px 0px 12px 0px silver;
+          }
+
+          .product-image {
+            height: auto;
+            width: auto;
+          }
+
+          .mb-mana-catalogsearch-leftnav {
+            background-color: white;
+          }
+
+          .left-sidebar-action {
+            display: none;
+            color: #C92127;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 20px;
+            cursor: pointer;
+          }
+
+          .checkbox-attr {
+            height: auto !important;
+            width: auto !important;
+            margin: 5px 5px 5px 0px !important;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border: 1px solid #ccc;
+
+          }
+
+          .checkbox-attr:before {
+            content: """";
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: white;
+            /* Set the background color of the checkbox */
+            border: 1px solid grey;
+            /* Set the border color of the checkbox */
+            border-radius: 3px;
+            /* Rounded corners */
+          }
+
+          /* Change the color of the check symbol when the checkbox is checked */
+          .checkbox-attr:checked::before {
+            background-color: #C92127;
+            /* Set the color of the check symbol */
+            content: ""✓"";
+            /* Unicode character for check symbol */
+            font-size: 14px;
+            text-align: center;
+            line-height: 15px;
+            color: white;
+            /* Set the color of the check symbol */
+          }
+
+          @media only screen and (max-width: 992px) {
+            .left-panel {
+              padding: 0px !important;
+            }
+
+            .form-search-form-suggestion {
+              bottom: 0px !important;
+            }
+
+            .left-sidebar-action {
+              display: block !important;
+            }
+
+            .catalog-list-default {
+              display: none;
+            }
+
+          }
+
+          /* Absolute Center Spinner */
+          .loadingSearch {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: show;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            display: ""none"";
+          }
+
+          /* Transparent Overlay */
+          .loadingSearch:before {
+            content: '';
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(rgba(20, 20, 20, .4), rgba(0, 0, 0, .4));
+            background: -webkit-radial-gradient(rgba(20, 20, 20, .4), rgba(0, 0, 0, .4));
+          }
+
+          /* :not(:required) hides these rules from IE9 and below */
+          .loadingSearch:not(:required) {
+            /* hide ""loadingSearch..."" text */
+            font: 0/0 a;
+            color: transparent;
+            text-shadow: none;
+            background-color: transparent;
+            border: 0;
+          }
+
+          .loadingSearch:not(:required):after {
+            content: '';
+            display: block;
+            font-size: 10px;
+            width: 1em;
+            height: 1em;
+            margin-top: -0.5em;
+            -webkit-animation: spinner 150ms infinite linear;
+            -moz-animation: spinner 150ms infinite linear;
+            -ms-animation: spinner 150ms infinite linear;
+            -o-animation: spinner 150ms infinite linear;
+            animation: spinner 150ms infinite linear;
+            border-radius: 0.5em;
+            -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+            box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+          }
+
+          /* Animation */
+
+          @-webkit-keyframes spinner {
+            0% {
+              -webkit-transform: rotate(0deg);
+              -moz-transform: rotate(0deg);
+              -ms-transform: rotate(0deg);
+              -o-transform: rotate(0deg);
+              transform: rotate(0deg);
+            }
+
+            100% {
+              -webkit-transform: rotate(360deg);
+              -moz-transform: rotate(360deg);
+              -ms-transform: rotate(360deg);
+              -o-transform: rotate(360deg);
+              transform: rotate(360deg);
+            }
+          }
+
+          @-moz-keyframes spinner {
+            0% {
+              -webkit-transform: rotate(0deg);
+              -moz-transform: rotate(0deg);
+              -ms-transform: rotate(0deg);
+              -o-transform: rotate(0deg);
+              transform: rotate(0deg);
+            }
+
+            100% {
+              -webkit-transform: rotate(360deg);
+              -moz-transform: rotate(360deg);
+              -ms-transform: rotate(360deg);
+              -o-transform: rotate(360deg);
+              transform: rotate(360deg);
+            }
+          }
+
+          @-o-keyframes spinner {
+            0% {
+              -webkit-transform: rotate(0deg);
+              -moz-transform: rotate(0deg);
+              -ms-transform: rotate(0deg);
+              -o-transform: rotate(0deg);
+              transform: rotate(0deg);
+            }
+
+            100% {
+              -webkit-transform: rotate(360deg);
+              -moz-transform: rotate(360deg);
+              -ms-transform: rotate(360deg);
+              -o-transform: rotate(360deg);
+              transform: rotate(360deg);
+            }
+          }
+
+          @keyframes spinner {
+            0% {
+              -webkit-transform: rotate(0deg);
+              -moz-transform: rotate(0deg);
+              -ms-transform: rotate(0deg);
+              -o-transform: rotate(0deg);
+              transform: rotate(0deg);
+            }
+
+            100% {
+              -webkit-transform: rotate(360deg);
+              -moz-transform: rotate(360deg);
+              -ms-transform: rotate(360deg);
+              -o-transform: rotate(360deg);
+              transform: rotate(360deg);
+            }
+          }
+                </style>")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loadPanel = $('.loadpanel').dxLoadPanel({
+        shadingColor: 'rgba(0,0,0,0.4)',
+        visible: false,
+        showIndicator: true,
+        showPane: true,
+        shading: true,
+        hideOnOutsideClick: false,
+    }).dxLoadPanel('instance');
+
+    window.toggleContent = function (e) {
+        "240px" == $(e + " .auto-maxheight").css("max-height") ? ($(e + " .auto-maxheight").css("max-height", "fit-content"),
+            $(e + " strong").text("Hiển ít lại ▲")) : ($(e + " .auto-maxheight").css("max-height", "240px"),
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $(e).offset().top
+                }, 500),
+                $(e + " strong").text("Xem thêm ▼"))
+    }
+
+    function reducer(state = {}, action) {
+        switch (action.type) {
+            case 'ADD':
+                return { ...state, ...action.payload }
+            default:
+                return state
+        }
+    }
+
+    const searchDriver = Redux.createStore(reducer)
+
+    window.addFilterActionDom = function (selector, type, el) {
+        let list = document.querySelector(selector).querySelectorAll("label")
+        const key = $(list[0]).attr('key')
+        const values = []
+
+
+        if (selector == "#list-price-filter") {
+
+            const valObj = JSON.parse(el.closest('label').getAttribute('value'))
+            startValue.option('value', valObj.from);
+            endValue.option('value', valObj.to);
+
+        } else {
+            list.forEach(item => {
+                if (item.querySelector('input').checked) {
+                    const value = $(item).attr('value')
+                    values.push(value)
+                }
+            })
+            searchDriver.dispatch({
+                type: 'ADD', payload: {
+                    [key]: {
+                        value: values,
+                        type: type
+                    },
+                    page: {
+                        value: 1,
+                        type: 'value'
+                    }
+                }
+            })
+        }
+    }
+
+    window.setPaginationPage = function (page) {
+        searchDriver.dispatch({
+            type: 'ADD', payload: {
+                page: {
+                    value: page,
+                    type: 'value'
+                }
+            }
+        })
+    }
+
+    function getPriceWithDiscount(Price, Discount) {
+        return parseFloat((Math.floor(Price * (1 - Discount / 100) / 100) * 100).toFixed(0)).toLocaleString('vi-VN');
+    }
+
+    searchDriver.subscribe(_.debounce(() => {
+        const state = searchDriver.getState()
+        loadPanel.show()
+
+        axios({
+            url: window.location.pathname + window.location.search,
+            method: "post",
+            data: {
+                filter: state
+            }
+        }).then(res => {
+            console.log(res)
+            document.querySelector("#productShowGrid").innerHTML = res.data.products.map(item => `<div class="item-inner">
+                                    <div class="ma-box-content">
+                                        <div class="products clearfix">
+                                            <div class="product images-container">
+                                                <a href="/Products/Details/${item.Id}"
+                                                   title="${item.Name}"
+                                                   class="product-image">
+                                                    <span class="product-image">
+                                                        <img src="${item.ImageSrc}"
+                                                             width="270" height="364" class=""
+                                                             alt="${item.Name}">
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <h2 class="product-name-no-ellipsis p-name-list">
+                                            <a href="/Products/Details/${item.Id}"
+                                               title="${item.Name}">${item.Name}</a>
+                                        </h2>
+                                        <div class="price-label">
+                                            <p class="special-price w-100 mb-2">
+                                                <span class="price-label"></span><span class="price m-price-font">${getPriceWithDiscount(item.Price, item.Discount)} đ</span>
+                                                <span class="discount-percent">-${item.Discount}%</span>
+                                            </p>
+                                            <p class="old-price bg-white">
+                                                <span class="price-label"></span><span class="price m-price-font">${item.Price.toLocaleString('vi-VN')} đ</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>`).join("");
+
+            let paginationHTML = "";
+
+            if (res.data.page.current != res.data.page.first) {
+                paginationHTML += `<li onclick="setPaginationPage(1)"><a href="#"><<</a></li>`;
+            }
+            for (let i = res.data.page.first; i <= res.data.page.last; i++) {
+                if (res.data.page.current == i)
+                    paginationHTML += `<li class="current"><a href="#">${i}</a></li>`;
+                else
+                    paginationHTML += `<li onclick="setPaginationPage(${i})"><a href="#">${i}</a></li>`;
+            }
+            if (res.data.page.current != res.data.page.last && res.data.page.last != 0) {
+                paginationHTML += `<li onclick="setPaginationPage(${res.data.page.last})"><a href="#">>></a></li>`;
+            }
+
+            document.querySelector("#pagination-search").innerHTML = paginationHTML
+
+            document.querySelector("#count-search").innerHTML = `Kết quả tìm kiếm với: ${res.data.q} <strong>(${res.data.count} kết quả)</strong>`
+        }).catch(e => {
+            console.log(e)
+        }).finally(() => {
+            loadPanel.hide()
+        })
+    }, 800))
+
+    const onHandleMoveRangeSlider = $('#slider-on-handle-move').dxRangeSlider({
+        min: 0,
+        max: 50000000,
+        start: 0,
+        end: 50000000,
+        step: 10000,
+        valueChangeMode: 'onHandleRelease',
+        onValueChanged({ value, start, end }) {
+            if (start > end) {
+                startValue.option('value', end);
+                endValue.option('value', start);
+
+                searchDriver.dispatch({
+                    type: 'ADD', payload: {
+                        price: {
+                            value: { from: end, to: start },
+                            type: 'any'
+                        },
+                        page: {
+                            value: 1,
+                            type: 'value'
+                        }
+                    }
+                })
+
+            }
+            else {
+                startValue.option('value', start);
+                endValue.option('value', end);
+
+                searchDriver.dispatch({
+                    type: 'ADD', payload: {
+                        price: {
+                            value: { from: start, to: end },
+                            type: 'any'
+                        },
+                        page: {
+                            value: 1,
+                            type: 'value'
+                        }
+                    }
+                })
+            }
+        },
+    }).dxRangeSlider('instance');
+
+    const startValue = $('#start-value').dxNumberBox({
+        value: 0,
+        min: 0,
+        max: 50000000,
+        step: 10000,
+        format: 'fixedPoint',
+        showSpinButtons: true,
+        onValueChanged({ value }) {
+            onHandleMoveRangeSlider.option('start', value);
+        },
+    }).dxNumberBox('instance');
+
+    const endValue = $('#end-value').dxNumberBox({
+        value: 50000000,
+        min: 0,
+        max: 50000000,
+        step: 10000,
+        format: 'fixedPoint',
+        showSpinButtons: true,
+        onValueChanged({ value }) {
+            onHandleMoveRangeSlider.option('end', value);
+        },
+    }).dxNumberBox('instance');
+
+    var sortBy = $('.sort-by.dropdownfhs.dropdownfhs-select').dxSelectBox({
+        items: [
+            {
+                id: 1,
+                text: 'Sắp xếp theo',
+                direction: '',
+                value: ''
+            },
+            {
+                id: 2,
+                text: 'Giảm giá',
+                direction: 'desc',
+                value: 'discount'
+            },
+            {
+                id: 3,
+                text: 'Giá Bán (Thấp -> Cao)',
+                direction: 'asc',
+                value: 'price'
+            },
+            {
+                id: 4,
+                text: 'Giá Bán (Cao -> Thấp)',
+                direction: 'desc',
+                value: 'price'
+            },
+            {
+                id: 5,
+                text: 'Mới nhất',
+                direction: 'desc',
+                value: 'id'
+            },
+        ],
+        valueExpr: 'id',
+        value: 1,
+        displayExpr: 'text',
+        onValueChanged(e) {
+            const valueId = sortBy.option('value')
+            const items = sortBy.option('items')
+            const value = items.find(i => i.id == valueId)
+
+            if (value != null && value.value != '') {
+                searchDriver.dispatch({
+                    type: 'ADD', payload: {
+                        sort: {
+                            value: { field: value.value, direction: value.direction },
+                            type: 'obj'
+                        },
+                        page: {
+                            value: 1,
+                            type: 'value'
+                        }
+                    }
+                })
+            }
+        }
+    }).dxSelectBox('instance');
+
+    $('.select-sort-by.dropdownfhs').dxSelectBox({
+        items: [
+            {
+                text: '12 sản phẩm',
+                count: 12,
+            }, {
+                text: '24 sản phẩm',
+                count: 24,
+            }, {
+                text: '48 sản phẩm',
+                count: 48,
+            },
+        ],
+        value: 48,
+        valueExpr: 'count',
+        displayExpr: 'text',
+        onValueChanged(e) {
+            console.log(e.value)
+
+            if (e.value) {
+                searchDriver.dispatch({
+                    type: 'ADD', payload: {
+                        take: {
+                            value: e.value,
+                            type: 'value'
+                        },
+                        page: {
+                            value: 1,
+                            type: 'value'
+                        }
+                    }
+                })
+            }
+        }
+    });
+
+    document.querySelector(".block.block-layered-nav .block-title").addEventListener("click", (e) => {
+        if (document.querySelector(".block.block-layered-nav.show")) {
+            document.querySelector(".block.block-layered-nav").classList.remove("show")
+        } else {
+            document.querySelector(".block.block-layered-nav").classList.add("show")
+        }
+    })
+</script>

@@ -1,0 +1,72 @@
+﻿@using Fahasa.Models
+@{ 
+    List<CartItem> listCart = Session["Cart"] as List<CartItem>;
+} 
+
+
+<div class="header-1">
+    <div class="top-link top-banner">
+        <div class="top-banner-block">
+            <p>
+                <a href="#">
+                    <img class="w-100" src="/assets/images/trang-tuan-2-ccgcvs-rs-1263x80.png" alt="mua-cang-nhieu-giam-cang-cao">
+                </a>
+            </p>
+        </div>
+    </div>
+    <div class="container-1">
+        <div class="wrapper">
+            <div class="header-main">
+                <div class="header-top">
+                    <div class="row h-100">
+                        <div class="col-3 h-100 d-flex align-items-center justify-content-center">
+                            <div class="logo-store w-100">
+                                <a href="/" title="FAHASA.COM" class="logo w-100 d-inline-block">
+                                    <img src="/assets/images/logo.png" class="w-100" alt="FAHASA.COM">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-7 h-100 col-search" style="height: 46px">
+                            <div class="search-box">
+                                <form action="/Products/Search" method="get">
+                                    <div class="search-input">
+                                        <div class="search">
+                                            <input type="text" name="q" id="search" autocomplete="off" placeholder="Tìm kiếm sản phẩm mong muốn...">
+                                            <button class="button-search">
+                                                <i class=" fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-1 h-100 col-cart">
+                            <a href="/Order" class="d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="cart-top">
+                                    <div class="cart-icon">
+                                        <i class="fad fa-shopping-cart fa-2x"></i>
+                                            @if(listCart != null && listCart.Count > 0)
+                                                {
+
+                                                                            <div class="cart-total">
+                                                                                @Html.Raw(listCart.Count)
+                                                                            </div>
+                                                } 
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-1 h-100 ">
+                            <div class="d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="cart-top header-user-btn">
+                                    <div class="cart-icon d-flex align-items-center justify-content-center flex-column">
+                                        <i class="fad fa-user fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

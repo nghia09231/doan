@@ -1,0 +1,441 @@
+﻿@using System.Web.Optimization;
+@using Fahasa.Models
+@{ Person user = (Person)Session["infoAdmin"];
+}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Areas/Admin/Content/assets/images/favicon.png">
+    <title>Admin</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- DevExtreme theme -->
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.4/css/dx.light.css">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    @RenderSection("htmlEditorScript", required: false)
+    <!-- DevExtreme library -->
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/localization/dx.messages.vi.js"></script>
+    <script src="https://unpkg.com/devextreme-aspnet-data@2.9.2/js/dx.aspnet.data.js"></script>
+
+    <link href="~/Areas/Admin/Content/assets/extra-libs/c3/c3.min.css" rel="stylesheet">
+    <link href="~/Areas/Admin/Content/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="~/Areas/Admin/Content/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <link href="~/Areas/Admin/Content/css/style.css" rel="stylesheet">
+
+
+
+    <script src="~/Areas/Admin/Content/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        DevExpress.localization.locale(navigator.language);
+        tinymce.init({
+            selector: 'textarea',
+            height: 300,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+    </script>
+</head>
+
+<body>
+    <div id="toast"></div>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md">
+                <div class="navbar-header" data-logobg="skin6">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-brand">
+                        <!-- Logo icon -->
+                        <a href="~/Admin/DashBoard/Index">
+                            <b class="logo-icon">
+                                <!-- Dark Logo icon -->
+                                <img src=@Url.Content("~/Areas/Admin/Content/assets/images/logo.png") alt="homepage" class="dark-logo w-100" />
+                                <!-- Light Logo icon -->
+                                <img src=@Url.Content("~/Areas/Admin/Content/assets/images/logo.png") alt="homepage" class="light-logo w-100" />
+                            </b>
+                            <!--End Logo icon -->
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                       data-toggle="collapse" data-target="#navbarSupportedContent"
+                       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+                        <div class="page-breadcrumb p-0">
+                            <div class="row">
+                                <div class="col-12 align-self-center">
+                                    @RenderSection("breadcrumb", required: false)
+                                </div>
+                            </div>
+                        </div>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        @*<li class="nav-item d-none d-md-block">
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <form>
+                                        <div class="customize-input">
+                                            <input class="form-control custom-shadow custom-radius border-0 bg-white"
+                                                   type="search" placeholder="Tìm kiếm..." aria-label="Search">
+                                            <i class="form-control-icon" data-feather="search"></i>
+                                        </div>
+                                    </form>
+                                </a>
+                            </li>*@
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src=@Url.Content("" + user.Avatar) class="rounded-circle" width="40" style="aspect-ratio: 1; object-fit: cover">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <span class="ml-2 d-none d-lg-inline-block">
+                                        <span>Xin Chào,</span> <span class="text-dark">@user.Name</span> <i data-feather="chevron-down" class="svg-icon"></i>
+                                    </span>}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <a class="dropdown-item" href="@Url.Action("EditProfile", "DashBoard")">
+                                    <i data-feather="user" class="svg-icon mr-2 ml-1"></i>
+                                    Thông tin cá nhân
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("ChangePassword", "DashBoard")">
+                                    <i data-feather="power" class="svg-icon mr-2 ml-1"></i>
+                                    Đổi mật khẩu
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <div class="pl-4 p-3">
+                                    <a href="@Url.Action("Logout", "Login")" class="btn btn-sm btn-info">
+                                        Đăng xuất
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar" data-sidebarbg="skin6">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link" href="~/Admin/DashBoard/Index"
+                               aria-expanded="false">
+                                <i data-feather="home" class="feather-icon"></i><span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="list-divider"></li>
+                        <li class="nav-small-cap"><span class="hide-menu">Ứng dụng</span></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/" aria-expanded="false" target="_blank">
+                                <i data-feather="shopping-bag" class="feather-icon"></i><span class="hide-menu">
+                                    Trở lại cửa hàng
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="list-divider"></li>
+                        <li class="nav-small-cap"><span class="hide-menu">Thành phần</span></li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i data-feather="server" class="feather-icon"></i><span class="hide-menu">Danh mục</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Category")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Category/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Thể loại
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Product")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Product/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Sản phẩm
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Supplier")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Supplier/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Nhà cung cấp
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Publisher")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Publisher/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Nhà xuất bản
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Author")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Author/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Tác giả
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Cover")))
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="~/Admin/Cover/Index" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Bìa
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "People")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="/Admin/People/Index"
+                                   aria-expanded="false">
+                                    <i data-feather="user" class="feather-icon"></i><span class="hide-menu">Nhân viên</span>
+                                </a>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Permission" || p.Name == "Group")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                   aria-expanded="false">
+                                    <i data-feather="server" class="feather-icon"></i><span class="hide-menu">Quyền</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse  first-level base-level-line">
+
+                                    @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Group")))
+                                    {
+                                        <li class="sidebar-item">
+                                            <a href="/Admin/UserGroup" class="sidebar-link">
+                                                <span class="hide-menu">
+                                                    Nhóm
+                                                </span>
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Permission")))
+                                    {
+                                        <li class="sidebar-item">
+                                            <a href="/Admin/Permission" class="sidebar-link">
+                                                <span class="hide-menu">
+                                                    Danh sách quyền truy cập
+                                                </span>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Invoice")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="~/Admin/Invoice" aria-expanded="false">
+                                    <i data-feather="shopping-cart" class="feather-icon"></i><span class="hide-menu">Hóa đơn</span>
+                                </a>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Customer")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="~/Admin/Buyer" aria-expanded="false">
+                                    <i data-feather="user" class="feather-icon"></i><span class="hide-menu">Khách hàng</span>
+                                </a>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Discount")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="/Admin/Discount" aria-expanded="false">
+                                    <i data-feather="percent" class="feather-icon"></i><span class="hide-menu">Mã giảm giá</span>
+                                </a>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Import")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="/Admin/Import" aria-expanded="false">
+                                    <i data-feather="inbox" class="feather-icon"></i><span class="hide-menu">Nhập kho</span>
+                                </a>
+                            </li>
+                        }
+                        @if (user.Groups.Any(g => g.Permissions.Any(p => p.Name == "Statistic")))
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                   aria-expanded="false">
+                                    <i data-feather="server" class="feather-icon"></i><span class="hide-menu">Thống kê</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                    <li class="sidebar-item">
+                                        <a href="/Admin/RevenueStatistics" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Doanh thu
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a href="/Admin/CustomerStatistics" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Số lượng khách hàng
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a href="/Admin/SoldProductStatistics" class="sidebar-link">
+                                            <span class="hide-menu">
+                                                Sản phẩm bán chạy
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        <li class="list-divider"></li>
+                    </ul>
+                </nav> <!-- End Sidebar navigation -->
+            </div> <!-- End Sidebar scroll-->
+        </aside> <!-- ============================================================== --> <!-- End Left Sidebar - style you can find in sidebar.scss  --> <!-- ============================================================== --> <!-- ============================================================== --> <!-- Page wrapper  --> <!-- ============================================================== -->
+        <div class="page-wrapper">
+            @RenderBody()
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div> <!-- ============================================================== --> <!-- End Page wrapper  --> <!-- ============================================================== -->
+    </div> <!-- ============================================================== --> <!-- End Wrapper --> <!-- ============================================================== --> <!-- End Wrapper --> <!-- ============================================================== --> <!-- All Jquery --> <!-- ============================================================== -->
+
+    <script src="~/Areas/Admin/Content/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Areas/Admin/Content/js/app-style-switcher.js"></script>
+    <script src="~/Areas/Admin/Content/js/feather.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Areas/Admin/Content/js/sidebarmenu.js"></script>
+    <script src="~/Areas/Admin/Content/js/custom.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/extra-libs/c3/d3.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/extra-libs/c3/c3.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="~/Areas/Admin/Content/assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="~/Areas/Admin/Content/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script type="text/javascript" src="https://apvarun.github.io/toastify-js/src/toastify.js"></script>
+    <script>
+        function Toast(text, duration = 5000, gravity = "bottom", position = "left") {
+            Toastify({
+                text: text || "",
+                duration: duration,
+                newWindow: true,
+                close: true,
+                gravity: gravity,
+                position: position,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
+        }
+    </script>
+
+    @RenderSection("ChartDashboard", required: false)
+    @RenderSection("ChartCovid", required: false)
+    @RenderSection("Chat", required: false)
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

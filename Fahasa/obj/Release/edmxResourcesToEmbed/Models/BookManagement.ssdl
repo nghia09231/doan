@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BookManagement.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="int" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Cover">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Discount">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Value" Type="bigint" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="DateExpired" Type="datetime" />
+    <Property Name="Amount" Type="int" />
+    <Property Name="DateStart" Type="datetime" />
+    <Property Name="ApplyField" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="Used" Type="int" />
+    <Property Name="ConditionalPrice" Type="int" Nullable="false" />
+    <Property Name="ConditionalOperator" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="LimitUsed" Type="int" />
+    <Property Name="SubTitle" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="DiscountOrder">
+    <Key>
+      <PropertyRef Name="DiscountCode" />
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="DiscountCode" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DiscountProduct">
+    <Key>
+      <PropertyRef Name="DiscountCode" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="DiscountCode" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Gallery">
+    <Key>
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="Source" />
+    </Key>
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Source" Type="varchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="GroupPermission">
+    <Key>
+      <PropertyRef Name="GroupId" />
+      <PropertyRef Name="PermissionId" />
+    </Key>
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="PermissionId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Import">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StaffId" Type="int" Nullable="false" />
+    <Property Name="ImportDate" Type="datetime" />
+    <Property Name="Note" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ImportProduct">
+    <Key>
+      <PropertyRef Name="ImportId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ImportId" Type="bigint" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="bigint" Nullable="false" />
+    <Property Name="Amount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderDate" Type="datetime" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="FeeShip" Type="int" />
+    <Property Name="ShipCode" Type="varchar" MaxLength="255" />
+    <Property Name="Status" Type="nvarchar" MaxLength="255" />
+    <Property Name="Street" Type="nvarchar" MaxLength="255" />
+    <Property Name="Ward" Type="nvarchar" MaxLength="255" />
+    <Property Name="District" Type="nvarchar" MaxLength="255" />
+    <Property Name="Province" Type="nvarchar" MaxLength="255" />
+    <Property Name="PaymentMethod" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="OrderId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="money" Nullable="false" />
+    <Property Name="TotalPrice" Type="money" Nullable="false" />
+    <Property Name="Amount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="People">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="10" />
+    <Property Name="Birth" Type="date" />
+    <Property Name="Phone" Type="varchar" MaxLength="11" />
+    <Property Name="Email" Type="varchar" MaxLength="255" />
+    <Property Name="Username" Type="varchar" MaxLength="255" />
+    <Property Name="Password" Type="varchar" MaxLength="255" />
+    <Property Name="GroupId" Type="int" />
+    <Property Name="Lock" Type="bit" />
+    <Property Name="Avatar" Type="varchar" MaxLength="255" />
+    <Property Name="Street" Type="nvarchar" MaxLength="255" />
+    <Property Name="Ward" Type="nvarchar" MaxLength="255" />
+    <Property Name="District" Type="nvarchar" MaxLength="255" />
+    <Property Name="Province" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="PeopleGroup">
+    <Key>
+      <PropertyRef Name="PeopleId" />
+      <PropertyRef Name="GroupId" />
+    </Key>
+    <Property Name="PeopleId" Type="int" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Permission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Function" Type="varchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageSrc" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="Price" Type="bigint" Nullable="false" />
+    <Property Name="SoonRelease" Type="bit" />
+    <Property Name="StockAvailable" Type="varchar" MaxLength="255" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="AuthorId" Type="int" />
+    <Property Name="CoverId" Type="int" />
+    <Property Name="Desc" Type="nvarchar(max)" />
+    <Property Name="Table" Type="nvarchar(max)" />
+    <Property Name="Amount" Type="int" />
+    <Property Name="Discount" Type="int" />
+    <Property Name="PublisherId" Type="int" />
+    <Property Name="Brand" Type="nvarchar" MaxLength="255" />
+    <Property Name="Origin" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ProductCategory">
+    <Key>
+      <PropertyRef Name="ProductId" />
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Address" Type="nvarchar" MaxLength="255" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK__Cart__ProductId__671F4F74">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Cart__UserId__681373AD">
+    <End Role="People" Type="Self.People" Multiplicity="1" />
+    <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DiscountO__Disco__4A8310C6">
+    <End Role="Discount" Type="Self.Discount" Multiplicity="1" />
+    <End Role="DiscountOrder" Type="Self.DiscountOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discount">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="DiscountOrder">
+        <PropertyRef Name="DiscountCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DiscountO__Order__4B7734FF">
+    <End Role="Order" Type="Self.Order" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DiscountOrder" Type="Self.DiscountOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DiscountOrder">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DiscountP__Disco__4CA06362">
+    <End Role="Discount" Type="Self.Discount" Multiplicity="1" />
+    <End Role="DiscountProduct" Type="Self.DiscountProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discount">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="DiscountProduct">
+        <PropertyRef Name="DiscountCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DiscountP__Produ__4D94879B">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="DiscountProduct" Type="Self.DiscountProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DiscountProduct">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Gallery__Product__47DBAE45">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Gallery" Type="Self.Gallery" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Gallery">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__GroupPerm__Group__25518C17">
+    <End Role="Group" Type="Self.Group" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="GroupPermission" Type="Self.GroupPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GroupPermission">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__GroupPerm__Permi__2DE6D218">
+    <End Role="Permission" Type="Self.Permission" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="GroupPermission" Type="Self.GroupPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Permission">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GroupPermission">
+        <PropertyRef Name="PermissionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Import__StaffId__17F790F9">
+    <End Role="People" Type="Self.People" Multiplicity="1" />
+    <End Role="Import" Type="Self.Import" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Import">
+        <PropertyRef Name="StaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ImportPro__Impor__1DB06A4F">
+    <End Role="Import" Type="Self.Import" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ImportProduct" Type="Self.ImportProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Import">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImportProduct">
+        <PropertyRef Name="ImportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ImportPro__Produ__1F98B2C1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="ImportProduct" Type="Self.ImportProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImportProduct">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order__CustomerI__787EE5A0">
+    <End Role="People" Type="Self.People" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Order__7B5B524B">
+    <End Role="Order" Type="Self.Order" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__Produ__5629CD9C">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PeopleGro__Group__2A164134">
+    <End Role="Group" Type="Self.Group" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PeopleGroup" Type="Self.PeopleGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PeopleGroup">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PeopleGro__Peopl__29221CFB">
+    <End Role="People" Type="Self.People" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PeopleGroup" Type="Self.PeopleGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PeopleGroup">
+        <PropertyRef Name="PeopleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__AuthorI__46E78A0C">
+    <End Role="Publisher" Type="Self.Publisher" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Publisher">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="PublisherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__AuthorI__6FE99F9F">
+    <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Publish__5DCAEF64">
+    <End Role="Cover" Type="Self.Cover" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cover">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CoverId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Supplie__656C112C">
+    <End Role="Supplier" Type="Self.Supplier" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Supplier">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="SupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductCa__Categ__74AE54BC">
+    <End Role="Category" Type="Self.Category" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductCategory">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductCa__Produ__44FF419A">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductCategory">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BookManagementStoreContainer">
+    <EntitySet Name="Author" EntityType="Self.Author" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cover" EntityType="Self.Cover" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Discount" EntityType="Self.Discount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DiscountOrder" EntityType="Self.DiscountOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DiscountProduct" EntityType="Self.DiscountProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Gallery" EntityType="Self.Gallery" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupPermission" EntityType="Self.GroupPermission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Import" EntityType="Self.Import" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImportProduct" EntityType="Self.ImportProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="People" EntityType="Self.People" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PeopleGroup" EntityType="Self.PeopleGroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Cart__ProductId__671F4F74" Association="Self.FK__Cart__ProductId__671F4F74">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Cart__UserId__681373AD" Association="Self.FK__Cart__UserId__681373AD">
+      <End Role="People" EntitySet="People" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DiscountO__Disco__4A8310C6" Association="Self.FK__DiscountO__Disco__4A8310C6">
+      <End Role="Discount" EntitySet="Discount" />
+      <End Role="DiscountOrder" EntitySet="DiscountOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DiscountO__Order__4B7734FF" Association="Self.FK__DiscountO__Order__4B7734FF">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="DiscountOrder" EntitySet="DiscountOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DiscountP__Disco__4CA06362" Association="Self.FK__DiscountP__Disco__4CA06362">
+      <End Role="Discount" EntitySet="Discount" />
+      <End Role="DiscountProduct" EntitySet="DiscountProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DiscountP__Produ__4D94879B" Association="Self.FK__DiscountP__Produ__4D94879B">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="DiscountProduct" EntitySet="DiscountProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Gallery__Product__47DBAE45" Association="Self.FK__Gallery__Product__47DBAE45">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Gallery" EntitySet="Gallery" />
+    </AssociationSet>
+    <AssociationSet Name="FK__GroupPerm__Group__25518C17" Association="Self.FK__GroupPerm__Group__25518C17">
+      <End Role="Group" EntitySet="Group" />
+      <End Role="GroupPermission" EntitySet="GroupPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK__GroupPerm__Permi__2DE6D218" Association="Self.FK__GroupPerm__Permi__2DE6D218">
+      <End Role="Permission" EntitySet="Permission" />
+      <End Role="GroupPermission" EntitySet="GroupPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Import__StaffId__17F790F9" Association="Self.FK__Import__StaffId__17F790F9">
+      <End Role="People" EntitySet="People" />
+      <End Role="Import" EntitySet="Import" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ImportPro__Impor__1DB06A4F" Association="Self.FK__ImportPro__Impor__1DB06A4F">
+      <End Role="Import" EntitySet="Import" />
+      <End Role="ImportProduct" EntitySet="ImportProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ImportPro__Produ__1F98B2C1" Association="Self.FK__ImportPro__Produ__1F98B2C1">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ImportProduct" EntitySet="ImportProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order__CustomerI__787EE5A0" Association="Self.FK__Order__CustomerI__787EE5A0">
+      <End Role="People" EntitySet="People" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Order__7B5B524B" Association="Self.FK__OrderDeta__Order__7B5B524B">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetail" EntitySet="OrderDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__Produ__5629CD9C" Association="Self.FK__OrderDeta__Produ__5629CD9C">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="OrderDetail" EntitySet="OrderDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PeopleGro__Group__2A164134" Association="Self.FK__PeopleGro__Group__2A164134">
+      <End Role="Group" EntitySet="Group" />
+      <End Role="PeopleGroup" EntitySet="PeopleGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PeopleGro__Peopl__29221CFB" Association="Self.FK__PeopleGro__Peopl__29221CFB">
+      <End Role="People" EntitySet="People" />
+      <End Role="PeopleGroup" EntitySet="PeopleGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__AuthorI__46E78A0C" Association="Self.FK__Product__AuthorI__46E78A0C">
+      <End Role="Publisher" EntitySet="Publisher" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__AuthorI__6FE99F9F" Association="Self.FK__Product__AuthorI__6FE99F9F">
+      <End Role="Author" EntitySet="Author" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Publish__5DCAEF64" Association="Self.FK__Product__Publish__5DCAEF64">
+      <End Role="Cover" EntitySet="Cover" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Supplie__656C112C" Association="Self.FK__Product__Supplie__656C112C">
+      <End Role="Supplier" EntitySet="Supplier" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductCa__Categ__74AE54BC" Association="Self.FK__ProductCa__Categ__74AE54BC">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="ProductCategory" EntitySet="ProductCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductCa__Produ__44FF419A" Association="Self.FK__ProductCa__Produ__44FF419A">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductCategory" EntitySet="ProductCategory" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

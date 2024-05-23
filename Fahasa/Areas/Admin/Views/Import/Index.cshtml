@@ -1,0 +1,301 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+<style>
+    .master-detail-caption {
+        padding: 0 0 5px 10px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Nhập sản phẩm</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách Nhập sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Nhập sản phẩm</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+<form id="importProductExcelForm" class="d-none" enctype="multipart/form-data">
+    <input name="ImportId" id="importProductExcelForm_ImportId" hidden />
+    <input name="file" id="importProductExcelForm_file" type="file" hidden />
+</form>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            Load();
+        });
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        function Load() {
+            $(() => {
+                const url = window.location.origin;
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "Import" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Import/Get`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/Import/Add`,
+                        updateUrl: `${url}/Admin/Import/Update`,
+                        deleteUrl: `${url}/Admin/Import/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                        @if(permissions.Find(p => p.Name == "Import" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Import" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Import" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        popup: {
+                            height: 'auto',
+                            width: 500,
+                            hideOnOutsideClick: true,
+                        },
+                        form: {
+                            items: [{
+                                itemType: 'group',
+                                colCount: 1,
+                                colSpan: 2,
+                                items: ['StaffId', 'ImportDate', 'Note']
+
+                            }]
+                        }
+                    },
+                    columnResizingMode: 'nextColumn',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            caption: 'Mã phiếu nhập',
+                            sortOrder: 'desc',
+                        },
+                        {
+                            dataField: 'StaffId',
+                            caption: 'Nhân viên nhận',
+                            dataType: 'string',
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: 'Id',
+                                    loadUrl: `${url}/Admin/People/GetPeoples`,
+                                }),
+                                displayExpr: 'Name',
+                                valueExpr: 'Id',
+                            }
+                        },
+                        {
+                            dataField: 'ImportDate',
+                            caption: 'Ngày nhập',
+                            dataType: 'datetime'
+                        },
+                        {
+                            dataField: 'Note',
+                            caption: 'Ghi chú',
+                            dataType: 'string'
+                        },
+                    ],
+                    masterDetail: {
+                        enabled: true,
+                        template(container, options) {
+                            const importPro = options.data;
+
+                            $('<div>')
+                                .addClass('master-detail-caption')
+                                .appendTo(container);
+
+                            const dataGridSub = $('<div>')
+                                .dxDataGrid({
+                                    columnAutoWidth: true,
+                                    showBorders: true,
+                                    editing: {
+                                        mode: 'popup',
+                                        allowAdding: true,
+                                        useIcons: true,
+                                        allowDeleting: true,
+                                        popup: {
+                                            height: 'auto',
+                                            width: 800,
+                                            hideOnOutsideClick: true,
+                                        },
+                                        form: {
+                                            items: [{
+                                                itemType: 'group',
+                                                colCount: 1,
+                                                colSpan: 2,
+                                                items: [{
+                                                    dataField: 'ProductId',
+                                                    editorOptions: {
+                                                        dataSource: DevExpress.data.AspNet.createStore({
+                                                            key: 'Id',
+                                                            loadUrl: `${url}/Admin/Product/Load`,
+                                                            useDefaultSearch: false,
+                                                            loadMode: 'raw'
+                                                        }),
+                                                        displayExpr: "Name",
+                                                        valueExpr: 'Id',
+                                                        searchEnabled: true,
+                                                    },
+                                                    editorType: "dxSelectBox"
+
+                                                }, 'Price', 'Amount']
+                                            }]
+                                        }
+                                    },
+                                    height: 300,
+                                    columns: [{
+                                        dataField: 'ProductId',
+                                        caption: "Mã sản phẩm"
+                                    }, {
+                                        dataField: 'Name',
+                                        dataType: 'string',
+                                        caption: "Tên"
+                                    }, {
+                                        dataField: 'Price',
+                                        format: 'fixedPoint',
+                                        dataType: 'number',
+                                        caption: "Giá"
+                                    }, {
+                                        dataField: 'Amount',
+                                        dataType: 'number',
+                                        caption: "Số lượng"
+                                        },],
+
+                                    toolbar: {
+                                        items: [
+                                            {
+                                                location: 'before',
+                                                template() {
+                                                    return $('<div>').append(`<strong>Phiếu nhập sản phẩm: ${importPro.Id}</strong>`)
+                                                },
+                                            },
+
+
+                                            @if(permissions.Find(p => p.Name == "Import" && p.Function == "Create") != null)
+                                            {
+                                                @Html.Raw(@"{
+                                                    location: 'after',
+                                                    widget: 'dxButton',
+                                                    options: {
+                                                        icon: 'add',
+                                                        onClick() {
+                                                            dataGridSub.dxDataGrid('instance').addRow();
+                                                        },
+                                                    },
+                                                }, {
+                                                    location: 'after',
+                                                    widget: 'dxButton',
+                                                    options: {
+                                                        icon: 'file',
+                                                        onClick() {
+                                                            const handle = (e) => {
+                                                                const form = document.querySelector('#importProductExcelForm')
+                                                                const formData = new FormData(form)
+
+                                                                axios({
+                                                                    url: '/Admin/Import/UploadProductExcel',
+                                                                    method: 'POST',
+                                                                    data: formData
+                                                                }).then(() => {
+                                                                    toast.option({ message: 'Lưu thành công!!!', type: 'success' });
+                                                                    toast.show();
+                                                                    dataGrid.refresh()
+                                                                }
+                                                                ).catch((e) => {
+                                                                    console.log(e)
+                                                                    toast.option({ message: 'Lưu thât bại!!!', type: 'error' });
+                                                                    toast.show();
+                                                                })
+
+                                                                document.querySelector('#importProductExcelForm_file').value = null
+                                                                document.querySelector('#importProductExcelForm_file').removeEventListener('change', handle)
+                                                            }
+                                                            document.querySelector('#importProductExcelForm_file').addEventListener('change', handle)
+                                                            document.querySelector('#importProductExcelForm_file').value = null
+                                                            document.querySelector('#importProductExcelForm_ImportId').value = importPro.Id
+                                                            document.querySelector('#importProductExcelForm_file').click()
+
+                                                        },
+                                                    },
+                                                },")
+                                            }
+                                            ]
+                                    },
+                                    dataSource: DevExpress.data.AspNet.createStore({
+                                        key: 'ProductId',
+                                        loadUrl: `${url}/Admin/Import/GetProducts?ImportId=${importPro.Id}`,
+                                        insertUrl: `${url}/Admin/Import/AddProduct?ImportId=${importPro.Id}`,
+                                        deleteUrl: `${url}/Admin/Import/DeleteProduct?ImportId=${importPro.Id}`,
+                                        onBeforeSend(method, ajaxOptions) {
+                                            ajaxOptions.xhrFields = { withCredentials: true };
+                                        },
+                                    }),
+                                })
+
+
+                                dataGridSub.appendTo(container);
+
+                        },
+                    },
+                }).dxDataGrid('instance');
+            });
+        }
+    </script>
+}

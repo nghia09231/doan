@@ -1,0 +1,165 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Thể loại</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách thể loại sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Thể loại</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+
+<form id="importExcelForm" class="d-none" enctype="multipart/form-data">
+    <input name="file" id="importExcelForm_file" type="file" hidden />
+</form>
+
+
+@section scripts{
+    <script>
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        $(document).ready(function () {
+            LoadDsCategory();
+        });
+
+        function LoadDsCategory() {
+            $(() => {
+                const url = window.location.origin;
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Id',
+                        @if(permissions.Find(p => p.Name == "Category" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Category/DsCategory`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+                        insertUrl: `${url}/Admin/Category/AddCategory`,
+                        updateUrl: `${url}/Admin/Category/Update`,
+                        deleteUrl: `${url}/Admin/Category/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Id',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'form',
+
+                        @if(permissions.Find(p => p.Name == "Category" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Category" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Category" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                    },
+
+                    columnResizingMode: 'nextColumn',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Id',
+                            caption: 'Mã Thể loại',
+                            dataType: 'number',
+                            sortOrder: 'desc',
+                            allowEditing: false,
+                        }, {
+                            dataField: 'Name',
+                            caption: 'Tên thể loại',
+                            dataType: 'string'
+                        },
+                    ], toolbar: {
+                        items: [
+                            'groupPanel',
+                            @if(permissions.Find(p => p.Name == "Category" && p.Function == "Create") != null)
+                            {
+                                @Html.Raw(@"{
+                                                location: 'after',
+                                                widget: 'dxButton',
+                                                options: {
+                                                    icon: 'file',
+                                                    onClick(e) {
+                                                        const handle = (e) => {
+                                                            const form = document.querySelector('#importExcelForm')
+                                                            const formData = new FormData(form)
+
+                                                            axios({
+                                                                url: '/Admin/Category/UploadExcel',
+                                                                method: 'POST',
+                                                                data: formData
+                                                            }).then(() => {
+                                                                toast.option({ message: 'Lưu thành công!!!', type: 'success' });
+                                                                toast.show();
+                                                                dataGrid.refresh()
+                                                            }
+                                                            ).catch((e) => {
+                                                                console.log(e)
+                                                                toast.option({ message: 'Lưu thât bại!!!', type: 'error' });
+                                                                toast.show();
+                                                            })
+                                                            
+                                                                document.querySelector('#importExcelForm_file').value = null
+                                                            document.querySelector('#importExcelForm_file').removeEventListener('change', handle)
+                                                        }
+                                                        document.querySelector('#importExcelForm_file').addEventListener('change', handle)
+                                                        document.querySelector('#importExcelForm_file').click()
+                                                    },
+                                                },
+                                            },")
+                            }
+                            
+                            'addRowButton',
+                            'searchPanel',]
+                    },
+                }).dxDataGrid('instance');
+            });
+        }
+    </script>
+}

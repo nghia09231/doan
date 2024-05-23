@@ -1,0 +1,66 @@
+﻿@using Fahasa.Models
+
+<div class="table-responsive" style="height:400px;">
+    <table class="table">
+        <thead>
+            <tr class="border-0">
+                <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                    Mã hóa đơn
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted px-2 text-center">
+                    Ngày đặt
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                    Tổng tiền
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                    Trạng thái
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted px-2 text-center">
+                    Ngày giao hàng
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                    Trạng thái giao hàng
+                </th>
+                <th class="border-0 font-14 font-weight-medium text-muted text-center" width="250px">
+                    Tính năng
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (var i in Model)
+            {
+                <tr>
+                    <td class="text-center font-weight-medium text-dark px-2 py-4">
+                        <a href="@Url.Action("InvoinceDetail", "CRUDinvoince", new { invoinceNo = i.invoinceNo})">#@i.invoinceNo</a>
+                    </td>
+                     <td class="text-muted px-2 py-4 font-14 text-center">
+                        @i.dateOrder
+                    </td>
+                     <td class="text-muted px-2 py-4 font-14 text-center">
+                        @i.totalMoney VNĐ
+                    </td>
+                    <td class="text-center px-2 py-4">
+                        @if (i.status == true) { <i class="fa fa-circle text-success font-12" data-toggle="tooltip" data-placement="top" title="Checked"></i>}
+                        else { <i class="fa fa-circle text-danger font-12" data-toggle="tooltip" data-placement="top" title="Cancel"></i>}
+                    </td>
+
+                    <td class="text-muted px-2 py-4 font-14 text-center">
+                        @if(i.deliveryDate == null) { <span>Q/A</span>}
+                        else { @i.deliveryDate}
+                    </td>
+                    <td class="text-center text-muted font-weight-medium px-2 py-4">
+                        @if (i.deliveryStatus == true)
+                        {<i class="fa fa-circle text-success font-12" data-toggle="tooltip" data-placement="top" title="Done"></i>}
+                        else
+                        { <i class="fa fa-circle text-danger font-12" data-toggle="tooltip" data-placement="top" title="In Progress"></i>}
+                    </td>
+                    <td class="text-muted px-2 py-4 text-right">
+                        @if(i.deliveryStatus != true) { <a href="@Url.Action("DeliverySuccess", "CRUDinvoince", new { id = i.invoinceNo})" class="btn waves-effect waves-light btn-success">Xác nhận đơn</a>}
+                        <a href="@Url.Action("Delete", "CRUDinvoince", new { id = i.invoinceNo})" class="btn waves-effect waves-light btn-danger" onclick="return confirm('Bạn chắc chắn muốn xóa nó??')">Hủy</a>
+                    </td>
+                </tr>
+            }*@
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,1086 @@
+﻿@using Fahasa.Models;
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var person = ViewData["info"] as Person;
+    CartTemp cart = Session["Cart"] as CartTemp;
+    var province = ViewData["province"] as ProvinceGHN;
+    var district = ViewData["district"] as DistrictGHN;
+    var ward = ViewData["ward"] as WardGHN;
+    var products = ViewData["productsRecommend"] as List<Product>;
+}
+@Styles.Render("~/Content/search.css")
+@Styles.Render("~/Content/cssCheckout")
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<style>
+    @Html.Raw("@media screen and (max-width: 992px) {.mb-container-checkout{padding-bottom: 120px}}")
+
+   @Html.Raw("@media screen and (min-width: 992px) {.mb-container-checkout{padding-bottom: 200px}}")
+
+    .btn-cart-to-cart {
+        margin-left: 0;
+        color: #C92127;
+        background: #fff;
+        border: 2px solid #C92127;
+        padding: 4px 10px;
+        width: 150px;
+        font-size: 14px;
+    }
+
+        .btn-cart-to-cart:hover {
+            color: #fff;
+            background: #C92127;
+        }
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</style>
+
+<script>
+    function subtractQty() {
+        let qty = parseInt($('.qty').val());
+        if (qty > 1) {
+            $('.qty').val(qty - 1);
+        } else {
+            $('.qty').val(1);
+        }
+    }
+    function addQty() {
+        let qty = parseInt($('.qty').val());
+        let maxValue = parseInt($('.qty').attr('maxValue'));
+        if (qty < maxValue) {
+            $('.qty').val(qty + 1);
+        } else {
+            $('.qty').val(maxValue);
+        }
+    }
+</script>
+<link rel="stylesheet" type="text/css"
+      href="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/css/eventCartProView.css?q=102468" media="all">
+
+<div class="fhs_checkout_block">
+    <div class="fhs_checkout_block_title">Người khác cũng đang quan tâm??</div>
+    <div class="fhs_checkout_block_content">
+        <div thumbsSlider="" class="swiper mySwiper bg-white">
+            <div class="swiper-wrapper bg-white">
+                @foreach (var item in products)
+                {
+                    <div class="swiper-slide text-center w-auto bg-white" style="height: unset">
+                        <div style="width: 400px" class="bg-white d-inline-block h-100">
+                            <div class="d-flex h-100">
+                                <a href="/Products/Details/@item.Id"
+                                   title="@item.Name"><img src="@item.ImageSrc" style="width: 100px;object-fit: contain" class=" me-4" /></a>
+
+                                <div class="text-left">
+                                    <h2 class="product-name-no-ellipsis p-name-list mb-3">
+                                        <a href="/Products/Details/@item.Id"
+                                           title="@item.Name">@item.Name</a>
+                                    </h2>
+                                    <div class="d-flex">
+                                        <p>
+                                            <span class="price m-price-font" style="line-height: 1; min-height: 0; line-height: 1.65rem; font-size: 1.65rem !important; color: #C92127; font-weight: 600;">@Fahasa.Ultis.PriceUltis.getShowDiscount(item.Price, item.Discount)</span>
+                                        </p>
+                                        <p>
+                                            <span class="discount-percent ms-sm-2">-@item.Discount%</span>
+                                        </p>
+                                    </div>
+                                    <span class="price m-price-font" style="color: #888888; text-decoration: line-through; font-size: 14px;">@Fahasa.Ultis.PriceUltis.getShow(item.Price)</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <script type="text/javascript">
+            var swiper = new Swiper(".mySwiper", {
+                speed: 400,
+                freeMode: true,
+                slidesPerView: "auto",
+                scrollbar: {
+                    el: ".swiper-scrollbar",
+                },
+                mousewheel: true,
+            });
+        </script>
+    </div>
+</div>
+
+<div class="container-1 mb-container-checkout">
+    <form id="submitFormCheckout" action="/Order/ConfirmCheckout" method="post">
+        <input id="fhs_shipping_to_ward_code" name="to_ward_code" value="" maxlength="100" hidden>
+        <input id="fhs_shipping_to_district_id" name="to_district_id" hidden>
+        <input id="fhs_checkout_values" name="values" hidden>
+    </form>
+    <form class="container-inner" name="checkoutForm">
+        <div id="fhs_checkout_block_address" class="fhs_checkout_block">
+            <div class="fhs_checkout_block_title">Địa chỉ giao hàng</div>
+            <div class="fhs_checkout_block_content">
+                <div class="fhs_checkout_block_address_block">
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Name">
+                        <label>Tên người nhận (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                @if (person != null && person.Name != null)
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text" validate_type="fullname" placeholder="Nhập họ và tên người nhận" id="fhs_shipping_fullname" name="Name" value="@person.Name" maxlength="100">
+                                }
+                                else
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text" validate_type="fullname" placeholder="Nhập họ và tên người nhận" id="fhs_shipping_fullname" name="Name" maxlength="100" />
+                                }
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Email">
+                        <label>Email (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                @if (person != null && person.Email != null)
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="email" placeholder="Nhập email" id="fhs_shipping_email" name="Email"
+                                           value="@person.Email" maxlength="200">
+                                }
+                                else
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="email" placeholder="Nhập email" id="fhs_shipping_email" name="Email"
+                                           maxlength="200">
+                                }
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Phone">
+                        <label>Số điện thoại (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                @if (person != null && person.Phone != null)
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="shipping_telephone" placeholder="Ví dụ: 0979123xxx (10 ký tự số)"
+                                           id="fhs_shipping_telephone" name="Phone" value="@person.Phone" maxlength="10">
+                                }
+                                else
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="shipping_telephone" placeholder="Ví dụ: 0979123xxx (10 ký tự số)"
+                                           id="fhs_shipping_telephone" name="Phone" maxlength="10">
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Province">
+                        <label>Tỉnh/Thành Phố (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                <select name="Province" onchange="provinceChange(this, 'province', '#fhs_shipping_district_select')" id="fhs_shipping_city_select" class="fhs-selectbox select2-hidden-accessible"
+                                        data-select2-id="fhs_shipping_city_select" tabindex="-1" aria-hidden="true">
+                                    <option value="" selected="" data-select2-id="12">Chọn tỉnh/thành phố</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="District">
+                        <label>Quận/Huyện (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                <select name="District" onchange="districtChange(this, 'district', '#fhs_shipping_wards_select')" id="fhs_shipping_district_select"
+                                        class="fhs-selectbox select2-hidden-accessible"
+                                        data-select2-id="fhs_shipping_district_select" tabindex="-1" aria-hidden="true"
+                                        disabled="disabled">
+                                    <option value="" selected="" data-select2-id="12">Chọn quận/huyện</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Ward">
+                        <label>Phường/Xã (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                <select name="Ward" onchange="wardChange()" id="fhs_shipping_wards_select"
+                                        class="fhs-selectbox select2-hidden-accessible"
+                                        data-select2-id="fhs_shipping_wards_select" tabindex="-1" aria-hidden="true"
+                                        disabled="disabled">
+                                    <option value="" selected="" data-select2-id="13">Chọn phường/Xã</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                    <div class="fhs-input-box fhs-input-group-horizontal-shippingaddress" id="Street">
+                        <label>Địa chỉ nhận hàng (<span style="color: #C92127;">*</span>)</label>
+                        <div class="fhs-input-item">
+                            <div class="fhs-input-group">
+                                @if (person != null && person.Street != null)
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="text" placeholder="Nhập địa chỉ nhận hàng" id="fhs_shipping_street"
+                                           name="Street" value="@person.Street" maxlength="200">
+                                }
+                                else
+                                {
+                                    <input class="fhs-textbox require_check check_shipping_address" type="text"
+                                           validate_type="text" placeholder="Nhập địa chỉ nhận hàng" id="fhs_shipping_street"
+                                           name="Street" maxlength="200">
+                                }
+
+                            </div>
+                        </div>
+                        <div class="fhs-input-alert">Thông tin này không thể để trống</div>
+                    </div>
+                </div>
+                <div class="fhs_checkout_block_loading">
+                    <div>
+                        <div id="default-icon-loading"
+                             style="height: 40px; width: 40px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/fpointstore/loading.png?q=102478') no-repeat center center transparent; background-size: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="fhs_checkout_block_shippingmethod" class="fhs_checkout_block">
+            <div class="fhs_checkout_block_title">Phương thức vận chuyển</div>
+            <div class="fhs_checkout_block_content">
+                <div class="fhs_checkout_block_radio_list fhs-input-box" id="FeeShip">
+                    <div id="fhs_checkout_shippingmethod_title" class="fhs_checkout_block_radio_list_title"></div>
+                    <div>
+                        <ul id="fhs_checkout_shippingmethod" class="fhs_checkout_block_radio_list_items">
+                        </ul>
+                    </div>
+
+                    <div class="fhs-input-alert">Vui lòng chọn phương thức vận chuyển</div>
+                    <i id="fhs_checkout_shippingmethod_msg" class="fhs_checkout_block_radio_list_msg">
+                        Quý khách vui lòng điền tên và địa chỉ giao nhận trước.
+                    </i>
+                </div>
+                <div class="fhs_checkout_block_loading">
+                    <div>
+                        <div id="default-icon-loading"
+                             style="height: 40px; width: 40px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/fpointstore/loading.png?q=102478') no-repeat center center transparent; background-size: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fhs_checkout_block_alert"></div>
+        </div>
+
+        <div id="fhs_checkout_block_paymentmethod" class="fhs_checkout_block">
+            <div class="fhs_checkout_block_title">Phương thức thanh toán</div>
+            <div class="fhs_checkout_block_content">
+                <div class="fhs_checkout_block_radio_list">
+                    <div>
+                        <ul id="fhs_checkout_paymentmethod" class="fhs_checkout_block_radio_list_items">
+                            <li class="fhs_checkout_block_radio_list_item cashondelivery" style="display: list-item;">
+                                <div class="fhs_checkout_paymentmethod_with_tutorial" id="tutorial_cashondelivery">
+                                    <div class="fhs-radio-big-with-icon-container">
+                                        <label class="fhs-radio-big fhs-raido-big-with-icon">
+                                            <div class="fhs-payment-name-with-icon-container">
+                                                <div style="background: url(https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_cashondelivery.svg?q=102478) no-repeat center center;width: 40px;"></div>
+                                                <div class="fhs-payment-name">Thanh toán bằng tiền mặt khi nhận hàng</div>
+                                                <input type="radio" id="fhs_checkout_paymentmethod_cashondelivery" checked="checked" name="PaymentMethod" class="fhs_checkout_paymentmethod_option" value="cashondelivery">
+                                                <span class="radiomark-big"></span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fhs_checkout_block_loading"><div><div id="default-icon-loading" style="height: 40px; width: 40px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/fpointstore/loading.png?q=102478') no-repeat center center transparent; background-size: 40px;"></div></div></div>
+            </div>
+            <div class="fhs_checkout_block_alert"></div>
+        </div>
+
+        <div class="fhs_checkout_block">
+            <div class="fhs_checkout_block_title">Mã khuyến mãi/Mã quà tặng</div>
+            <div class="fhs_checkout_block_content">
+                <div class="fhs_checkout_block_address_block">
+                    <div class="fhs-input-box fhs-input-btn fhs-input-group-horizontal-coupon">
+                        <div class="fhs-input-item w-100">
+                            <div class="fhs-input-group flex-column">
+                                <input class="fhs-textbox fhs_checkout_coupon" type="text" validate_type="text" placeholder="Nhập mã khuyến mãi/Quà tặng" id="fhs_checkout_coupon" name="coupon" value="" maxlength="200">
+                                <div style=" display: flex; width: 100%; align-items: center; justify-content: space-between; margin: 8px 0;">
+                                    <span style="background: #2F80ED; color: white; -webkit-border-radius: 8px; border-radius: 8px; padding: 5px 0; width: 100px; font-weight: 700; align-items: center; -webkit-align-items: center; -webkit-box-align: center; -webkit-box-pack: center; -webkit-box-pack: center; display: flex; align-items: center; justify-content: center; " id="fhs_checkout_btn_coupon" onclick="applyDiscount(document.querySelector('#fhs_checkout_coupon').value);" class="fhs-input-icon">Áp dụng</span>
+                                    <div style=" text-decoration: underline; color: #007bff;" class="fhs_checkout_block_coupon_search" onclick="onAllDiscount(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(cart.CartItems.Select(c => c.Product.Id))));"><span>Chọn mã khuyến mãi</span></div>
+                                </div>
+                                <div class="fhs_label_note m-0" style="align-self: self-start;"><div class="fhs_label_coupon_label_info"><div>Có thể áp dụng đồng thời nhiều mã </div><div class="fhs_tooltip" style="margin-left: 0.25em;"><img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico-alert-grey.svg?q=102478"><span>Áp dụng tối đa 1 mã giảm giá <br>và 1 mã freeship</span></div></div></div>		<div class="fhs-input-alert"></div>
+                            </div>
+                        </div>
+                        <div class="fhs_label_coupon_label ms-0">
+                            @foreach (var discount in cart.Discounts)
+                            {
+                                string className = discount.ApplyField == "Price" ? "fhs_label_coupon_label_orange" : "fhs_label_coupon_label_green";
+                                <div class="@className">
+                                    <div title="@discount.Title">Nhập mã thành công - @discount.Title</div>
+                                    <div onclick="removeDiscount('@discount.Code');" coupon="@discount.Code" apply="0">
+                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="fhs_checkout_block_loading"><div><div id="default-icon-loading" style="height: 40px; width: 40px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/fpointstore/loading.png?q=102478') no-repeat center center transparent; background-size: 40px;"></div></div></div>
+            </div>
+        </div>
+
+        <div class="fhs_checkout_block">
+            <div class="fhs_checkout_block_title">Kiểm tra lại đơn hàng</div>
+            <div class="fhs_checkout_block_content">
+                <div id="fhs_checkout_products" class="fhs_checkout_products">
+                    @foreach (var cartItem in cart.CartItems)
+                    {
+                        if (cartItem.IsChecked == true)
+                        {
+                            <div class="fhs_checkout_products_item">
+                                <div class="fhs_checkout_products_item_img">
+                                    <img src="@cartItem.Product.ImageSrc">
+                                </div>
+                                <div class="fhs_checkout_products_item_detail">
+                                    <div class="fhs_checkout_products_item_name">
+                                        <div>@cartItem.Product.Name - @cartItem.Product.Id</div>
+                                    </div>
+                                    <div class="fhs_checkout_products_item_price">
+                                        @if (cartItem.Product.Discount == null || cartItem.Product.Discount == 0)
+                                        {
+                                            <div>@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cartItem.Price.ToString()))</div>
+                                        }
+                                        else
+                                        {
+                                            <div>@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cartItem.Price.ToString()))</div>
+                                            <div class="fhs_checkout_products_item_original_price">@Fahasa.Ultis.PriceUltis.getShow(cartItem.Product.Price)</div>
+                                        }
+                                    </div>
+                                    <div class="fhs_checkout_products_item_qty"><span>Số lượng: </span>@cartItem.Amount</div>
+                                    <div class="fhs_checkout_products_item_total">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cartItem.TotalPrice.ToString()))</div>
+                                </div>
+                            </div>}
+                    }
+                </div>
+                <div class="fhs_checkout_total fhs_checkout_total_mobile">
+                    <div class="fhs_checkout_total_subtotal">
+                        <div>Thành tiền</div>
+                        <div class="fahasa-checkout-total">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cart.CartItems.Sum(x => x.TotalPrice).ToString()))</div>
+                    </div>
+                    <div class="fhs_checkout_total_shipping">
+                        <div>Phí vận chuyển</div>
+                        <div class="fahasa-checkout-ship">0 đ</div>
+                    </div>
+                    <div class="fhs_checkout_total_discount">
+                        <div>Tổng giảm giá</div>
+                        <div class="fahasa-checkout-discount">0 đ</div>
+                    </div>
+                    <div class="fhs_checkout_total_grand_total">
+                        <div>Tổng Số Tiền (gồm VAT)</div>
+                        <div class="fahasa-checkout-totalPaid">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cart.CartItems.Sum(x => x.TotalPrice).ToString()))</div>
+                    </div>
+                </div>
+                <div class="fhs-bsidebar">
+                    <div class="fhs-bsidebar-content">
+                        <div class="container">
+                            <div class="fhs_checkout_total fhs_checkout_total_desktop">
+                                <div class="fhs_checkout_total_subtotal">
+                                    <div>Thành tiền</div>
+                                    <div class="fahasa-checkout-total">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cart.CartItems.Sum(x => x.TotalPrice).ToString()))</div>
+                                </div>
+                                <div class="fhs_checkout_total_shipping">
+                                    <div>Phí vận chuyển</div>
+                                    <div class="fahasa-checkout-ship">0 đ</div>
+                                </div>
+                                <div class="fhs_checkout_total_discount">
+                                    <div>Tổng giảm giá</div>
+                                    <div class="fahasa-checkout-discount">0 đ</div>
+                                </div>
+                                <div class="fhs_checkout_total_grand_total">
+                                    <div>Tổng Số Tiền (gồm VAT)</div>
+                                    <div class="fahasa-checkout-totalPaid">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cart.CartItems.Sum(x => x.TotalPrice).ToString()))</div>
+                                </div>
+                            </div>
+                            <div class="fhs_checkout_bottom">
+                                <div>
+                                    <div class="fhs_checkout_total_grand_total">
+                                        <div>Tổng Số Tiền (gồm VAT)</div>
+                                        <div class="fahasa-checkout-totalPaid">@Fahasa.Ultis.PriceUltis.getShow(long.Parse(cart.CartItems.Sum(x => x.TotalPrice).ToString()))</div>
+                                    </div>
+                                    <div>
+                                        <a href="/Order">
+                                            <span style="padding-right: 8px;">
+                                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/btn_back.svg?q=102478">
+                                            </span><span>
+                                                Quay về giỏ hàng
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fhs-btn-box">
+                                        <button type="button" title="Xác nhận thanh toán"
+                                                class="fhs-btn-confirm fhs-btn-orderconfirm">
+                                            <span>
+                                                Xác nhận thanh toán
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fhs_checkout_block_loading">
+                    <div>
+                        <div id="default-icon-loading"
+                             style="height: 40px; width: 40px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/fpointstore/loading.png?q=102478') no-repeat center center transparent; background-size: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<div id="allDiscountPopup"></div>
+<div id="detailDiscountPopup"></div>
+
+<script>
+
+
+    var filter = @Html.Raw("/^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$/");
+    let validateEmail = function (emailAddress) {
+        if (filter.test(emailAddress)) {
+            return true
+        } else {
+            return false
+        }
+    }
+    let languages = {
+        show: 'Hiện ',
+        hide: 'Ẩn',
+        phoneinvalid: 'Số điện thoại không hợp lệ',
+        phoneinvalid10: 'Số điện thoại phải 10 chữ số',
+        phoneexist: 'Số điện thoại đã tồn tại',
+        emailinvalid: 'Email không hợp lệ',
+        taxcodeinvalid: 'Mã số thuế không hợp lệ',
+        otpinvalid: 'OTP không hợp lệ',
+        notemail: 'Đây không phải là địa chỉ email hợp lệ!',
+        notempty: 'Thông tin này không thể để trống',
+        nopass: 'Enter a valid password!',
+        '30char': 'Mật khẩu phải từ 30 ký tự trở xuống!',
+        over200char: 'Không thể vượt quá 200 ký tự',
+        notsame: 'Passwords are not same!',
+        wrong: 'Số điện thoại/Email hoặc Mật khẩu sai!',
+        registered: 'This email is already registered!',
+        tryagain: 'Đã xảy ra lỗi, xin vui lòng thử lại',
+        login: 'Đăng nhập',
+        recoverypassword: 'Khôi phục',
+        dateinvalid: 'Ngày không hợp lệ',
+        change: 'Thay đổi',
+        loginfail: 'Đăng nhập thất bại',
+        '2word': 'Họ và tên phải có 2 từ trở lên',
+        copied: 'Đã copy',
+        close: 'Đóng',
+        img_loading: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ring_loader.svg',
+        close_img: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_delete_gray.svg?q=102548',
+        locale: 'vi_VN',
+        add_to_cart: 'Thêm giỏ hàng',
+        fail_icon: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo-alert-fail.png?q=102548',
+        out_of_stock: 'Sản phẩm tạm hết hàng',
+        comingsoon: 'Sắp Có Hàng',
+        cancel: 'Hủy',
+        add_to_cart_success: 'Thêm vào giỏ hàng thành công',
+        try_again: 'Hệ thống đang bận, vui lòng thử lại!',
+        minLength: 'Mật khẩu phải từ 6 ký tự trở lên!',
+        minLength_address: 'Địa chỉ phải từ 6 ký tự trở lên!',
+    }
+
+    function test(code) {
+        console.log(code)
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('footer')?.remove()
+
+        function getFeeShip() {
+            axios({
+                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+                method: "POST",
+                headers: {
+                    Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551',
+                    ShopId: '189704'
+                },
+                data: {
+                    from_district: 1456,
+                    to_district: Number(document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.districtid),
+                    "shop_id": 189704
+                }
+            }).then((res) => {
+                res.data.data.forEach(service => {
+                    axios({
+                        url: '/Order/GetShipFeeAsync',
+                        method: "POST",
+                        data: {
+                            to_ward_code: document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.wardcode,
+                            to_district_id: Number(document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.districtid),
+                            "height": 50,
+                            "length": 20,
+                            "weight": 200,
+                            "width": 20,
+                            "service_id": service.service_id,
+                        }
+                    }).then((res) => {
+                        const fee = JSON.parse(res.data).data
+                        value = {
+                            ...value,
+                            feeShip: fee.total
+                        }
+                        document.querySelector('#fhs_checkout_shippingmethod').innerHTML += `
+                                                <li class="fhs_checkout_block_radio_list_item fhs_radio_top">
+                                                    <div>
+                                                        <label class="fhs-radio-big">
+                                                            <div style="font-weight: 600;">${service.short_name}: ${fee.total.toLocaleString('vi-VN') + ' đ'}</div>
+                                                           <input type="radio"name="FeeShip" class="fhs_checkout_shippingmethod_option" value="${fee.total}">
+                                                            <span class="radiomark-big"></span>
+                                                        </label>
+                                                    </div>
+                                                </li>`
+                        const listFeeShipEl = document.querySelectorAll('input[name="FeeShip"]')
+
+                        if (listFeeShipEl.length > 0) {
+                            listFeeShipEl[0].checked = true
+
+                            axios({
+                                url: '/Order/PlusFeeShip',
+                                method: "POST",
+                                data: {
+                                    fee: Number(listFeeShipEl[0].value)
+                                }
+                            }).then(res => {
+                                document.querySelectorAll(".fahasa-checkout-totalPaid").forEach(element => {
+                                    element.innerHTML = res.data.totalPaid.toLocaleString('vi-VN') + ' đ'
+                                })
+                                document.querySelectorAll(".fahasa-checkout-ship").forEach(element => {
+                                    element.innerHTML = res.data.feeShip.toLocaleString('vi-VN') + ' đ'
+                                })
+                                document.querySelectorAll(".fahasa-checkout-total").forEach(element => {
+                                    element.innerHTML = res.data.total.toLocaleString('vi-VN') + ' đ'
+                                })
+                                document.querySelectorAll(".fahasa-checkout-discount").forEach(element => {
+                                    element.innerHTML = res.data.SumDiscountValue.toLocaleString('vi-VN') + ' đ'
+                                })
+                            })
+                                .catch(console.log)
+                        }
+
+                        listFeeShipEl.forEach(el => {
+                            el.addEventListener('change', (e) => {
+                                axios({
+                                    url: '/Order/PlusFeeShip',
+                                    method: "POST",
+                                    data: {
+                                        fee: Number(e.target.value)
+                                    }
+                                }).then(res => {
+                                    document.querySelectorAll(".fahasa-checkout-totalPaid").forEach(element => {
+                                        element.innerHTML = res.data.totalPaid.toLocaleString('vi-VN') + ' đ'
+                                    })
+                                    document.querySelectorAll(".fahasa-checkout-ship").forEach(element => {
+                                        element.innerHTML = res.data.feeShip.toLocaleString('vi-VN') + ' đ'
+                                    })
+                                    document.querySelectorAll(".fahasa-checkout-total").forEach(element => {
+                                        element.innerHTML = res.data.total.toLocaleString('vi-VN') + ' đ'
+                                    })
+                                    document.querySelectorAll(".fahasa-checkout-discount").forEach(element => {
+                                        element.innerHTML = res.data.SumDiscountValue.toLocaleString('vi-VN') + ' đ'
+                                    })
+                                })
+                                    .catch(console.log)
+                            })
+                        })
+                    }).catch(console.log)
+                })
+            })
+        }
+
+
+        let value = {}
+        axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+            headers: {
+                Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+            }
+        }).then(({ data }) => {
+            const provinces = data.data
+            provinces.sort((a, b) => a.ProvinceID - b.ProvinceID).forEach(province => {
+                @if(province!=null)
+            {
+                @Html.Raw(@"if (province.ProvinceID == "+@Html.Raw(province.ProvinceID)+ @") {
+                    document.querySelector('#fhs_shipping_city_select').innerHTML += `<option selected data-id='${province.ProvinceID}' value='${province.ProvinceName}'>${province.ProvinceName}</option>`
+                }
+                else ")
+            }
+                    document.querySelector('#fhs_shipping_city_select').innerHTML += `<option data-id="${province.ProvinceID}" value="${province.ProvinceName}">${province.ProvinceName}</option>`
+            })
+        })
+
+        @if(province != null && district != null && ward != null)
+            {
+                @Html.Raw(@"Promise.all([
+            axios.get(`https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=` + '"+@Html.Raw(province.ProvinceID) + @"', {
+                headers: {
+                    Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                }
+            }),
+            axios.get(`https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=` + '"+@Html.Raw(district.DistrictID) + @"', {
+                headers: {
+                    Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                }
+            })
+        ]).then(([districtRes, wardRes]) => {
+            const districts = districtRes.data.data
+            const wards = wardRes.data.data
+
+
+            document.querySelector('#fhs_shipping_district_select').innerHTML = `<option value='' selected='' data-select2-id='12'>Chọn quận/huyện</option>`
+            document.querySelector(`#fhs_shipping_wards_select`).innerHTML = `<option value='' selected='' data-select2-id='13'>Chọn phường/Xã</option>`
+            districts.forEach(district => {
+                if (district.DistrictID == " + @Html.Raw(district.DistrictID) + @") {
+                    document.querySelector('#fhs_shipping_district_select').removeAttribute('disabled')
+                    document.querySelector('#fhs_shipping_district_select').innerHTML += `<option selected data-id='${district.DistrictID}' value='${district.DistrictName}'>${district.DistrictName}</option>`
+                } else {
+                    document.querySelector('#fhs_shipping_district_select').innerHTML += `<option data-id='${district.DistrictID}' value='${district.DistrictName}'>${district.DistrictName}</option>`
+                }
+            })
+
+            document.querySelector('#fhs_shipping_wards_select').innerHTML = `<option value='' selected='' data-select2-id='13'>Chọn phường/Xã</option>`
+            wards.forEach(ward => {
+                if (ward.WardCode == " + @Html.Raw(ward.WardCode) + @") {
+                    document.querySelector('#fhs_shipping_wards_select').removeAttribute('disabled')
+                    document.querySelector('#fhs_shipping_wards_select').innerHTML += `<option selected data-wardcode='${ward.WardCode}' data-districtid='${ward.DistrictID}' value='${ward.WardName}'>${ward.WardName}</option>`
+                } else {
+                    document.querySelector('#fhs_shipping_wards_select').innerHTML += `<option data-wardcode='${ward.WardCode}' data-districtid='${ward.DistrictID}' value='${ward.WardName}'>${ward.WardName}</option>`
+                }
+            })
+            document.querySelector('#fhs_shipping_to_district_id').value = Number(document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.districtid)
+            document.querySelector('#fhs_shipping_to_ward_code').value = document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.wardcode
+            getFeeShip()
+        })")
+            }
+
+
+        window.provinceChange = function provinceChange(e, key, target) {
+            if (e.value !== "") {
+                document.querySelector(target).removeAttribute('disabled')
+                document.querySelector('#fhs_checkout_shippingmethod').innerHTML = ""
+                document.querySelectorAll(".fahasa-checkout-ship").forEach(element => {
+                    element.innerHTML = '0 đ'
+                })
+                axios.get(`https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${e.selectedOptions[0].dataset.id}`, {
+                    headers: {
+                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                    }
+                }).then(({ data }) => {
+                    const districts = data.data
+                    document.querySelector(target).innerHTML = `<option value="" selected="" data-select2-id="12">Chọn quận/huyện</option>`
+                    document.querySelector(`#fhs_shipping_wards_select`).innerHTML = `<option value="" selected="" data-select2-id="13">Chọn phường/Xã</option>`
+                    districts.forEach(district => {
+                        document.querySelector(target).innerHTML += `<option data-id="${district.DistrictID}" value="${district.DistrictName}">${district.DistrictName}</option>`
+                    })
+                })
+            } else {
+                document.querySelector(target).setAttribute('disabled', 'disabled')
+            }
+        }
+
+        window.districtChange = function districtChange(e, key, target) {
+            if (e.value !== "") {
+                document.querySelector(target).removeAttribute('disabled')
+                document.querySelector('#fhs_checkout_shippingmethod').innerHTML = ""
+                document.querySelectorAll(".fahasa-checkout-ship").forEach(element => {
+                    element.innerHTML = '0 đ'
+                })
+                axios.get(`https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${e.selectedOptions[0].dataset.id}`, {
+                    headers: {
+                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                    }
+                }).then(({ data }) => {
+                    const wards = data.data
+
+                    document.querySelector(target).innerHTML = `<option value="" selected="" data-select2-id="13">Chọn phường/Xã</option>`
+                    wards.forEach(ward => {
+                        document.querySelector(target).innerHTML += `<option data-wardcode="${ward.WardCode}" data-districtid="${ward.DistrictID}" value="${ward.WardName}">${ward.WardName}</option>`
+                    })
+                })
+            } else {
+                document.querySelector(target).setAttribute('disabled', 'disabled')
+            }
+        }
+
+        window.wardChange = function wardChange() {
+            document.querySelector('#fhs_checkout_shippingmethod').innerHTML = ""
+            console.log({
+                name: document.querySelector('#fhs_shipping_fullname').value,
+                email: document.querySelector('#fhs_shipping_email').value,
+                phone: document.querySelector('#fhs_shipping_telephone').value,
+                province: document.querySelector('#fhs_shipping_city_select').value,
+                district: document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.districtid,
+                ward: document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.wardcode,
+                street: document.querySelector('#fhs_shipping_street').value,
+            })
+
+            document.querySelector("#fhs_shipping_to_district_id").value = Number(document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.districtid)
+            document.querySelector("#fhs_shipping_to_ward_code").value = document.querySelector('#fhs_shipping_wards_select').selectedOptions[0].dataset.wardcode
+
+            getFeeShip()
+        }
+
+        document.forms['checkoutForm'].addEventListener('submit', function (e) {
+            e.preventDefault()
+            console.log(e)
+        })
+
+        document.querySelector('.fhs-btn-confirm').addEventListener('click', () => {
+            const formData = new FormData(document.forms['checkoutForm'])
+            const values = {}
+            for (const entry of formData) {
+                const [fieldName, fieldValue] = entry;
+                values[fieldName] = fieldValue;
+                console.log(`${fieldName}: ${fieldValue}`);
+            }
+
+            const required = ['Name', 'Email', 'Phone', 'Province', 'District', 'Ward', 'Street', 'FeeShip']
+            const errors = []
+            for (var i = 0; i < required.length; i++) {
+                let el = required[i];
+                if (!formData.get(el)) {
+                    document.getElementById(el).classList.add('checked-error')
+
+                    errors.push({
+                        field: el,
+                        msg: "Thông tin này không thể để trống"
+                    })
+                } else {
+                    document.getElementById(el).classList.remove('checked-error')
+                }
+            }
+
+            let result = ""
+                const Phone = formData.get("Phone")
+            if (Phone.length < 1) {
+                result = languages['notempty']
+
+                document.querySelector("#Phone .fhs-input-alert").innerHTML = result
+                document.getElementById("Phone").classList.add('checked-error')
+                errors.push({
+                    field: "Phone",
+                    msg: result
+                })
+            } else {
+                var regExp = /(0[1-9]{1})+([0-9]{8})/
+                if (Phone.length < 10 || Phone.length >= 11 || !regExp.test(Phone)) {
+                    result = languages['phoneinvalid']
+                    document.querySelector("#Phone .fhs-input-alert").innerHTML = result
+                    document.getElementById("Phone").classList.add('checked-error')
+                    errors.push({
+                        field: "Phone",
+                        msg: result
+                    })
+                } else {
+                    document.getElementById("Phone").classList.remove('checked-error')
+                }
+            }
+
+            const Email = formData.get("Email")
+            if (!validateEmail(Email)) {
+                result = languages['emailinvalid']
+
+                document.querySelector("#Email .fhs-input-alert").innerHTML = result
+                document.getElementById("Email").classList.add('checked-error')
+                errors.push({
+                    field: "Email",
+                    msg: result
+                })
+            } else {
+                document.getElementById("Email").classList.remove('checked-error')
+            }
+
+            console.log(errors)
+
+            errors.forEach((err) => {
+                document.querySelector(`#${err.field} .fhs-input-alert`).innerHTML = err.msg
+            })
+
+            document.querySelector("#fhs_checkout_values").value = JSON.stringify(values)
+
+            if (!errors.length) {
+                document.forms["submitFormCheckout"].submit()
+            }
+
+        })
+
+
+    })
+
+
+
+    const popup = $('#allDiscountPopup')
+        .dxPopup({
+            width: 550,
+            height: 650,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            visible: false,
+            title: 'ƯU ĐÃI LIÊN QUAN',
+            hideOnOutsideClick: true,
+            showCloseButton: true,
+        })
+        .dxPopup('instance');
+
+    const popupDetailDiscount = $('#detailDiscountPopup')
+        .dxPopup({
+            animation: null,
+            width: 550,
+            height: 650,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            visible: false,
+            hideOnOutsideClick: true,
+            showCloseButton: false,
+            toolbarItems: [{
+                location: 'before',
+                widget: 'dxButton',
+                toolbar: 'top',
+                options: {
+                    icon: 'arrowleft',
+                    type: 'danger',
+                    stylingMode: 'text',
+                    text: "",
+                    onClick() {
+                        popupDetailDiscount.hide();
+                    }
+                },
+            }, {
+                location: 'before',
+                toolbar: 'top',
+                text: 'ĐIỀU KIỆN ÁP DỤNG',
+            }, {
+                location: 'after',
+                widget: 'dxButton',
+                toolbar: 'top',
+                options: {
+                    icon: 'close',
+                    stylingMode: 'text',
+
+                    elementAttr: {
+                        class: 'dx-closebutton'
+                    },
+                    text: "",
+                    onClick() {
+                        popupDetailDiscount.hide();
+                        popup.hide();
+                    }
+                },
+            }
+            ],
+        })
+        .dxPopup('instance');
+
+    function showDetailDiscount(code) {
+        popupDetailDiscount.show();
+        axios(`/Products/GetDiscountDetail?Id=${code}`).then(res => {
+            if (window.innerWidth <= 568) {
+                popupDetailDiscount.option({
+                    fullScreen: true
+                })
+            } else {
+                popupDetailDiscount.option({
+                    fullScreen: false
+                })
+            }
+
+            popupDetailDiscount.option({
+                contentTemplate: `<div>
+                                    <div style="background-color: #f2ddc3ab;padding: 8px 16px; color: #ea7601;margin-bottom:8px;">${res.data.Title}</div>
+                                    <div>${res.data.Content}</div>
+                                </div>`
+            });
+            popupDetailDiscount.repaint()
+        }).catch(console.log());
+    }
+
+    function onAllDiscount(pIds) {
+        popup.show();
+        axios({
+            url: `/Order/GetAllDiscount`,
+            method: 'POST',
+            data: {
+                pIds
+            }
+        }).then(res => {
+            const discounts = res.data
+
+            const priceDiscountHtml = `<div class="evt_cart_2_pop_container">
+                                        <div class="evt_cart_2_pop_title_sm">
+                                            <div class="pop_title_sm_r">Mã giảm giá</div>
+                                            <div class="pop_title_sm_l">Áp dụng 1 lần</div>
+                                        </div>
+                                        <div class="evt_cart_2_pop_content">
+                                            ${discounts.filter(d => d.ApplyField == "Price").map(d => `<div class="evt_cart_2_pop_ite">
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="350" height="104" viewBox="0 0 524 145.001"
+                                                                                                            class="svg-bg-pop-up-cart2">
+                                                                                                            <path id="Frame_voucher_Web"
+                                                                                                                d="M110,144H12A12,12,0,0,1,0,132V12A12,12,0,0,1,12,0h98a12.02,12.02,0,0,0,12,11.971A12.02,12.02,0,0,0,134,0H511a12,12,0,0,1,12,12V132a12,12,0,0,1-12,12H134v-.03a12,12,0,0,0-24,0V144Z"
+                                                                                                                transform="translate(0.5 0.5)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10"
+                                                                                                                stroke-width="1"></path>
+                                                                                                        </svg>
+                                                                                                        <div class="evt_cart_2_pop_ite_content">
+                                                                                                            <div class="evt_cart_2_pop_ite_left">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="104.554" height="125.395"
+                                                                                                                    viewBox="0 0 104.554 125.395" class="svg-icon-pop-up-cart2">
+                                                                                                                    <path id="Frame_icon_web"
+                                                                                                                        d="M95.424,124.4H47.593l-33.592,0a12,12,0,0,1-12-12V12A12,12,0,0,1,14,0H80.785l.255,0H95.424a10.364,10.364,0,0,0,10.129,10.165l-.005,4.374a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.814v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.911v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9V55.22a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.813V71.5a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9v2.324a2.907,2.907,0,1,0,0,5.814V95.9a2.907,2.907,0,1,0,0,5.814v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.916,2.916,0,0,0,2.915,2.911l0,3.987A10.328,10.328,0,0,0,95.423,124.2c0,.065,0,.131,0,.2h0Z"
+                                                                                                                        transform="translate(-1.501 0.499)" fill="#FFB323" stroke="rgba(0,0,0,0)"
+                                                                                                                        stroke-miterlimit="10" stroke-width="1"></path>
+                                                                                                                </svg>
+                                                                                                                <img class="evt_cart_pop_icon_type"
+                                                                                                                    src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/event_cart_2/ico_promotion.svg?q=102534">
+                                                                                                            </div>
+                                                                                                            <div class="evt_cart_2_pop_ite_right justify-content-between">
+                                                                                                                <div>
+                                                                                                                    <div class="pop_ite_right_header">
+                                                                                                                        <div class="pop_ite_txt_right">${d.Title}</div>
+                                                                                                                        <div class="pop_ite_more_right" onclick="showDetailDiscount('${d.Code}')">Chi tiết</div>
+                                                                                                                    </div>
+                                                                                                                    <div class="pop_ite_right_content">${d.SubTitle}</div>
+                                                                                                                </div>
+                                                                                                                <div><button type="button" onclick="applyDiscount('${d.Code}')" title="Áp dụng" coupon="${d.Code}" apply="1" class="fhs-btn-view-promo-coupon ms-auto"><span>Áp dụng</span></button></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>`).join('')}
+                                        </div>
+                                        <div style="margin: 8px 0;border-top: 1px solid #ededed;"></div>
+                                    </div><div class="evt_cart_2_pop_container">
+                                        <div class="evt_cart_2_pop_title_sm">
+                                            <div class="pop_title_sm_r">Mã vận chuyển</div>
+                                            <div class="pop_title_sm_l">Áp dụng 1 lần</div>
+                                        </div>
+                                        <div class="evt_cart_2_pop_content">
+                                            ${discounts.filter(d => d.ApplyField == "FeeShip").map(d => `<div class="evt_cart_2_pop_ite">
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="350" height="104" viewBox="0 0 524 145.001"
+                                                                                                            class="svg-bg-pop-up-cart2">
+                                                                                                            <path id="Frame_voucher_Web"
+                                                                                                                d="M110,144H12A12,12,0,0,1,0,132V12A12,12,0,0,1,12,0h98a12.02,12.02,0,0,0,12,11.971A12.02,12.02,0,0,0,134,0H511a12,12,0,0,1,12,12V132a12,12,0,0,1-12,12H134v-.03a12,12,0,0,0-24,0V144Z"
+                                                                                                                transform="translate(0.5 0.5)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10"
+                                                                                                                stroke-width="1"></path>
+                                                                                                        </svg>
+                                                                                                        <div class="evt_cart_2_pop_ite_content">
+                                                                                                            <div class="evt_cart_2_pop_ite_left">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="104.554" height="125.395" viewBox="0 0 104.554 125.395">
+                                                                                                                  <path id="Frame_icon_web_green" d="M95.424,124.4H47.593l-33.592,0a12,12,0,0,1-12-12V12A12,12,0,0,1,14,0H80.785l.255,0H95.424a10.364,10.364,0,0,0,10.129,10.165l-.005,4.374a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.814v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.911v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9V55.22a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.813V71.5a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9v2.324a2.907,2.907,0,1,0,0,5.814V95.9a2.907,2.907,0,1,0,0,5.814v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.916,2.916,0,0,0,2.915,2.911l0,3.987A10.328,10.328,0,0,0,95.423,124.2c0,.065,0,.131,0,.2h0Z" transform="translate(-1.501 0.499)" fill="#23c16b" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
+                                                                                                                </svg>
+                                                                                                                <svg class="evt_cart_pop_icon_type" fill="#ffffff" width="64px" height="64px" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M2.84375 13C1.273438 13 0 14.277344 0 15.84375L0 42C0 43.566406 1.429688 45 3 45L7.09375 45C7.570313 47.835938 10.03125 50 13 50C15.96875 50 18.429688 47.835938 18.90625 45L28.15625 45C29.722656 45 31 43.722656 31 42.15625L31 15.90625C31 14.304688 29.738281 13 28.1875 13 Z M 33 20L33 45C33.480469 47.832031 36.03125 50 39 50C41.96875 50 44.429688 47.832031 44.90625 45L47 45C48.570313 45 50 43.570313 50 42L50 32.375C50 30.363281 48.550781 28.308594 48.375 28.0625L44.21875 22.5C43.265625 21.351563 41.769531 20 40 20 Z M 38 25L43.59375 25L46.78125 29.25C47.121094 29.730469 48 31.203125 48 32.375L48 33L38 33C37 33 36 32 36 31L36 27C36 25.894531 37 25 38 25 Z M 13 40C15.207031 40 17 41.792969 17 44C17 46.207031 15.207031 48 13 48C10.792969 48 9 46.207031 9 44C9 41.792969 10.792969 40 13 40 Z M 39 40C41.207031 40 43 41.792969 43 44C43 46.207031 41.207031 48 39 48C36.792969 48 35 46.207031 35 44C35 41.792969 36.792969 40 39 40Z"></path></g></svg>
+                                                                                                                </div>
+                                                                                                            <div class="evt_cart_2_pop_ite_right justify-content-between">
+                                                                                                                <div>
+                                                                                                                    <div class="pop_ite_right_header">
+                                                                                                                        <div class="pop_ite_txt_right">${d.Title}</div>
+                                                                                                                        <div class="pop_ite_more_right" onclick="showDetailDiscount('${d.Code}')">Chi tiết</div>
+                                                                                                                    </div>
+                                                                                                                    <div class="pop_ite_right_content">${d.SubTitle}</div>
+                                                                                                                </div>
+                                                                                                                <div><button type="button" onclick="applyDiscount('${d.Code}')" title="Áp dụng" coupon="${d.Code}" apply="1" class="fhs-btn-view-promo-coupon ms-auto"><span>Áp dụng</span></button></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>`).join('')}
+                                        </div>
+                                    </div>`
+
+            if (window.innerWidth <= 568) {
+                popup.option({
+                    fullScreen: true
+                })
+            } else {
+                popup.option({
+                    fullScreen: false
+                })
+            }
+            popup.option({
+                contentTemplate: priceDiscountHtml
+            });
+            popup.repaint()
+        }).catch(console.log)
+    }
+
+    function applyDiscount(code) {
+        axios({
+            url: `/Order/ApplyDiscount`,
+            method: 'POST',
+            data: {
+                code
+            }
+        }).then(res => {
+            document.querySelector(".fhs_label_coupon_label").innerHTML = res.data.Discounts.map(dis => `<div class="fhs_label_coupon_label_${dis.ApplyField == 'Price' ? 'orange' : 'green'}">
+                                                                                                <div title='${dis.Title}'>Nhập mã thành công - ${dis.Title}</div>
+                                                                                                <div onclick="removeDiscount('${dis.Code}');" coupon="${dis.Code}" apply="0">
+                                                                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                                                                </div>
+                                                                                            </div>`).join('')
+
+            document.querySelectorAll(".fahasa-checkout-totalPaid").forEach(element => {
+                element.innerHTML = res.data.totalPaid.toLocaleString('vi-VN') + ' đ'
+            })
+
+            document.querySelectorAll(".fahasa-checkout-discount").forEach(element => {
+                element.innerHTML = res.data.SumDiscountValue.toLocaleString('vi-VN') + ' đ'
+            })
+            popup.hide();
+        }).catch(() => {
+            const toastDx = $('#toast').dxToast({ displayTime: 4000 }).dxToast('instance');
+
+            toastDx.option({ message: "Mã không tồn tại hoặc hết hạn, hết lượt sử dụng!!!", type: 'error' });
+            toastDx.show();
+        })
+    }
+
+    function removeDiscount(code) {
+        axios({
+            url: `/Order/RemoveDiscount`,
+            method: 'POST',
+            data: {
+                code
+            }
+        }).then(res => {
+            document.querySelector(".fhs_label_coupon_label").innerHTML = res.data.Discounts.map(dis => `<div class="fhs_label_coupon_label_${dis.ApplyField == 'Price' ? 'orange' : 'green'}">
+                                                                                                <div title='${dis.Title}'>Nhập mã thành công - ${dis.Title}</div>
+                                                                                                <div onclick="removeDiscount('${dis.Code}');" coupon="${dis.Code}" apply="0">
+                                                                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                                                                </div>
+                                                                                            </div>`).join('')
+
+
+            document.querySelectorAll(".fahasa-checkout-totalPaid").forEach(element => {
+                element.innerHTML = res.data.totalPaid.toLocaleString('vi-VN') + ' đ'
+            })
+
+            document.querySelectorAll(".fahasa-checkout-discount").forEach(element => {
+                element.innerHTML = res.data.SumDiscountValue.toLocaleString('vi-VN') + ' đ'
+            })
+        }).catch(console.log)
+    }
+</script>

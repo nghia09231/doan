@@ -1,0 +1,21 @@
+﻿@using Fahasa;
+@model dynamic
+@{
+    ViewBag.Title = "Home Page";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<div class="std">
+
+    @Html.Partial("Client/_HeaderBreadCrumb")
+
+    @Html.Partial("Client/_Banner")
+
+    @Html.Partial("Client/_CMSIcon")
+
+    @Html.Partial("Client/_ProductLiterary")
+
+</div>

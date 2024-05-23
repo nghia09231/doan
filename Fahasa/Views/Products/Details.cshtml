@@ -1,0 +1,933 @@
+﻿@using Fahasa;
+@model dynamic
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";}
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<link rel="stylesheet" type="text/css"
+      href="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/css/product_view.css?q=102468" media="all">
+<link rel="stylesheet" type="text/css"
+      href="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/css/eventCartProView.css?q=102468" media="all">
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<script>
+    function subtractQty() {
+        let qty = parseInt($('.qty').val());
+        if (qty > 1) {
+            $('.qty').val(qty - 1);
+        } else {
+            $('.qty').val(1);
+        }
+    }
+    function addQty() {
+        let qty = parseInt($('.qty').val());
+        let maxValue = parseInt($('.qty').attr('maxValue'));
+        if (qty < maxValue) {
+            $('.qty').val(qty + 1);
+        } else {
+            $('.qty').val(maxValue);
+        }
+    }
+</script>
+<style>
+    .mySwiper .swiper-slide {
+        opacity: 0.4;
+    }
+
+    .mySwiper .swiper-slide-thumb-active {
+        opacity: 1;
+        border: 1px solid #C92127;
+        border-radius: 4px;
+    }
+
+    .evt_cart_2_slide_ite {
+        width: auto !important;
+        margin-right: 16px !important;
+    }
+
+    .evt_cart_2_text_more {
+        position: unset;
+    }
+</style>
+@*@Styles.Render("~/Content/cssDetail")*@
+
+<div class="main">
+    <div class="margin-bottom: 5px;">
+        <div class="container-1" style="background-color : transparent!important;">
+
+            <!-- start breadcrumb json -->
+            <!-- end breadcrumb json-->
+            <div id="ves-breadcrumbs" class="breadcrumbs hidden-xs px-4">
+                <div class="container-inner breadcrumbs">
+                    <ol class="breadcrumb">
+                        @foreach (Fahasa.Models.Category item in Model.Product.Categories)
+                        {
+
+                            <li class="">
+                                <a href="/Products/Search?cate=@item.Name" title="@item.Name">@item.Name</a>
+                                <span>/ </span>
+                            </li>
+                        }
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-main">
+        <div class="container-1">
+            <div class="container-inner">
+
+                <!--<div id="messages_product_view"></div>-->
+                <form action="" method="post" id="product_addtocart_form">
+                    <!--begin web product view UI-->
+                    <div class="product-view kasitoo">
+                        <!--begin web UI-->
+                        <div class="product-essential">
+                            <div class="product-essential-media">
+
+
+                                <div class="product-view-image" style="height: 400px;flex-direction: column">
+                                    <div style="height: 300px; width: 100%" class="swiper mySwiper2">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide text-center">
+                                                <img src="@Model.Product.ImageSrc" style="object-fit:contain"
+                                                     class="h-100" />
+                                            </div>
+                                            @foreach (Fahasa.Models.Gallery item in Model.Product.Galleries)
+                                            {
+                                                <div class="swiper-slide text-center">
+                                                    <img src="@item.Source" style="object-fit:contain" class="h-100" />
+                                                </div>
+                                            }
+
+                                        </div>
+                                        <div class="swiper-button-next"></div>
+                                        <div class="swiper-button-prev"></div>
+                                    </div>
+                                    <div thumbsSlider="" style="margin-top:20px; height: 80px; width: 100%"
+                                         class="swiper mySwiper">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide text-center">
+                                                <img src="@Model.Product.ImageSrc" style="object-fit:contain"
+                                                     class="h-100" />
+                                            </div>
+                                            @foreach (Fahasa.Models.Gallery item in Model.Product.Galleries)
+                                            {
+                                                <div class="swiper-slide text-center ">
+                                                    <img src="@item.Source" style="object-fit:contain" class="h-100" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script type="text/javascript">
+                                    var swiper = new Swiper(".mySwiper", {
+                                        spaceBetween: 10,
+                                        slidesPerView: 4,
+                                        watchSlidesProgress: true,
+                                    });
+                                    var swiper2 = new Swiper(".mySwiper2", {
+                                        spaceBetween: 10,
+                                        navigation: {
+                                            nextEl: ".swiper-button-next",
+                                            prevEl: ".swiper-button-prev",
+                                        },
+                                        thumbs: {
+                                            swiper: swiper,
+                                        },
+                                    });
+                                </script>
+
+                            </div>
+                            <div class="product-essential-detail">
+                                <div class="flashsale-product-info flashsale-product-info-mobile" style="display:none">
+                                    <div class="flashsale-product">
+                                        <div class="flashsale-product-banner">
+                                            <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/flashsale/label-flashsale.svg?q=102468">
+                                            <div class="flashsale-product-price product_price">
+                                                <div class="price-box">
+                                                    <p class="special-price">
+                                                        <span class="price-label">Special Price</span><span class="price"
+                                                                                                            id="product-price-311509">
+                                                            @Fahasa.Ultis.PriceUltis.getShowDiscount(Model.Product.Price,
+                                                                                  Model.Product.Discount)
+                                                        </span>
+                                                    </p>
+                                                    <p class="old-price">
+                                                        <span class="price-label">Regular Price:</span><span class="price"
+                                                                                                             id="old-price-311509">@Fahasa.Ultis.PriceUltis.getShow(Model.Product.Price)</span><span class="discount-percent">-@Model.Product.Discount%</span>
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flashsale-product-last">
+                                                                                                <div class="flashsale-progress">
+                                                                                                    <div class="flashsale-progress-bar" style="width: 50%;"></div>
+                                                                                                    <div class="flashsale-progress-value">
+                                                                                                        Đã bán: <span class="flashsale_sold_number"></span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="flashsale-countdown">
+                                                                                                    <span class="flashsale-countdown-temp"></span>
+                                                                                                    <span class="flashsale-countdown-number">01</span>
+                                                                                                    <span>:</span>
+                                                                                                    <span class="flashsale-countdown-number">16</span>
+                                                                                                    <span>:</span>
+                                                                                                    <span class="flashsale-countdown-number">09</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <h1>
+                                                                                        @Model.Product.Name
+                                                                                    </h1>
+
+                                                                                    <div class="product-view-sa row row-cols-2">
+
+                                                                                        @if (Model.Product.Supplier != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-author col">
+                                                                                                <span>Nhà cung cấp:</span><span>@Model.Product.Supplier.Name</span>
+                                                                                            </div>
+                                                                                        }
+
+                                                                                        @if (Model.Product.Author != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-author col">
+                                                                                                <span>
+                                                                                                    Tác
+                                                                                                    giả:
+                                                                                                </span><span>@Model.Product.Author.Name</span>
+                                                                                            </div>
+                                                                                        }@if (Model.Product.Publisher != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-supplier col">
+                                                                                                <span>
+                                                                                                    Nhà xuất
+                                                                                                    bản:
+                                                                                                </span><span>@Model.Product.Publisher.Name</span>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.Product.Cover != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-author col">
+                                                                                                <span>
+                                                                                                    Hình thức
+                                                                                                    bìa:
+                                                                                                </span><span>@Model.Product.Cover.Name</span>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.Product.Brand != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-author col">
+                                                                                                <span>
+                                                                                                    Thương
+                                                                                                    hiệu:
+                                                                                                </span><span>@Model.Product.Brand</span>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.Product.Origin != null)
+                                                                                        {
+                                                                                            <div class="product-view-sa-author col">
+                                                                                                <span>
+                                                                                                    Xuất
+                                                                                                    xứ:
+                                                                                                </span><span>@Model.Product.Origin</span>
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+
+                                                                                    <div class="col-md-12 price-block">
+                                                                                        <div id="catalog-product-details-price" class="product_price price-block-left "
+                                                                                             style="">
+                                                                                            <div class="price-box">
+                                                                                                <p class="special-price">
+                                                                                                    <span class="price-label">Special Price</span>
+                                                                                                    <span class="price price-lg"
+                                                                                                          id="product-price-311509">
+                                                                                                        @Fahasa.Ultis.PriceUltis.getShowDiscount(Model.Product.Price,
+                                                                                Model.Product.Discount)
+                                                                                                    </span>
+                                                                                                </p>
+                                                                                                <p class="old-price d-flex align-items-center">
+                                                                                                    <span class="price-label">Regular Price:</span>
+                                                                                                    <span class="price mx-4">@Fahasa.Ultis.PriceUltis.getShow(Model.Product.Price)</span>
+                                                                                                    <span class="discount-percent">-@Model.Product.Discount%</span>
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="clear"></div>
+                                                                                    <div id="catalog-product-details-discount">
+                                                                                        <div class="product-view-quantity-box">
+                                                                                            <label for="qty">Số lượng:</label>
+                                                                                            <div class="product-view-quantity-box-block">
+                                                                                                <a class="btn-subtract-qty" onclick="subtractQty();">
+                                                                                                    <img style="width: 12px; height: auto; max-width: unset "
+                                                                                                         src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_minus2x.png">
+                                                                                                </a>
+                                                                                                <input type="number" name="qty" id="qty" maxvalue="999" minvalue="1"
+                                                                                                       align="center" value="1" title="SL" class="input-text qty">
+                                                                                                <a class="btn-add-qty" onclick="addQty();">
+                                                                                                    <img style="width: 12px; height: auto; max-width: unset "
+                                                                                                         src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_plus2x.png">
+                                                                                                </a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="clear"></div>
+
+                                                                                    <div class="product_view_add_box justify-content-start ">
+                                                                                        <button type="button" onclick="addToCart(@Model.Product.Id, document.querySelector('#qty').value)"
+                                                                                                title="Thêm vào giỏ hàng" class="btn-cart-to-cart">
+                                                                                            <span class="ps-0">Thêm vào giỏ hàng</span>
+                                                                                        </button>
+                                                                                        <button type="button" title="Mua ngay" is_buynow="true" class="btn-buy-now"
+                                                                                                onclick="buyNow(@Model.Product.Id, document.querySelector('#qty').value)">
+                                                                                            <span>Mua ngay</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div class="policy-popup-background" id="policy-popup-background">
+                                                                                        <div class="policy-popup-content">
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="clear"></div>
+                                                                                    <div class="product_view_msg " style="display:none;">
+                                                                                    </div>
+
+
+                                                                                    <div class="clear"></div>
+                                                                                    <div class="fhs-bsidebar">
+                                                                                        <div class="fhs-bsidebar-tab">
+                                                                                            <ul class="fhs-bsidebar-tab-items">
+                                                                                                <li class="fhs-bsidebar-tab-items-qty">
+                                                                                                    <div class="product-view-quantity-box">
+                                                                                                        <div class="product-view-quantity-box-block">
+                                                                                                            <a class="btn-subtract-qty" onclick="subtractQty();">
+                                                                                                                <img style="width: 12px; height: auto; max-width: unset "
+                                                                                                                     src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_minus2x.png">
+                                                                                                            </a>
+                                                                                                            <input type="number" name="qty" id="qty_mobile" maxvalue="999"
+                                                                                                                   minvalue="1" align="center" value="1"
+                                                                                                                   title="SL" class="input-text qty">
+                                                                                                            <a class="btn-add-qty" onclick="addQty();">
+                                                                                                                <img style="width: 12px; height: auto; max-width: unset "
+                                                                                                                     src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_plus2x.png">
+                                                                                                            </a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </li>
+                                                                                                <li class="fhs-bsidebar-tab-items-addcart">
+                                                                                                    <button onclick="addToCart(@Model.Product.Id, document.querySelector('#qty_mobile').value)" type="button"
+                                                                                                            title="Thêm vào giỏ hàng" class="btn-cart-to-cart">
+                                                                                                        <span>
+                                                                                                            Thêm vào giỏ hàng
+                                                                                                        </span>
+                                                                                                    </button>
+                                                                                                </li>
+                                                                                                <li class="fhs-bsidebar-tab-items-buynow">
+                                                                                                    <button type="button" title="Mua ngay" is_buynow="true"
+                                                                                                            class="btn-buy-now"
+                                                                                                            onclick="buyNow(@Model.Product.Id, document.querySelector('#qty_mobile').value)">
+                                                                                                        <span>Mua ngay</span>
+                                                                                                    </button>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="clear"></div>
+                                                                        </div>
+                                                                        <!--end web product view UI-->
+                                                                    </form>
+
+
+                                                                    <div>
+                                                                        <div class="event_cart_2_content">
+                                                                            <div class="event_cart_2_header d-flex justify-content-between">
+                                                                                <div class="d-flex">
+                                                                                    <div class="event_cart_2_title_icon">
+                                                                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/event_cart_2/ico_coupon_red.svg?q=102468">
+                                                                                    </div>
+                                                                                    <div class="event_cart_2_title">Ưu đãi liên quan</div>
+                                                                                </div>
+
+                                                                                <div class="evt_cart_2_text_more">
+                                                                                    Có thể áp dụng nhiều mã <div class="fhs_tooltip" style="margin-left: 0.25em;">
+                                                                                        <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/promotion/ico-alert-grey.svg?q=102468">
+                                                                                        <span>Áp dụng tối đa 1 mã giảm giá <br>và 1 mã freeship</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="evt_cart_2_slide_container">
+                                                                                <div class="evt_cart_2_slide_coupon">
+
+                                                                                    <div class="evt_cart_2_slide_content evt_cart_2_slide_swpier_container visible_tab_conent swiper-container-horizontal"
+                                                                                         id="tab_conent_affect_all">
+                                                                                        <div class="evt_cart_2_slide_swiper-wrapper swiper-wrapper"
+                                                                                             style="transform: translate3d(0px, 0px, 0px);">
+
+                                                                                            @foreach (Fahasa.Models.Discount item in Model.Discounts)
+                                                                                            {
+                                                                                                <div class="evt_cart_2_slide_ite swiper-slide">
+                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="350" height="104"
+                                                                                                         viewBox="0 0 524 145.001" class="svg-bg">
+                                                                                                        <path id="Frame_voucher_Web"
+                                                                                                              d="M110,144H12A12,12,0,0,1,0,132V12A12,12,0,0,1,12,0h98a12.02,12.02,0,0,0,12,11.971A12.02,12.02,0,0,0,134,0H511a12,12,0,0,1,12,12V132a12,12,0,0,1-12,12H134v-.03a12,12,0,0,0-24,0V144Z"
+                                                                                                              transform="translate(0.5 0.5)" fill="#fff" stroke="rgba(0,0,0,0)"
+                                                                                                              stroke-miterlimit="10" stroke-width="1"></path>
+                                                                                                    </svg>
+                                                                                                    <div class="evt_cart_2_sli_ite_content">
+                                                                                                        <div class="evt_cart_2_sli_ite_left">
+                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="104.554"
+                                                                                                                 height="125.395" viewBox="0 0 104.554 125.395"
+                                                                                                                 class="cart2-svg-icon">
+                                                                                                                <path id="Frame_icon_web"
+                                                                                                                      d="M95.424,124.4H47.593l-33.592,0a12,12,0,0,1-12-12V12A12,12,0,0,1,14,0H80.785l.255,0H95.424a10.364,10.364,0,0,0,10.129,10.165l-.005,4.374a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.814v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.911v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9V55.22a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.813V71.5a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9v2.324a2.907,2.907,0,1,0,0,5.814V95.9a2.907,2.907,0,1,0,0,5.814v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.916,2.916,0,0,0,2.915,2.911l0,3.987A10.328,10.328,0,0,0,95.423,124.2c0,.065,0,.131,0,.2h0Z"
+                                                                                                                      transform="translate(-1.501 0.499)" fill="#48A7F8"
+                                                                                                                      stroke="rgba(0,0,0,0)" stroke-miterlimit="10"
+                                                                                                                      stroke-width="1"></path>
+                                                                                                            </svg>
+                                                                                                            <img class="evt_cart_2_icon_type"
+                                                                                                                 src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/event_cart_2/ico_ewallet.svg?q=102468">
+                                                                                                        </div>
+                                                                                                        <div class="evt_cart_2_sli_ite_right">
+                                                                                                            <div class="sli_ite_right_header">
+                                                                                                                <div class="ite_txt_right">@item.Title</div>
+                                                                                                                <div class="ite_more_right"
+                                                                                                                     onclick="showDetailDiscount('@item.Code')">
+                                                                                                                    Chi
+                                                                                                                    tiết
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="sli_ite_right_content">
+                                                                                                                @item.SubTitle
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            }
+                                                                                            <div class="evt_cart_2_slide_ite_last evt_cart_2_slide_ite swiper-slide"
+                                                                                                 onclick="onAllDiscount()">
+                                                                                                <span class="evt_cart_2_view_more"></span><span>Xem thêm Mã</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="product-collateral">
+                                                                        <div class="fhs_tabslider_recommended ">
+                                                                        </div>
+
+                                                                        <div class="fhs_tabslider3_container" id="fhs_tabslider3_tab_recommendatedApi"
+                                                                             style="display: none;">
+                                                                            <div class="fhs_tabslider3_header">
+                                                                                <div class="fhs_tabslider3_title">Sản phẩm liên quan</div>
+                                                                            </div>
+                                                                            <div id="fhs_tabslider3_tabs_content_recommendatedApi" style="display:none">
+                                                                                <div class="fhs_tabslider3_tabs_swiper_container">
+                                                                                    <ul class="fhs_tabslider3_tabs fhs-tabs swiper-wrapper"
+                                                                                        id="fhs_tabslider3_ul_recommendatedApi"></ul>
+                                                                                </div>
+                                                                                <div class="fhs_tabslider3_products_container" id="fhs_tabslider3_pro_recommendatedApi">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="fhs_tabslider3_loading_icon" id="fhs_tabslider3_loading_recommendatedApi"
+                                                                                 style="display:block">
+                                                                                <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ring_loader.svg"
+                                                                                     class="img-responsive center-block">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="product_view_info" class="content product_view_content">
+                                                                            <div class="product_view_content-title">Thông tin sản phẩm</div>
+                                                                            <div class="product_view_tab_content_ad">
+                                                                                <div class="product_view_tab_content_additional">
+                                                                                    @Html.Raw(Model.Product.Table)
+                                                                                </div>
+
+                                                                                <div class="clear"></div>
+                                                                                <div id="product_tabs_description_contents">
+                                                                                    <div id="desc_content" class="std">
+                                                                                        @Html.Raw(Model.Product.Desc)
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="clear"></div>
+                                                                            <div style="overflow-y: hidden;">
+                                                                                <div class="product_view_tab_content_ad_more" style="">
+                                                                                    <div class="product_view_tab_content_additional">
+                                                                                        @Html.Raw(Model.Product.Table)
+                                                                                    </div>
+
+                                                                                    <div class="clear"></div>
+                                                                                    <div id="product_tabs_description_contents">
+                                                                                        <div id="desc_content" class="std">
+                                                                                            @Html.Raw(Model.Product.Desc)
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="clear"></div>
+                                                                            <div id="desc_viewmore" class="desc_viewmore" style="display: block;">
+                                                                                <div class="fhs_center_center" style="padding: 15px 0 8px 0;">
+                                                                                    <a id="btn_showmore" class="fhs_btn_default mobile_link">
+                                                                                        Xem Thêm<span class="icon_seemore_blue mobile_only down" style="margin-left:4px;"></span>
+                                                                                    </a>
+                                                                                    <script>
+                                                                                        $('.product_view_tab_content_ad_more').html($('.product_view_tab_content_ad').html());
+                                                                                        $(document).ready(function () {
+                                                                                            let h = $('.product_view_tab_content_ad_more').height();
+                                                                                            if (h + 25 > 600) {
+                                                                                                $('#desc_viewmore').fadeIn(0);
+                                                                                            }
+                                                                                        });
+                                                                                        $('#btn_showmore').click(function () {
+                                                                                            let $btn_showmore = $(this);
+                                                                                            if ($('.product_view_tab_content_ad_more').is(':visible')) {
+                                                                                                $btn_showmore.html('Xem Thêm<span class="icon_seemore_blue mobile_only down" style="margin-left:4px;"></span>');
+                                                                                            } else {
+                                                                                                $btn_showmore.html('Rút Gọn<span class="icon_seemore_blue mobile_only up" style="margin-left:4px;"></span>');
+                                                                                            }
+                                                                                            $('.product_view_tab_content_ad_more').slideToggle();
+                                                                                        });
+                                                                                    </script>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div id="product_view_review" class="content product_view_content">
+                                                                            <div class="product_view_content-title">Đánh giá sản phẩm</div>
+                                                                            <div id="product_view_tab_content_review" class="product_view_tab_content_review">
+                                                                                <style>
+                                                                                </style>
+                                                                                <div class="product-view-tab-content-rating">
+                                                                                    <div class="product-view-tab-content-rating-chart">
+                                                                                        <div>
+                                                                                            <div>
+                                                                                                <div>
+                                                                                                    <div>
+                                                                                                        5<span>/5</span>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <div class="rating-box">
+                                                                                                            <div class="rating" style="width:100%"></div>
+                                                                                                        </div>
+                                                                                                        <div class="clear"></div>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        (@Model.comments.Count &nbsp;đánh giá)
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                @if (Model.starStatistics != null && Model.starStatistics.Count == 5)
+                                                                                                {
+                                                                                                    for (int i = 0; i < 5; i++)
+                                                                                                    {
+                                                                                                        <div>
+                                                                                                            <span>@(5 - i) sao</span>
+                                                                                                            <div class="review-rating"><div style="width: @Model.starStatistics[i]%;"></div></div>
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                }
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div>
+
+                                                                                </div>
+
+
+
+                                                                                <div class="product-view-tab-content-review-comment" style="">
+                                                                                    <div class="product-view-tab-content-review-comment_sort review_comment_tabs_swiper_container swiper-container-horizontal">
+                                                                                        <ul class="fhs-tabs review_comment_tabs swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+                                                                                            <li class="active" onclick=""><a>Mới nhất</a><hr></li>
+                                                                                            <li onclick=""><a>Yêu thích nhất</a><hr></li>
+                                                                                        </ul>
+                                                                                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                                                                                    </div>
+                                                                                    <div class="comment_content">
+                                                                                        <ul class="comment_list">
+
+                                                                                            @foreach (var item in Model.comments as List<Fahasa.Models.Comment>)
+                                                                                            {
+                                                                                                <li>
+                                                                                                    <div>
+                                                                                                        <div>@item.Person.Name</div>
+                                                                                                        <div>@item.Date</div>
+                                                                                                        <div class="fhs_center_left Verified_Purchase desktop_only" style="display:none">
+                                                                                                            <span class="icon_Verified_Purchase" style="margin-right:4px;"></span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <div class="fhs_center_left">
+                                                                                                            @if (item.Rating > 0)
+                                                                                                            {
+                                                                                                                <div class="rating-box">
+                                                                                                                    <div class="rating" style="width:@(item.Rating * 20)%">@item.Rating</div>
+                                                                                                                </div>
+                                                                                                            }
+
+                                                                                                            <div class="clear"></div>
+                                                                                                            <div class="fhs_center_left Verified_Purchase mobile_only" style="display:none">
+                                                                                                                <span class="icon_Verified_Purchase" style="margin-right:4px;"></span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div>
+                                                                                                            @item.Content
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </li>
+                                                                                            }
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <div class="toolbar toolbar-bottom">
+                                                                                        <div class="pager">
+                                                                                            <div class="pages" id="pagination"><ol></ol></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div id="popup-notification-msg">
+                                                                                    <div id="popup-fahasa-alert-logo" class="popup-fahasa-alert-logo">
+                                                                                        <center><img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo-alert-success.png?q=105549"></center>
+                                                                                    </div>
+                                                                                    <div class="popup-fahasa-default-alert-content">
+                                                                                        <div id="popup-fahasa-default-content-text" class="popup-fahasa-default-content-text" style="padding: 0 10px;">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="popup-fahasa-default-footer-small btn-submit col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                        <button type="button" onclick="" class="popup-fahasa-default-alert-confirm lg-close">
+                                                                                            <span>
+                                                                                                Đã hiểu
+                                                                                            </span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="clear"></div>
+                                                                        </div>
+                                                                        <div class="clear pb-5">
+                                                                            <div class="product_view_policy">
+                                                                                <!--show static block: block-note-product-->
+
+                                                                                <div class="product-attribute">
+                                                                                    <div class="item">
+                                                                                        <div class="item-content">
+                                                                                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-1-2020/icon/ico_shop_1.png">
+                                                                                            <span><a>Chính Sách Khách Sỉ</a></span>
+                                                                                            <span><a>Khách Sỉ</a></span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div class="item-content">
+                                                                                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-1-2020/icon/ico_truck.png">
+                                                                                            <span><a>Thời Gian Giao Hàng</a></span>
+                                                                                            <span><a>Giao Hàng</a></span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div class="item-content">
+                                                                                            <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-1-2020/icon/ico_transfer.png">
+                                                                                            <span><a>Chính Sách Đổi Trả</a></span>
+                                                                                            <span><a>Đổi Trả</a></span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="clear">
+
+
+                                                                                <div id="personalization-grid" class="container">
+                                                                                    <div id="personalization-header">
+                                                                                        <div id="personalization-header-title" class="block-header">
+                                                                                            <img src="https://cdn0.fahasa.com/media/wysiwyg/icon-menu/ico_goiy@3x.png"
+                                                                                                 class="block-header-icon">
+                                                                                            <a class="block-header-title"
+                                                                                               href="/daily-suggestion?fhs_campaign=PERSONALIZE_XEM_THEM">
+                                                                                                Gợi Ý Dành Riêng
+                                                                                                Cho Bạn
+                                                                                            </a>
+                                                                                        </div>
+                                                                                        <ul id="personalization-header-menu">
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <div class="header-separator">
+                                                                                        <div class="line-separator"></div>
+                                                                                    </div>
+                                                                                    <div id="personalization-grid-loading">
+                                                                                        <div>Loading...</div>
+                                                                                    </div>
+                                                                                    <div id="personalization-grid-container">
+                                                                                    </div>
+                                                                                    <div id="personalization-grid-more" class="tabs-xem-them xem-them-item-aaa">
+                                                                                        <a id="personalization-more-link"
+                                                                                           href-data="/daily-suggestion?fhs_campaign=PERSONALIZE_XEM_THEM"
+                                                                                           href="/daily-suggestion?fhs_campaign=PERSONALIZE_XEM_THEM">Xem Thêm</a>
+                                                                                    </div>
+                                                                                </div>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="allDiscountPopup"></div>
+                                                    <div id="detailDiscountPopup"></div>
+
+                                                    <script>
+    const swiperDiscount = new Swiper('.evt_cart_2_slide_swpier_container', {
+        speed: 400,
+        freeMode: true,
+        slidesPerView: "auto",
+    });
+
+    function addToCart(id, qty = 1) {
+        axios.get(`/Order/AddToCart/${id}?qty=${qty}`).then((res) => {
+            if (res.data.Error) {
+                toast({
+                    text: res.data.Message,
+                    type: 'error'
+                })
+                return
+            }
+
+            toast({
+                text: "Thêm giỏ hàng thành công!!!",
+                type: 'success'
+            })
+        }).catch((err) => {
+
+            toast({
+                text: "Thêm giỏ hàng thất bại!!!",
+                type: 'error'
+            })
+        })
+    }
+
+    function buyNow(id, qty = 1) {
+        axios.get(`/Order/CheckQty/${id}?qty=${qty}`).then((res) => {
+            if (res.data.Error) {
+                toast({
+                    text: res.data.Message,
+                    type: 'error'
+                })
+                return
+            }
+
+            window.location.href = `/Order/BuyNow/${id}?qty=${qty}`
+        }).catch((err) => {
+
+            toast({
+                text: "Đã xảy ra lỗi vui lòng thử lại",
+                type: 'error'
+            })
+        })
+
+
+    }
+
+    const popup = $('#allDiscountPopup')
+        .dxPopup({
+            width: 550,
+            height: 650,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            visible: false,
+            title: 'ƯU ĐÃI LIÊN QUAN',
+            hideOnOutsideClick: true,
+            showCloseButton: true,
+        })
+        .dxPopup('instance');
+
+    const popupDetailDiscount = $('#detailDiscountPopup')
+        .dxPopup({
+            animation: null,
+            width: 550,
+            height: 650,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            visible: false,
+            hideOnOutsideClick: true,
+            showCloseButton: false,
+            toolbarItems: [{
+                    location: 'before',
+                    widget: 'dxButton',
+                    toolbar: 'top',
+                    options: {
+                        icon: 'arrowleft',
+                        type: 'danger',
+                        stylingMode: 'text',
+                        text: "",
+                        onClick() {
+                            popupDetailDiscount.hide();
+                        }
+                    },
+                }, {
+                    location: 'before',
+                    toolbar: 'top',
+                    text: 'ĐIỀU KIỆN ÁP DỤNG',
+                }, {
+                    location: 'after',
+                    widget: 'dxButton',
+                    toolbar: 'top',
+                        options: {
+                            icon: 'close',
+                            stylingMode: 'text',
+
+                            elementAttr: {
+                                class: 'dx-closebutton'
+                            },
+                            text: "",
+                            onClick() {
+                                popupDetailDiscount.hide();
+                                popup.hide();
+                            }
+                        },
+                }
+            ],
+        })
+        .dxPopup('instance');
+
+    function showDetailDiscount(code) {
+        popupDetailDiscount.show();
+        axios(`/Products/GetDiscountDetail?Id=${code}`).then(res => {
+            if (window.innerWidth <= 568) {
+                popupDetailDiscount.option({
+                    fullScreen: true
+                })
+            } else {
+                popupDetailDiscount.option({
+                    fullScreen: false
+                })
+            }
+
+            popupDetailDiscount.option({
+                contentTemplate: `<div>
+                                    <div style="background-color: #f2ddc3ab;padding: 8px 16px; color: #ea7601;margin-bottom:8px;">${res.data.Title}</div>
+                                    <div>${res.data.Content}</div>
+                                </div>`
+            });
+            popupDetailDiscount.repaint()
+        }).catch(console.log());
+    }
+
+    function onAllDiscount() {
+        popup.show();
+        axios(`/Products/GetAllDiscount?pId=@Html.Raw(Model.Product.Id)`).then(res => {
+            const discounts = res.data
+
+            const priceDiscountHtml = `<div class="evt_cart_2_pop_container">
+                                        <div class="evt_cart_2_pop_title_sm">
+                                            <div class="pop_title_sm_r">Mã giảm giá</div>
+                                            <div class="pop_title_sm_l">Áp dụng 1 lần</div>
+                                        </div>
+                                        <div class="evt_cart_2_pop_content">
+                                            ${discounts.filter(d => d.ApplyField == "Price").map(d => `<div class="evt_cart_2_pop_ite">
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="350" height="104" viewBox="0 0 524 145.001"
+                                                                                                            class="svg-bg-pop-up-cart2">
+                                                                                                            <path id="Frame_voucher_Web"
+                                                                                                                d="M110,144H12A12,12,0,0,1,0,132V12A12,12,0,0,1,12,0h98a12.02,12.02,0,0,0,12,11.971A12.02,12.02,0,0,0,134,0H511a12,12,0,0,1,12,12V132a12,12,0,0,1-12,12H134v-.03a12,12,0,0,0-24,0V144Z"
+                                                                                                                transform="translate(0.5 0.5)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10"
+                                                                                                                stroke-width="1"></path>
+                                                                                                        </svg>
+                                                                                                        <div class="evt_cart_2_pop_ite_content">
+                                                                                                            <div class="evt_cart_2_pop_ite_left">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="104.554" height="125.395"
+                                                                                                                    viewBox="0 0 104.554 125.395" class="svg-icon-pop-up-cart2">
+                                                                                                                    <path id="Frame_icon_web"
+                                                                                                                        d="M95.424,124.4H47.593l-33.592,0a12,12,0,0,1-12-12V12A12,12,0,0,1,14,0H80.785l.255,0H95.424a10.364,10.364,0,0,0,10.129,10.165l-.005,4.374a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.814v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.911v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9V55.22a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.813V71.5a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9v2.324a2.907,2.907,0,1,0,0,5.814V95.9a2.907,2.907,0,1,0,0,5.814v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.916,2.916,0,0,0,2.915,2.911l0,3.987A10.328,10.328,0,0,0,95.423,124.2c0,.065,0,.131,0,.2h0Z"
+                                                                                                                        transform="translate(-1.501 0.499)" fill="#FFB323" stroke="rgba(0,0,0,0)"
+                                                                                                                        stroke-miterlimit="10" stroke-width="1"></path>
+                                                                                                                </svg>
+                                                                                                                <img class="evt_cart_pop_icon_type"
+                                                                                                                    src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/event_cart_2/ico_promotion.svg?q=102534">
+                                                                                                            </div>
+                                                                                                            <div class="evt_cart_2_pop_ite_right justify-content-between">
+                                                                                                                <div>
+                                                                                                                    <div class="pop_ite_right_header">
+                                                                                                                        <div class="pop_ite_txt_right">${d.Title}</div>
+                                                                                                                        <div class="pop_ite_more_right" onclick="showDetailDiscount('${d.Code}')">Chi tiết</div>
+                                                                                                                    </div>
+                                                                                                                    <div class="pop_ite_right_content">${d.SubTitle}</div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>`).join('')}
+                                        </div>
+                                        <div style="margin: 8px 0;border-top: 1px solid #ededed;"></div>
+                                    </div><div class="evt_cart_2_pop_container">
+                                        <div class="evt_cart_2_pop_title_sm">
+                                            <div class="pop_title_sm_r">Mã vận chuyển</div>
+                                            <div class="pop_title_sm_l">Áp dụng 1 lần</div>
+                                        </div>
+                                        <div class="evt_cart_2_pop_content">
+                                            ${discounts.filter(d => d.ApplyField == "FeeShip").map(d => `<div class="evt_cart_2_pop_ite">
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="350" height="104" viewBox="0 0 524 145.001"
+                                                                                                            class="svg-bg-pop-up-cart2">
+                                                                                                            <path id="Frame_voucher_Web"
+                                                                                                                d="M110,144H12A12,12,0,0,1,0,132V12A12,12,0,0,1,12,0h98a12.02,12.02,0,0,0,12,11.971A12.02,12.02,0,0,0,134,0H511a12,12,0,0,1,12,12V132a12,12,0,0,1-12,12H134v-.03a12,12,0,0,0-24,0V144Z"
+                                                                                                                transform="translate(0.5 0.5)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-miterlimit="10"
+                                                                                                                stroke-width="1"></path>
+                                                                                                        </svg>
+                                                                                                        <div class="evt_cart_2_pop_ite_content">
+                                                                                                            <div class="evt_cart_2_pop_ite_left">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="104.554" height="125.395" viewBox="0 0 104.554 125.395">
+                                                                                                                  <path id="Frame_icon_web_green" d="M95.424,124.4H47.593l-33.592,0a12,12,0,0,1-12-12V12A12,12,0,0,1,14,0H80.785l.255,0H95.424a10.364,10.364,0,0,0,10.129,10.165l-.005,4.374a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.814v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.911v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9V55.22a2.907,2.907,0,1,0,0,5.813v2.324a2.907,2.907,0,1,0,0,5.813V71.5a2.907,2.907,0,0,0-2.06.852,2.874,2.874,0,0,0-.855,2.05,2.917,2.917,0,0,0,2.915,2.912v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.912,2.912,0,0,0,2.915,2.9v2.324a2.907,2.907,0,1,0,0,5.814V95.9a2.907,2.907,0,1,0,0,5.814v2.324a2.906,2.906,0,0,0-2.06.852,2.876,2.876,0,0,0-.855,2.051,2.916,2.916,0,0,0,2.915,2.911l0,3.987A10.328,10.328,0,0,0,95.423,124.2c0,.065,0,.131,0,.2h0Z" transform="translate(-1.501 0.499)" fill="#23c16b" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
+                                                                                                                </svg>
+                                                                                                                <svg class="evt_cart_pop_icon_type" fill="#ffffff" width="64px" height="64px" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M2.84375 13C1.273438 13 0 14.277344 0 15.84375L0 42C0 43.566406 1.429688 45 3 45L7.09375 45C7.570313 47.835938 10.03125 50 13 50C15.96875 50 18.429688 47.835938 18.90625 45L28.15625 45C29.722656 45 31 43.722656 31 42.15625L31 15.90625C31 14.304688 29.738281 13 28.1875 13 Z M 33 20L33 45C33.480469 47.832031 36.03125 50 39 50C41.96875 50 44.429688 47.832031 44.90625 45L47 45C48.570313 45 50 43.570313 50 42L50 32.375C50 30.363281 48.550781 28.308594 48.375 28.0625L44.21875 22.5C43.265625 21.351563 41.769531 20 40 20 Z M 38 25L43.59375 25L46.78125 29.25C47.121094 29.730469 48 31.203125 48 32.375L48 33L38 33C37 33 36 32 36 31L36 27C36 25.894531 37 25 38 25 Z M 13 40C15.207031 40 17 41.792969 17 44C17 46.207031 15.207031 48 13 48C10.792969 48 9 46.207031 9 44C9 41.792969 10.792969 40 13 40 Z M 39 40C41.207031 40 43 41.792969 43 44C43 46.207031 41.207031 48 39 48C36.792969 48 35 46.207031 35 44C35 41.792969 36.792969 40 39 40Z"></path></g></svg>
+                                                                                                                </div>
+                                                                                                            <div class="evt_cart_2_pop_ite_right justify-content-between">
+                                                                                                                <div>
+                                                                                                                    <div class="pop_ite_right_header">
+                                                                                                                        <div class="pop_ite_txt_right">${d.Title}</div>
+                                                                                                                        <div class="pop_ite_more_right" onclick="showDetailDiscount('${d.Code}')">Chi tiết</div>
+                                                                                                                    </div>
+                                                                                                                    <div class="pop_ite_right_content">${d.SubTitle}</div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                    </div>`).join('')}
+                                        </div>
+                                    </div>`
+
+            if (window.innerWidth <= 568) {
+                popup.option({
+                    fullScreen: true
+                })
+            } else {
+                popup.option({
+                    fullScreen: false
+                })
+            }
+            popup.option({
+                contentTemplate: priceDiscountHtml
+            });
+            popup.repaint()
+        }).catch(console.log)
+    }
+                                                    </script>

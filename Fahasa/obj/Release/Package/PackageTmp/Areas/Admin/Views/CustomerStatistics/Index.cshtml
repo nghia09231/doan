@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+}
+@section htmlEditorScript{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Thống kê doanh thu</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Thống kê</li>
+                <li class="breadcrumb-item active">Số lượng khách hàng</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <h3 class="text-dark text-uppercase card-title">Doanh thu</h3>
+
+        <div class="dx-field mt-1 row ml-auto">
+            <div class="dx-field-value col-12 col-md-2 mb-3 mb-md-0 p-0">
+                <div id="chart-type"></div>
+            </div>
+            <div class="dx-field-value col-12 col-md-10 p-0 mb-3 mb-md-0 pl-md-2">
+                <div id="range-selection"></div>
+            </div>
+            <div class="col-12 mt-2 p-0 row p-0 m-0">
+                <div class="col p-0 mr-1">
+                    <div id="submit-btn"></div>
+                </div>
+                <div class="col mb-3 ml-1 p-0">
+                    <div id="export"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="chart" class="h-100"></div>
+    <div id="dataGrid" class=""></div>
+</div>
+
+
+@section scripts{
+    <script>
+        let dataGrid = null;
+        let chart = null;
+        let dataSource = new DevExpress.data.AspNet.createStore({
+            key: 'Date',
+            loadUrl: `/Admin/CustomerStatistics/Get`,
+            onBeforeSend(method, ajaxOptions) {
+                ajaxOptions.xhrFields = { withCredentials: true };
+                ajaxOptions.method = "POST"
+                ajaxOptions.data = {
+                    startDate: formatDate(initialValue[0]),
+                    endDate: formatDate(initialValue[1]),
+                    type: "Ngày"
+                }
+            },
+        })
+
+        const msInDay = 1000 * 60 * 60 * 24;
+        const now = new Date();
+        const initStartDate = new Date(now.getTime())
+        const initEndDate = new Date(now.getTime())
+        initStartDate.setDate(1)
+        initStartDate.setHours(0, 0, 0, 0)
+        initEndDate.setDate(new Date().getDate())
+        initEndDate.setHours(23, 59, 59, 59)
+        const initialValue = [
+            initStartDate, initEndDate
+        ];
+
+        function formatDate(date) {
+            let year = date.getFullYear();
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let day = String(date.getDate()).padStart(2, '0');
+            let hours = String(date.getHours()).padStart(2, '0');
+            let minutes = String(date.getMinutes()).padStart(2, '0');
+            let seconds = String(date.getSeconds()).padStart(2, '0');
+
+            let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            return formattedDate
+        }
+
+        let selectBox = $('#chart-type').dxSelectBox({
+            items: ["Ngày", "Tháng", "Năm"],
+            label: "Loại",
+            labelMode: "floating"
+        }).dxSelectBox('instance');
+
+        function createChart(startDate, endDate) {
+            chart = $('#chart').dxChart({
+                dataSource: dataSource,
+                title: `Số lượng khách hàng ${startDate.toLocaleDateString('vi')} - ${endDate.toLocaleDateString('vi')}`,
+                commonSeriesSettings: {
+                    argumentField: 'Date',
+                    type: 'bar',
+                },
+                series: [{
+                    valueField: 'ValueInt',
+                    name: "Số lượng"
+                }, {
+                    axis: 'total',
+                    type: 'spline',
+                    valueField: 'ValueDecimal',
+                    name: 'Total',
+                    color: '#ff3f7a',
+                },],
+                legend: {
+                    visible: false,
+                },
+                export: {
+                    enabled: true,
+                },
+                loadingIndicator: {
+                    enabled: true,
+                },
+                tooltip: {
+                    enabled: true,
+                    format: 'fixedPoint'
+                },
+                valueAxis: [{
+                    grid: {
+                        visible: true,
+                    },
+                }, {
+                    name: 'total',
+                    position: 'right',
+                    grid: {
+                        visible: true,
+                    },
+                    title: {
+                        text: 'Doanh thu',
+                    },
+                }],
+            }).dxChart('instance');
+
+            dataGrid = $("#dataGrid").dxDataGrid({
+                dataSource: dataSource,
+                keyExpr: "Date",
+                columns: [
+                    {
+                        dataField: "Date",
+                        caption: "Ngày"
+                    },
+                    {
+                        dataField: "ValueInt",
+                        caption: "Số lượng"
+                    },
+                    {
+                        dataField: "ValueDecimal",
+                        caption: "Doanh thu"
+                    }
+                ], summary: {
+                    totalItems: [{
+                        column: 'ValueInt',
+                        summaryType: 'sum',
+                    }, {
+                        column: 'ValueDecimal',
+                        summaryType: 'sum',
+                    }]
+                }, visible: false
+            }).dxDataGrid("instance")
+        }
+
+        let rangeDate = $('#range-selection').dxDateRangeBox({
+            value: initialValue,
+            onValueChanged: showSelectedDays,
+        }).dxDateRangeBox('instance');
+
+        function showSelectedDays({ value: [startDate, endDate] }) {
+            let daysCount = 0;
+
+            if (startDate && endDate) {
+                daysCount = (endDate - startDate) / msInDay + 1;
+            }
+            startDate.setHours(0, 0, 0, 0)
+            endDate.setHours(23, 59, 59, 59)
+            $('#days-selected').text(daysCount);
+        }
+
+        showSelectedDays({ value: initialValue });
+
+        $('#export').dxButton({
+            stylingMode: 'contained',
+            text: 'Xuất excel',
+            type: 'default',
+            width: '100%',
+            onClick() {
+                dataGrid.option("visible", true)
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('CountriesPopulation');
+
+                DevExpress.excelExporter.exportDataGrid({
+                    component: dataGrid,
+                    worksheet,
+                    topLeftCell: { row: 4, column: 1 },
+                }).then((cellRange) => {
+                    // header
+                    const headerRow = worksheet.getRow(2);
+                    headerRow.height = 30;
+                    worksheet.mergeCells(2, 1, 2, 2);
+
+                    headerRow.getCell(1).value = chart.option("title");
+                    headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
+                    headerRow.getCell(1).alignment = { horizontal: 'center' };
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
+                    });
+                    dataGrid.option("visible", false)
+                });
+                console.log(dataGrid)
+            },
+        });
+
+        $('#submit-btn').dxButton({
+            stylingMode: 'contained',
+            text: 'Lọc',
+            type: 'default',
+            width: '100%',
+            onClick() {
+                submit()
+            },
+        });
+
+        function submit() {
+            dataSource = new DevExpress.data.AspNet.createStore({
+                key: 'Date',
+                loadUrl: `/Admin/CustomerStatistics/Get`,
+                onBeforeSend(method, ajaxOptions) {
+                    ajaxOptions.xhrFields = { withCredentials: true };
+                    ajaxOptions.method = "POST"
+                    ajaxOptions.data = {
+                        startDate: formatDate(rangeDate.option('value')[0]),
+                        endDate: formatDate(rangeDate.option('value')[1]),
+                        type: selectBox.option("value") ? selectBox.option("value") : "Ngày"
+                    }
+                },
+            })
+            createChart(rangeDate.option('value')[0], rangeDate.option('value')[1])
+        }
+    </script>
+}

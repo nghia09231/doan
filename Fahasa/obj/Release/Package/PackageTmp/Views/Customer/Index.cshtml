@@ -1,0 +1,856 @@
+﻿@using Fahasa.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var person = ViewData["info"] as Person;
+}
+
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<div class="main">
+    <div class="container-1">
+        <div class="container-inner">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+                    <div class="block block-account">
+                        <div class="block-title">
+                            <strong><span>Tài khoản</span></strong>
+                        </div>
+                        <div class="block-content">
+                            <ul>
+                                <li class="current"><strong><a href="/Customer">Thông tin tài khoản</a></strong></li>
+                                <li><a href="/Customer/OrderHistory">Đơn hàng của tôi</a></li>
+                                <li><a href="/User/Logout">Thoát tài khoản</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <ul id="admin_messages"></ul>
+                    <style>
+                        .fhs-input-box .fhs-input-group.checked-error .fhs-textbox-alert,
+                        .fhs-input-box.checked-error .fhs-input-group .fhs-textbox-alert {
+                            background: url(https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_fail.png) no-repeat center center;
+                            -webkit-background-size: cover;
+                            -moz-background-size: cover;
+                            -o-background-size: cover;
+                            background-size: cover;
+                            height: 20px;
+                            width: 20px;
+                            display: inline-block;
+                        }
+
+                        .fhs-input-box.checked-pass .fhs-input-group .fhs-textbox-alert {
+                            background: url(https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_success.png) no-repeat center center;
+                            -webkit-background-size: cover;
+                            -moz-background-size: cover;
+                            -o-background-size: cover;
+                            background-size: cover;
+                            height: 20px;
+                            width: 20px;
+                            display: inline-block;
+                        }
+
+                        .fhs-input-box.checked-error .fhs-input-alert {
+                            display: block;
+                            margin-top: 8px;
+                            color: #dc3545;
+                        }
+                    </style>
+                    <div class="my-account">
+                        <style>
+                            .col-fhs-main-body {
+                                background: #F0F0F0 !important;
+                                padding-right: 0 !important;
+                                padding-left: 0 !important;
+                            }
+
+                            .my-account {
+                                padding-right: 15px;
+                                padding-left: 15px;
+                                margin-top: 0 !important;
+                            }
+                        </style>
+                        <div style="background-color: #fff;">
+                            <div class="page-title-2">
+                                <h1>Thông tin tài khoản</h1>
+                            </div>
+                            <form id="form-account-info" autocomplete="off">
+                                <div>
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account">
+                                        <label>Tên (<span style="color: #C92127;">*</span>)</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <input class="fhs-textbox" type="text" placeholder="Nhập tên" id="firstname" name="Name" value="@person.Name" maxlength="200">
+                                                <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                            </div>
+                                        </div>
+                                        <div class="fhs-input-alert"></div>
+                                    </div>
+
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Số điện thoại (<span style="color: #C92127;">*</span>)</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <input class="fhs-textbox" type="text" id="telephone" name="Phone" maxlength="10" value="@person.Phone">
+                                                <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                            </div>
+                                        </div>
+                                        <div class="fhs-input-alert"></div>
+                                    </div>
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Email (<span style="color: #C92127;">*</span>)</label>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <input class="fhs-textbox" type="text" placeholder="Email" id="email" name="Email" noti="true" value="@person.Email" maxlength="200">
+                                                <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                            </div>
+                                        </div>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-alert"></div>
+                                    </div>
+
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account">
+                                        <label>Giới tính</label>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-item" style="display:-webkit-inline-box !important;">
+                                            <div class="fhs-input-group">
+                                                <div>
+                                                    <label class="fhs-radio" style="margin-top: 2px;">
+                                                        Nam					<input type="radio" class="gender-radio" @if (person.Gender == "Nam") { @Html.Raw("checked") } name="Gender" value="Nam">
+
+                                                        <span class="radiomark"></span>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="fhs-radio" style="margin-top: 2px;">
+                                                        Nữ                  <input type="radio" class="gender-radio" @if (person.Gender == "Nữ") { @Html.Raw("checked") } name="Gender" value="Nữ">
+                                                        <span class="radiomark"></span>
+                                                    </label>
+                                                </div>
+                                                <div style="width: 42px;"></div>
+                                                <div style="clear: both;"></div>
+
+                                                <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                            </div>
+                                        </div>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-alert"></div>
+                                    </div>
+
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Ngày sinh</label>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-item" style="padding:0 !important;">
+                                            <div class="fhs-input-group customer-dob">
+                                                <div class="account-input-bod">
+                                                    <input class="fhs_input_date_group_day account-input-birthday" name="day" type="text" style="text-align: center;" maxlength="2" placeholder="DD" value="@if (person.Birth.HasValue) { @person.Birth.Value.Day    } else { }">
+                                                </div>
+                                                <div class="account-input-bod">
+                                                    <input class="fhs_input_date_group_month account-input-birthday" name="month" type="text" style="text-align: center;" maxlength="2" placeholder="MM" value="@if (person.Birth.HasValue) { @person.Birth.Value.Month } else { }">
+                                                </div>
+                                                <div class="account-input-bod">
+                                                    <input class="fhs_input_date_group_year account-input-birthday" name="year" type="text" style="text-align: center;" maxlength="4" placeholder="YYYY" value="@if (person.Birth.HasValue) { @person.Birth.Value.Year } else { }">
+                                                </div>
+
+
+                                                <div class="dob-full" style="display:none;">
+                                                    <input type="hidden" id="dob" class="fhs_input_date_group_full" value="" name="Birth">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label class="fhs-input-description"></label>
+                                        <div class="fhs-input-alert"></div>
+                                    </div>
+
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Tỉnh/Thành phố</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <div id="provinceField" class="w-100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Quận/Huyện</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <div id="districtField" class="w-100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Phường/Xã</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <div id="wardField" class="w-100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fhs-input-box fhs-input-group-horizontal-account fhs-input-send">
+                                        <label>Phường/Xã</label>
+                                        <div class="fhs-input-item">
+                                            <div class="fhs-input-group">
+                                                <div id="streetField" class="w-100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="account-row" style="margin-top: 10px;">
+                                        <label class="account-title"></label>
+                                        <div class="account-input">
+                                            <label class="fhs-checkbox">
+                                                Đổi mật khẩu                <input type="checkbox" name="change_password" id="change_password" value="1" title="Đổi mật khẩu">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        <div style="clear: both;"></div>
+                                    </div>
+                                    <div class="fhs-edit-account-password-form" style="display:none;">
+                                        <div class="fhs-input-box fhs-input-group-horizontal-account">
+                                            <label>Mật khẩu hiện tại (<span style="color: #C92127;">*</span>)</label>
+                                            <div class="fhs-input-item">
+                                                <div class="fhs-input-group">
+                                                    <input class="fhs-textbox" type="password" placeholder="Mật khẩu hiện tại" name="CurrentPassword" id="current_password" value="" maxlength="16">
+                                                    <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                                </div>
+                                            </div>
+                                            <div class="fhs-input-alert"></div>
+                                        </div>
+                                        <div class="fhs-input-box fhs-input-group-horizontal-account">
+                                            <label>Mật khẩu mới (<span style="color: #C92127;">*</span>)</label>
+                                            <div class="fhs-input-item">
+                                                <div class="fhs-input-group">
+                                                    <input class="fhs-textbox" type="password" placeholder="Mật khẩu mới" name="Password" id="password" value="" maxlength="16">
+                                                    <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                                </div>
+                                            </div>
+                                            <div class="fhs-input-alert"></div>
+                                        </div>
+                                        <div class="fhs-input-box fhs-input-group-horizontal-account">
+                                            <label>Nhập lại mật khẩu mới (<span style="color: #C92127;">*</span>)</label>
+                                            <div class="fhs-input-item">
+                                                <div class="fhs-input-group">
+                                                    <input class="fhs-textbox" type="password" placeholder="Nhập lại mật khẩu mới" name="confirmation" id="confirmation" value="" maxlength="16">
+                                                    <span class="fhs-input-icon fhs-textbox-alert"></span>
+                                                </div>
+                                            </div>
+                                            <div class="fhs-input-alert"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="text-align: center;padding: 20px 0 10px 0;">
+                                    <button type="button" title="Lưu thay đổi" id="btn-save-account-info" class="btn-save-confirm"><span><span>Lưu thay đổi</span></span></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var filter = @Html.Raw("/^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$/");
+    let minLength = 6
+    let languages = {
+        show: 'Hiện ',
+        hide: 'Ẩn',
+        phoneinvalid: 'Số điện thoại không hợp lệ',
+        phoneinvalid10: 'Số điện thoại phải 10 chữ số',
+        phoneexist: 'Số điện thoại đã tồn tại',
+        emailinvalid: 'Email không hợp lệ',
+        taxcodeinvalid: 'Mã số thuế không hợp lệ',
+        otpinvalid: 'OTP không hợp lệ',
+        notemail: 'Đây không phải là địa chỉ email hợp lệ!',
+        notempty: 'Thông tin này không thể để trống',
+        nopass: 'Enter a valid password!',
+        '30char': 'Mật khẩu phải từ 30 ký tự trở xuống!',
+        over200char: 'Không thể vượt quá 200 ký tự',
+        notsame: 'Passwords are not same!',
+        wrong: 'Số điện thoại/Email hoặc Mật khẩu sai!',
+        registered: 'This email is already registered!',
+        tryagain: 'Đã xảy ra lỗi, xin vui lòng thử lại',
+        login: 'Đăng nhập',
+        recoverypassword: 'Khôi phục',
+        dateinvalid: 'Ngày không hợp lệ',
+        change: 'Thay đổi',
+        loginfail: 'Đăng nhập thất bại',
+        '2word': 'Họ và tên phải có 2 từ trở lên',
+        copied: 'Đã copy',
+        close: 'Đóng',
+        img_loading: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ring_loader.svg',
+        close_img: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_delete_gray.svg?q=102548',
+        locale: 'vi_VN',
+        add_to_cart: 'Thêm giỏ hàng',
+        fail_icon: 'https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo-alert-fail.png?q=102548',
+        out_of_stock: 'Sản phẩm tạm hết hàng',
+        comingsoon: 'Sắp Có Hàng',
+        cancel: 'Hủy',
+        add_to_cart_success: 'Thêm vào giỏ hàng thành công',
+        try_again: 'Hệ thống đang bận, vui lòng thử lại!',
+        minLength: 'Mật khẩu phải từ 6 ký tự trở lên!',
+        minLength_address: 'Địa chỉ phải từ 6 ký tự trở lên!',
+    }
+
+    $('#change_password').click(function () {
+        PasswordShow($(this).is(':checked'))
+    })
+
+    function PasswordShow(isShow) {
+        if (isShow) {
+            $('.fhs-edit-account-password-form').fadeIn(0)
+        } else {
+            $('.fhs-edit-account-password-form').fadeOut(0)
+        }
+    }
+
+    let validateEmail = function (emailAddress) {
+        if (filter.test(emailAddress)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    let isEmpty = function (obj, isCheckLength = false) {
+        try {
+            if (typeof obj == 'undefined' || obj == null || obj == '') {
+                return true
+            }
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) return false
+            }
+            if (Object.keys(obj).length !== 0) {
+                return false
+            }
+            if (isCheckLength) {
+                if (Object.keys(obj).length === 0) {
+                    return true
+                }
+            }
+            if (Number.isInteger(obj)) {
+                return false
+            }
+            if (Date.parse(obj)) {
+                return false
+            }
+            if (obj) {
+                return false
+            }
+            if (obj === false || obj === true) {
+                return false
+            }
+        } catch (ex) { }
+        return true
+    }
+
+    let formatDate = function (date) {
+        var d = new Date(date),
+            day = '' + d.getDate(),
+            month = '' + (d.getMonth() + 1),
+            year = d.getFullYear()
+
+        if (month.length < 2) month = '0' + month
+        if (day.length < 2) day = '0' + day
+
+        return [day, month, year].join('/')
+    }
+
+    let validateData = function (name, text) {
+        let result = ''
+        switch (name) {
+            case 'date':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (text.length < 8 || text == '0') {
+                        result = languages['dateinvalid']
+                    }
+                }
+                break
+            case 'text':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (text.length > 200) {
+                        result = languages['over200char']
+                    }
+                }
+                break
+            case 'login_username':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (!validateEmail(text)) {
+                        if ($.isNumeric(text)) {
+                            if (text.length < 10 || text.length >= 11) {
+                                result = languages['phoneinvalid']
+                            }
+                        } else {
+                            result = languages['emailinvalid']
+                        }
+                    }
+                }
+                break
+            case 'email':
+            case 'change_email':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (!validateEmail(text)) {
+                        result = languages['emailinvalid']
+                    }
+                }
+                break
+            case 'password':
+            case 'recovery_password':
+            case 'register_password':
+            case 'login_password':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (text.length < minLength) {
+                        result = languages['minLength']
+                    }
+                    if (text.length > 30) {
+                        result = languages['30char']
+                    }
+                }
+                break
+            case 'phone':
+            case 'change_phone':
+            case 'recovery_phone':
+            case 'register_phone':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    var regExp = /(0[1-9]{1})+([0-9]{8})/
+                    if (text.length < 10 || text.length >= 11 || !regExp.test(text)) {
+                        result = languages['phoneinvalid']
+                    }
+                }
+                break
+            case 'shipping_telephone':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    var regExp = /^0[0-9].*$/
+                    if (text.length <= 9 || text.length >= 11 || !regExp.test(text)) {
+                        result = languages['phoneinvalid10']
+                    }
+                }
+                break
+            case 'otp':
+            case 'change_email_otp':
+            case 'change_phone_otp':
+            case 'recovery_phone_otp':
+            case 'register_phone_otp':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (text.length != 6) {
+                        result = languages['otpinvalid']
+                    }
+                }
+                break
+            case 'fullname':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (/^\S+$/g.test(text)) {
+                        result = languages['2word']
+                    }
+                }
+                break
+            case 'address':
+                if (text.length < 1) {
+                    result = languages['notempty']
+                } else {
+                    if (text.length < 10) {
+                        result = languages['minLength_address'].replace(minLength, '10')
+                    } else if (text.length > 200) {
+                        result = languages['over200char']
+                    }
+                }
+                break
+        }
+        return result
+    }
+
+    let setDateBox = function (date_box) {
+        let $day = $(date_box + ' .fhs_input_date_group_day')
+        let $month = $(date_box + ' .fhs_input_date_group_month')
+        let $year = $(date_box + ' .fhs_input_date_group_year')
+        let $full = $(date_box + ' .fhs_input_date_group_full')
+        $day.keydown(function (e) {
+            let key = ''
+            let keyCode = 0
+            if (e.type === 'paste') {
+                key = e.clipboardData.getData('text/plain')
+            } else {
+                keyCode = e.keyCode ? e.keyCode : e.which
+                key = String.fromCharCode(keyCode)
+            }
+            if (
+                !(keyCode >= 37 && keyCode <= 40) &&
+                keyCode != 17 &&
+                !(keyCode >= 8 && keyCode <= 9) &&
+                !(keyCode >= 46 && keyCode <= 47) &&
+                keyCode != 49 &&
+                keyCode != 116
+            ) {
+                if (!((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105))) {
+                    let regex = /[0-9]|\./
+                    if (!regex.test(key)) {
+                        e.returnValue = false
+                        if (e.preventDefault) e.preventDefault()
+                    }
+                }
+            }
+        })
+        $month.keydown(function (e) {
+            let key = ''
+            let keyCode = 0
+            if (e.type === 'paste') {
+                key = e.clipboardData.getData('text/plain')
+            } else {
+                keyCode = e.keyCode ? e.keyCode : e.which
+                key = String.fromCharCode(keyCode)
+            }
+            if (
+                !(keyCode >= 37 && keyCode <= 40) &&
+                keyCode != 17 &&
+                !(keyCode >= 8 && keyCode <= 9) &&
+                !(keyCode >= 46 && keyCode <= 47) &&
+                keyCode != 49 &&
+                keyCode != 116
+            ) {
+                if (!((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105))) {
+                    let regex = /[0-9]|\./
+                    if (!regex.test(key)) {
+                        e.returnValue = false
+                        if (e.preventDefault) e.preventDefault()
+                    }
+                }
+            }
+        })
+        $year.keydown(function (e) {
+            let key = ''
+            let keyCode = 0
+            if (e.type === 'paste') {
+                key = e.clipboardData.getData('text/plain')
+            } else {
+                keyCode = e.keyCode ? e.keyCode : e.which
+                key = String.fromCharCode(keyCode)
+            }
+            if (
+                !(keyCode >= 37 && keyCode <= 40) &&
+                keyCode != 17 &&
+                !(keyCode >= 8 && keyCode <= 9) &&
+                !(keyCode >= 46 && keyCode <= 47) &&
+                keyCode != 49 &&
+                keyCode != 116
+            ) {
+                if (!((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105))) {
+                    let regex = /[0-9]|\./
+                    if (!regex.test(key)) {
+                        e.returnValue = false
+                        if (e.preventDefault) e.preventDefault()
+                    }
+                }
+            }
+        })
+        $day.keyup(function (e) {
+            if ($day.val().length == 2) {
+                if ($day.val() <= 0) {
+                    $day.val(1)
+                } else if ($day.val() > 31) {
+                    $day.val(31)
+                }
+            }
+            if ($year.val().length == 4 && $month.val().length <= 2 && $day.val().length <= 2) {
+                let datefull = $year.val() + '-' + $month.val() + '-' + $day.val()
+                $full.val(datefull)
+                console.log($full)
+            } else {
+                $full.val(0000)
+            }
+        })
+        $month.keyup(function (e) {
+            if ($month.val().length == 2) {
+                if ($month.val() <= 0) {
+                    $month.val(1)
+                } else if ($month.val() > 12) {
+                    $month.val(12)
+                }
+            }
+            if ($year.val().length == 4 && $month.val().length <= 2 && $day.val().length <= 2) {
+                let datefull = $year.val() + '-' + $month.val() + '-' + $day.val()
+                $full.val(datefull)
+            } else {
+                $full.val(0000)
+            }
+        })
+        $year.keyup(function (e) {
+            var d = new Date()
+            var nowyear = d.getFullYear()
+            if ($year.val().length == 4) {
+                if ($year.val() <= 1900) {
+                    $year.val(1900)
+                } else if ($year.val() > nowyear) {
+                    $year.val(nowyear)
+                }
+            }
+            if ($year.val().length == 4 && $month.val().length <= 2 && $day.val().length <= 2) {
+                let datefull = $year.val() + '-' + $month.val() + '-' + $day.val()
+                $full.val(datefull)
+            } else {
+                $full.val(0000)
+            }
+        })
+    }
+
+    let validateTextbox = function (name, text, $element) {
+        let result = false
+        let $input_box = $element.parents('.fhs-input-box')
+        let $alert_message = $input_box.children('.fhs-input-alert')
+        $input_box.removeClass('checked-error')
+        $input_box.removeClass('checked-error-text')
+        $input_box.removeClass('checked-pass')
+        $input_box.removeClass('checked-warning')
+        $input_box.removeClass('checked-msg')
+        $alert_message.text('')
+        let message = validateData(name, text)
+        if (!isEmpty(message)) {
+            $input_box.addClass('checked-error')
+            $alert_message.text(message)
+        } else {
+            result = true
+        }
+        return result
+    }
+
+    axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        headers: {
+            Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+        }
+    }).then(({ data }) => {
+        provinceField.option("dataSource", data.data)
+        provinceField.option("value", "@Html.Raw(person.Province)")
+
+        const p = data.data.find(x => x.ProvinceName == "@Html.Raw(person.Province)")
+
+        if (p) {
+            axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + p.ProvinceID, {
+            headers: {
+                Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+            }
+            }).then(({ data }) => {
+                districtField.option("dataSource", data.data)
+                districtField.option("value", "@Html.Raw(person.District)")
+
+
+                const p = data.data.find(x => x.DistrictName == "@Html.Raw(person.District)")
+
+                if (p) {
+                    axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + p.DistrictID, {
+                        headers: {
+                            Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                        }
+                    }).then(({ data }) => {
+                        wardField.option("dataSource", data.data)
+                        wardField.option("value", "@Html.Raw(person.Ward)")
+                    });
+                }
+            });
+        }
+    });
+
+    const provinceField = $('#provinceField').dxSelectBox({
+        dataSource: [],
+        displayExpr: "ProvinceName",
+        valueExpr: "ProvinceName",
+        name: "Province",
+        onValueChanged: ({ value }) => {
+            districtField.option("dataSource", [])
+            districtField.option("value", "")
+            wardField.option("dataSource", [])
+            wardField.option("value", "")
+
+            const provinces = provinceField.option("dataSource")
+            const p = provinces.find(x => x.ProvinceName == value)
+
+            if (p?.ProvinceID)
+                axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + p.ProvinceID, {
+                    headers: {
+                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                    }
+                }).then(({ data }) => {
+                    districtField.option("dataSource", data.data)
+                    districtField.option("value", "@Html.Raw(person.District)")
+                });
+        }
+    }).dxSelectBox('instance');
+
+    const districtField = $('#districtField').dxSelectBox({
+        dataSource: [],
+        displayExpr: "DistrictName",
+        valueExpr: "DistrictName",
+        name: "District",
+        onValueChanged: ({ value }) => {
+            wardField.option("dataSource", [])
+            wardField.option("value", "")
+            const districts = districtField.option("dataSource")
+            const p = districts.find(x => x.DistrictName == value)
+
+            if (p?.DistrictID)
+                axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + p.DistrictID, {
+                    headers: {
+                        Token: '58d8ec5c-6109-11ee-8bfa-8a2dda8ec551'
+                    }
+                }).then(({ data }) => {
+                    wardField.option("dataSource", data.data)
+                    wardField.option("value", "@Html.Raw(person.Ward)")
+                });
+        }
+    }).dxSelectBox('instance');
+
+    const wardField = $('#wardField').dxSelectBox({
+        dataSource: [],
+        displayExpr: "WardName",
+        valueExpr: "WardName",
+        name: "Ward"
+    }).dxSelectBox('instance');
+
+    const streetField = $('#streetField').dxTextBox({
+        value: '@Html.Raw(person.Street)',
+        name: 'Street'
+    })
+
+    $(document).ready(function () {
+        setDateBox('.customer-dob')
+
+        let $day = $('.customer-dob' + ' .fhs_input_date_group_day')
+        let $month = $('.customer-dob' + ' .fhs_input_date_group_month')
+        let $year = $('.customer-dob' + ' .fhs_input_date_group_year')
+        let $full = $('.customer-dob' + ' .fhs_input_date_group_full')
+
+        $('#btn-save-account-info').click(function () {
+            let is_pass = true
+
+            let firstname = $('#firstname')
+            if (!validateTextbox('text', firstname.val().trim(), firstname)) {
+                is_pass = false
+            }
+
+            let email = $('#email')
+            if (!validateTextbox('email', email.val().trim(), email)) {
+                is_pass = false
+            }
+
+            let telephone = $('#telephone')
+            if (!validateTextbox('phone', telephone.val().trim(), telephone)) {
+                is_pass = false
+            }
+
+            if ($year.val().length == 4 && $month.val().length <= 2 && $day.val().length <= 2) {
+                let datefull = $year.val() + '-' + $month.val() + '-' + $day.val()
+                $full.val(datefull)
+            } else {
+                $full.val(0000)
+            }
+
+            let dob = $('#dob')
+            if (!validateTextbox('date', dob.val().trim(), dob)) {
+                is_pass = false
+            }
+
+            if ($('#change_password').is(':checked')) {
+                let current_password = $('#current_password')
+                if (!validateTextbox('password', current_password.val().trim(), current_password)) {
+                    is_pass = false
+                }
+
+                let password = $('#password')
+                if (!validateTextbox('password', password.val().trim(), password)) {
+                    is_pass = false
+                }
+
+                let confirmation = $('#confirmation')
+                if (!validateTextbox('password', confirmation.val().trim(), confirmation)) {
+                    is_pass = false
+                } else {
+                    if (password.val().trim() != confirmation.val().trim()) {
+                        let $input_box = confirmation.parents('.fhs-input-box')
+                        let alert_message = $input_box.children('.fhs-input-alert')
+                        $input_box.removeClass('checked-pass')
+                        $input_box.addClass('checked-error')
+                        alert_message.text('Mật khẩu xác nhận không đúng')
+                        is_pass = false
+                    }
+                }
+            }
+
+            function isValidDate(year, month, day) {
+                var date = new Date(year, month - 1, day); // Adjust month to be 0-indexed
+                return (
+                    date.getFullYear() === year &&
+                    date.getMonth() === month - 1 &&
+                    date.getDate() === day
+                );
+            }
+
+            if (!isValidDate(Number($year.val()), Number($month.val()), Number($day.val()))) {
+                is_pass = false
+                let $input_box = dob.parents('.fhs-input-box')
+                let $alert_message = $input_box.children('.fhs-input-alert')
+                $input_box.addClass('checked-error')
+                $alert_message.text(languages['dateinvalid'])
+            } else {
+                let $input_box = dob.parents('.fhs-input-box')
+                let $alert_message = $input_box.children('.fhs-input-alert')
+                $input_box.removeClass('checked-error')
+                $input_box.removeClass('checked-error-text')
+                $input_box.removeClass('checked-pass')
+                $input_box.removeClass('checked-warning')
+                $input_box.removeClass('checked-msg')
+                $alert_message.text('')
+            }
+
+            if (is_pass) {
+                const formData = new FormData(document.forms['form-account-info'])
+                const values = {}
+                for (const entry of formData) {
+                    const [fieldName, fieldValue] = entry
+                    values[fieldName] = fieldValue
+                    console.log(`${fieldName}: ${fieldValue}`)
+                }
+
+                const toastDx = $('#toast').dxToast({ displayTime: 4000 }).dxToast('instance');
+
+                axios({
+                    url: '/Customer/UpdateInfo',
+                    method: 'POST',
+                    data: {
+                        values: JSON.stringify(values),
+                    },
+                }).then(() => {
+                    toastDx.option({ message: "Thay đổi thông tin thành công!!!", type: 'success' });
+                    toastDx.show();
+                }).catch(error => {
+                    toastDx.option({ message: "Thực hiện không thành công!!! Vui lòng liên hệ nhân viên để được hỗ trợ.", type: 'error' });
+                    toastDx.show();
+                })
+            }
+        })
+    })
+
+</script>
+

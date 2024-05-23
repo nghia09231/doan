@@ -1,0 +1,334 @@
+﻿@using Fahasa;
+@using Fahasa.Ultis;
+@model dynamic
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Tawk {
+    @Html.Partial("Client/_Tawk")
+}
+<div class="cart">
+    <div class="cart-banner-block fhs-no-mobile-block">
+    </div>
+    <div class="page-title title-buttons">
+        <div class="page-title-container">
+            <h1 style="display: inline-block;width: auto;">Giỏ hàng</h1>
+            <span class="cart-title-num-items">(@Model.CartItems.Count sản phẩm)</span>
+        </div>
+    </div>
+
+    <form action="https://www.fahasa.com/checkout/cart/updatePost/" method="post" id="form-cart">
+        <input name="form_key" type="hidden" value="CtZb7qPTQber7xiu">
+        <div class="cart-ui-content row ">
+
+            @if (Model.CartItems.Count > 0)
+            {
+                <div class="col-sm-8 col-xs-12">
+                    <div>
+                        <div class="header-cart-item" style="display: flex;">
+                            <div class="checkbox-all-product ">
+                                <input class="checkbox-add-cart" type="checkbox" id="checkbox-all-products"
+                                       onclick="cart.checkAllProducts()">
+                            </div>
+                            <div><span>Chọn tất cả</span></div>
+                            <div>Số lượng</div>
+                            <div>Thành tiền</div>
+                            <div></div>
+                        </div>
+                        <div class="product-cart-left">
+                            @foreach (Fahasa.Models.CartItem item in Model.CartItems)
+                            {
+                                <div class="item-product-cart" id="product-@item.Product.Id">
+                                    <div class="checked-product-cart">
+                                        <input type="checkbox" id="checkbox-product-@item.Product.Id"
+                                               name="checkbox_product_@item.Product.Id" class="checkbox-add-cart"
+                                               @(item.IsChecked ? "checked=\"checked\"" : "")
+                                               onclick="cart.addCheckedProductToBuy(@item.Product.Id)">
+                                    </div>
+                                    <div class="img-product-cart">
+                                        <a class="product-image" href="/Products/Details/@item.Product.Id">
+                                            <img src="@item.Product.ImageSrc"
+                                                 width="120" height="120"
+                                                 alt="@item.Product.Name">
+                                        </a>
+                                    </div>
+                                    <div class="group-product-info">
+                                        <div class="info-product-cart">
+                                            <div>
+                                                <h2 class="product-name-full-text">
+                                                    <a href="/Products/Details/@item.Product.Id">
+                                                        @item.Product.Name
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                            <div class="price-original">
+                                                <div class="cart-price">
+                                                    <div class="cart-fhsItem-price">
+                                                        <div><span class="price" id="price-@item.Product.Id">@Fahasa.Ultis.PriceUltis.getShow(((long)item.Price))</span></div>
+                                                        <div class="fhsItem-price-old">
+                                                            <span class="price" id="old-price-@item.Product.Id">@Fahasa.Ultis.PriceUltis.getShow(item.Product.Price)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="number-product-cart">
+                                            <div class="product-view-quantity-box">
+                                                <div class="product-view-quantity-box-block ">
+                                                    <a class="btn-subtract-qty"
+                                                       onclick="cart.subtractQty(@item.Product.Id);">
+                                                        <img style="width: 12px; height: auto;vertical-align: middle;"
+                                                             src="https://cdn0.fahasa.com/skin//frontend/ma_vanese/fahasa/images/ico_minus2x.png">
+                                                    </a><input type="number" class="qty-carts" name="cart[@item.Product.Id][qty]" min="1" id="qty-@item.Product.Id"
+                                                               maxlength="12" align="center" value="@item.Amount"
+                                                               onchange="cart.updateQty(@item.Product.Id)" title="So luong"><a class="btn-add-qty" onclick="cart.addQty('@item.Product.Id', event);">
+                                                        <img style="width: 12px; height: auto;vertical-align: middle;"
+                                                             src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_plus2x.png">
+                                                    </a>
+                                                </div>
+                                                <div class="product-view-icon-remove-mobile" style="display:none;">
+                                                    <a onclick="cart.deleteItem(@item.Product.Id);" title="Remove item"
+                                                       id="@item.Product.Id" class="btn-remove-mobile-cart">
+                                                        <i class="fa fa-trash-o"
+                                                           style="font-size:22px"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="cart-price-total">
+                                                <span class="cart-price">
+                                                    <span class="price" id="total-price-@item.Product.Id">
+                                                        @Fahasa.Ultis.PriceUltis.getShow(long.Parse((item.Price * item.Amount).ToString()))
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="div-of-btn-remove-cart">
+                                        <a onclick="cart.deleteItem(@item.Product.Id);"
+                                           title="Remove Item" class="btn-remove-desktop-cart">
+                                            <i class="fa fa-trash-o"
+                                               style="font-size:22px"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="border-product"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 hidden-max-width-992">
+                    <div class="total-cart-right">
+                        <div class="effect-scroll-cart-right">
+
+
+                            <div style="clear:both;"></div>
+                            <div class="block-total-cart" style="">
+                                <div class="block-totals-cart-page">
+                                    <div class="border-product"></div>
+                                    <div class="total-cart-page title-final-total">
+                                        <div class="title-cart-page-left">Tổng Số Tiền (gồm VAT)</div>
+                                        <div class="number-cart-page-right"><span id="total-order" class="price">0 đ</span></div>
+                                    </div>
+                                </div>
+                                <div class="checkout-type-button-cart" style="text-align: center;">
+                                    <div class="method-button-cart">
+                                        <a href="/Order/Checkout" class="d-flex">
+                                            <button type="button" title="Thanh toán"
+                                                    class="button btn-proceed-checkout btn-checkout btn-checkout-disable">
+                                                <span><span>Thanh toán</span></span>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="fhs_error_message_cart"
+                                 style="margin-top:10px;background: white;padding:10px;display:none;"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.CartItems.Count == 0)
+            {
+                <div style="box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);padding: 20px;background-color: #fff;flex: 1; border-radius: 8px;">
+                    <div class="cart-empty body-mh-300" style="justify-content: center;display: flex;align-items: center;">
+                        <div style="text-align: center">
+                            <div class="icon-empty-cart">
+                                <img src="https://cdn0.fahasa.com/skin//frontend/ma_vanese/fahasa/images/checkout_cart/ico_emptycart.svg"
+                                     class="center">
+                            </div>
+                            <p style="font-size:14px;margin: 20px 0;">Chưa có sản phẩm trong giỏ hàng của bạn.</p><a style="color: white;text-transform: uppercase;" href="/Home">
+                                <button class="button-shopping" type="button" title="Mua sắm ngay" style="margin:auto">
+                                    Mua sắm ngay
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>}
+        </div>
+    </form>
+</div>
+
+<div class="fhs-bsidebar hidden-desktop">
+    <div class="tab-bsidebar-total-button-mobile">
+        <div class="tab-bsidebar-total-mobile">
+            <div class="title-price-mobile">Tổng cộng</div>
+            <div id="total-price-mobile" class="total-price-mobile">0 đ</div>
+        </div>
+        <div class="tab-bsidebar-button-mobile">
+            <div class="checkout-type-button-cart" style="text-align: center;">
+                <div class="method-button-cart">
+                    <a href="/Order/Checkout" class="d-flex h-100">
+                        <button type="button" title="Thanh toán" class="button btn-proceed-checkout btn-checkout btn-checkout-disable">
+                            <span>
+                                <span>Thanh toán</span>
+                                <i class="fa fa-arrow-right" style="font-size: 14px;margin-left: 5px;"></i>
+
+
+                            </span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cart = new Cart();
+    function Cart() {
+        let checkboxAllProducts = document.querySelector('#checkbox-all-products')
+        this.checkAllProducts = function () {
+            axios.post('/Order/CheckedAllProduct', {
+                IsChecked: checkboxAllProducts.checked
+            }).then(function (response) {
+                response.data.list.forEach(el => {
+                    if (el.IsChecked) {
+                        document.querySelector(`#checkbox-product-${el.Id}`).checked = true
+                        document.querySelector(`#checkbox-product-${el.Id}`).setAttribute('checked', 'checked')
+                    }
+                    else {
+                        document.querySelector(`#checkbox-product-${el.Id}`).checked = false
+                        document.querySelector(`#checkbox-product-${el.Id}`).removeAttribute('checked')
+                    }
+                })
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+
+                if (response.data.list.some(el => el.IsChecked == true)) {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.remove('btn-checkout-disable'))
+                } else {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.add('btn-checkout-disable'))
+                }
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        this.addCheckedProductToBuy = (id) => {
+            let checkboxProduct = document.querySelector(`#checkbox-product-${id}`)
+            console.log(checkboxProduct.checked)
+            axios.post('/Order/AddCheckedProductToBuy', {
+                Id: id,
+                IsChecked: checkboxProduct.checked
+            }).then(function (response) {
+                if (response.data.list.every(el => el.IsChecked === true)) {
+                    document.querySelector('#checkbox-all-products').checked = true
+                } else {
+                    document.querySelector('#checkbox-all-products').checked = false
+                }
+
+                response.data.list.forEach(el => {
+                    if (el.IsChecked) {
+                        document.querySelector(`#checkbox-product-${el.Id}`).checked = true
+                        document.querySelector(`#checkbox-product-${el.Id}`).setAttribute('checked', 'checked')
+                    }
+                    else {
+                        document.querySelector(`#checkbox-product-${el.Id}`).checked = false
+                        document.querySelector(`#checkbox-product-${el.Id}`).removeAttribute('checked')
+                    }
+                })
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+
+
+                if (response.data.list.some(el => el.IsChecked == true)) {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.remove('btn-checkout-disable'))
+                } else {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.add('btn-checkout-disable'))
+                }
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        this.subtractQty = (id) => {
+            axios.post('/Order/SubtractQty', {
+                Id: id
+            }).then(function (response) {
+                document.querySelector(`#qty-${response.data.item.Id}`).value = response.data.item.Amount
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-${response.data.item.Id}`).innerHTML = response.data.item.TotalPrice.toLocaleString('vi-VN') + ' đ'
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        this.addQty = (id) => {
+            axios.post('/Order/AddQty', {
+                Id: id
+            }).then(function (response) {
+                document.querySelector(`#qty-${response.data.item.Id}`).value = response.data.item.Amount
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-${response.data.item.Id}`).innerHTML = response.data.item.TotalPrice.toLocaleString('vi-VN') + ' đ'
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        this.updateQty = function (id) {
+
+            axios.post('/Order/updateQty', {
+                Id: id,
+                Amount: Number(document.querySelector(`#qty-${id}`).value)
+            }).then(function (response) {
+                document.querySelector(`#qty-${response.data.item.Id}`).value = response.data.item.Amount
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-${response.data.item.Id}`).innerHTML = response.data.item.TotalPrice.toLocaleString('vi-VN') + ' đ'
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        this.deleteItem = function (id) {
+            axios.post('/Order/DeleteItem', {
+                Id: id,
+            }).then(function (response) {
+                document.querySelector(`#product-${response.data.item.Id}`).remove()
+                document.querySelector(`#total-order`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+                document.querySelector(`#total-price-mobile`).innerHTML = response.data.total.toLocaleString('vi-VN') + ' đ'
+
+
+                if (response.data.list.some(el => el.IsChecked == true)) {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.remove('btn-checkout-disable'))
+                } else {
+                    document.querySelectorAll(`.btn-proceed-checkout`).forEach(x => x.classList.add('btn-checkout-disable'))
+                }
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+</script>

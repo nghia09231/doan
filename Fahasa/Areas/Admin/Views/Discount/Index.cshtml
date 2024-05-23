@@ -1,0 +1,358 @@
+﻿@using Fahasa.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDashBoard.cshtml";
+    Person user = (Person)Session["infoAdmin"];
+    List<Permission> permissions = new List<Permission>();
+    foreach (Group group in user.Groups)
+    {
+        permissions.AddRange(group.Permissions);
+    }
+}
+
+@section breadcrumb {
+    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Quản lí Mã giảm giá</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 p-0">
+                <li class="breadcrumb-item"><a href="~/Admin/DashBoard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active">Danh sách Mã giảm giá</li>
+            </ol>
+        </nav>
+    </div>
+}
+<div style="padding: 0 25px;">
+    <h3 class="text-dark text-uppercase card-title">Mã giảm giá</h3>
+    <hr />
+</div>
+<div class="card-body pt-0">
+
+    <div id="gridContainer" class="h-100"></div>
+</div>
+<form id="importExcelForm" class="d-none" enctype="multipart/form-data">
+    <input name="file" id="importExcelForm_file" type="file" hidden />
+</form>
+@section htmlEditorScript{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-minifier/4.0.0/htmlminifier.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-quill/1.6.2/dx-quill.min.js" integrity="sha512-fIUDyhR9ElipkcKvGZbRgnnRKoTDPoHFlBbqa4NVz/p5xc2ohBGonu5cHnUp1y05IHiyv2diNUVdrzhldNx66A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.9/jspdf.plugin.autotable.min.js"></script>
+}
+
+@section scripts{
+    <script>
+        const toast = $('#toast').dxToast({ displayTime: 2000 }).dxToast('instance');
+        $(document).ready(function () {
+            LoadDsCategory();
+        });
+
+        function LoadDsCategory() {
+            $(() => {
+
+                function tagBoxEditorTemplate(cellElement, cellInfo) {
+                    return $('<div>').dxHtmlEditor({
+                        height: 300,
+                        value: cellInfo.value,
+                        toolbar: {
+                            items: [
+                                'undo', 'redo', 'separator',
+                                {
+                                    name: 'size',
+                                    acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
+                                    options: { inputAttr: { 'aria-label': 'Font size' } },
+                                },
+                                {
+                                    name: 'font',
+                                    acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
+                                    options: { inputAttr: { 'aria-label': 'Font family' } },
+                                },
+                                'separator', 'bold', 'italic', 'strike', 'underline', 'separator',
+                                'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'separator',
+                                'orderedList', 'bulletList', 'separator', 'cellProperties', 'tableProperties',
+                                {
+                                    name: 'header',
+                                    acceptedValues: [false, 1, 2, 3, 4, 5],
+                                    options: { inputAttr: { 'aria-label': 'Header' } },
+                                }, 'separator',
+                                'color', 'background', 'separator',
+                                'link', 'separator',
+                                'clear', 'codeBlock', 'blockquote', 'separator',
+                                'insertTable', 'deleteTable',
+                                'insertRowAbove', 'insertRowBelow', 'deleteRow',
+                                'insertColumnLeft', 'insertColumnRight', 'deleteColumn',
+
+                            ],
+                        },
+                        onValueChanged({ component, value }) {
+                            cellInfo.setValue(value);
+                        },
+                    });
+                }
+
+                const url = window.location.origin;
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: 'Code',
+
+                        @if(permissions.Find(p => p.Name == "Discount" && p.Function == "Read") != null)
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Discount/GetDiscounts`,")
+                        }
+                        else
+                        {
+                            @Html.Raw("loadUrl: `${url}/Admin/Permission/GetEmpty`,")
+                        }
+
+                        insertUrl: `${url}/Admin/Discount/Add`,
+                        updateUrl: `${url}/Admin/Discount/Update`,
+                        deleteUrl: `${url}/Admin/Discount/Delete`,
+                        onBeforeSend(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    headerFilter: {
+                        visible: true,
+                    },
+                    filterPanel: {
+                        visible: true,
+                    },
+                    keyExpr: 'Code',
+                    showBorders: true,
+                    paging: {
+                        enabled: false,
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 320,
+                    },
+                    groupPanel: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                        @if(permissions.Find(p => p.Name == "Discount" && p.Function == "Create") != null)
+                        {
+                            @Html.Raw("allowAdding: true,")
+                        }
+                        @if(permissions.Find(p => p.Name == "Discount" && p.Function == "Update") != null)
+                        {
+                            @Html.Raw("allowUpdating: true,")
+
+                        }
+                        @if(permissions.Find(p => p.Name == "Discount" && p.Function == "Delete") != null)
+                        {
+                            @Html.Raw("allowDeleting: true,")
+                        }
+                        useIcons: true,
+                        popup: {
+                            height: 'auto',
+                            showTitle: true,
+                            title: "Mã giảm giá"
+                        },
+                        form: {
+                            items: ['Code', 'Title', 'SubTitle', 'LimitUsed', 'DateStart', 'DateExpired',
+                                {
+                                    colSpan: 2,
+                                    colCount: 3,
+                                    itemType: 'group',
+                                    caption: 'Giá trị',
+                                    items: ['Value', 'Type', 'Amount',],
+                                },
+                                {
+                                    colSpan: 2,
+                                    colCount: 3,
+                                    itemType: 'group',
+                                    caption: 'Điều kiện',
+                                    items: ['ApplyField', 'ConditionalOperator', 'ConditionalPrice',],
+                                },
+                                {
+                                    colSpan: 2,
+                                    colCount: 1,
+                                    itemType: 'group',
+                                    caption: 'Mô tả',
+                                    items: [{
+                                        dataField: 'Content',
+                                        label: {
+                                            visible: false,
+                                        }
+                                    }],
+                                },
+                            ]
+                        }
+                    },
+
+                    columnResizingMode: 'nextColumn',
+                    allowColumnResizing: true,
+                    columns: [
+                        {
+                            dataField: 'Code',
+                            caption: 'Mã',
+                            dataType: 'string',
+                            sortOrder: 'desc',
+                            width: 100,
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'Title',
+                            caption: 'Tiêu đề',
+                            minWidth: 250,
+                            dataType: 'string',
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'SubTitle',
+                            caption: 'Tiêu đề phụ',
+                            minWidth: 250,
+                            dataType: 'string',
+                            validationRules: [{ type: 'required' }],
+                        }, {
+                            dataField: 'Value',
+                            caption: 'Giá trị giảm giá',
+                            width: 100,
+                            dataType: 'number',
+                            editorType: 'dxNumberBox',
+                            validationRules: [{ type: 'required' }],
+                            editorOptions: {
+                                value: 0
+                            }
+                        }, {
+                            dataField: 'Type',
+                            caption: 'Loại',
+                            width: 120,
+                            dataType: 'string',
+                            validationRules: [{ type: 'required' }],
+                            lookup: {
+                                dataSource: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Constanst.DISCOUNT_TYPES))')
+                            }
+                        }, {
+                            dataField: 'Amount',
+                            caption: 'Số lượng',
+                            width: 100,
+                            dataType: 'number'
+                        }, {
+                            dataField: 'Used',
+                            caption: 'Đã dùng',
+                            width: 100,
+                            dataType: 'number',
+                        }, {
+                            dataField: 'LimitUsed',
+                            caption: 'Giới hạn dùng',
+                            width: 100,
+                            dataType: 'number',
+                        }, {
+                            dataField: 'ApplyField',
+                            caption: 'Trường giảm giá',
+                            validationRules: [{ type: 'required' }],
+                            visible: false,
+                            width: 100,
+                            dataType: 'string',
+                            lookup: {
+                                dataSource: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Constanst.DISCOUNT_FIELDS))')
+                            }
+                        }, {
+                            dataField: 'ConditionalOperator',
+                            caption: 'Điều kiện',
+                            validationRules: [{ type: 'required' }],
+                            visible: false,
+                            dataType: 'string',
+                            width: 100,
+                            editorOptions: {
+                                dataSource: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Constanst.COMPARE_OPERATOR))'),
+                                displayExpr: 'text',
+                                valueExpr: 'key'
+                            },
+                            editorType: 'dxSelectBox'
+                        }, {
+                            dataField: 'ConditionalPrice',
+                            visible: false,
+                            caption: 'Giảm giá',
+                            validationRules: [{ type: 'required' }],
+                            dataType: 'number',
+                        }, {
+                            dataField: 'Conditional',
+                            caption: 'Điều kiện',
+                            width: 150,
+                            dataType: 'string',
+                            cellTemplate(container, option) {
+                                if (option.row.data) {
+                                    let arrayPlace = []
+                                    if (option.row.data.ApplyField) {
+                                        arrayPlace.push(option.row.data.ApplyField)
+                                    }
+                                    if (option.row.data.ConditionalOperator) {
+                                        arrayPlace.push(option.row.data.ConditionalOperator)
+                                    }
+                                    if (option.row.data.ConditionalPrice) {
+                                        arrayPlace.push(option.row.data.ConditionalPrice)
+                                    }
+                                    container.text(arrayPlace.join(' '))
+                                } else {
+                                    container.text("")
+                                }
+                            },
+                        }, {
+                            dataField: 'DateStart',
+                            caption: 'Ngày bắt đầu',
+                            width: 150,
+                            dataType: 'datetime'
+                        }, {
+                            dataField: 'DateExpired',
+                            caption: 'Ngày hết hạn',
+                            width: 150,
+                            dataType: 'datetime'
+                        }, {
+                            dataField: 'Content',
+                            caption: 'Nội dung',
+                            dataType: 'string',
+                            visible: false,
+                            editCellTemplate: tagBoxEditorTemplate,
+                        },
+                    ], toolbar: {
+                        items: [
+                            'groupPanel',
+                            @if(permissions.Find(p => p.Name == "Discount" && p.Function == "Create") != null)
+                            {
+                                @Html.Raw(@"{
+                                                location: 'after',
+                                                widget: 'dxButton',
+                                                options: {
+                                                    icon: 'file',
+                                                    onClick(e) {
+                                                        const handle = (e) => {
+                                                            const form = document.querySelector('#importExcelForm')
+                                                            const formData = new FormData(form)
+
+                                                            axios({
+                                                                url: '/Admin/Discount/UploadExcel',
+                                                                method: 'POST',
+                                                                data: formData
+                                                            }).then(() => {
+                                                                toast.option({ message: 'Lưu thành công!!!', type: 'success' });
+                                                                toast.show();
+                                                                dataGrid.refresh()
+                                                            }
+                                                            ).catch((e) => {
+                                                                console.log(e)
+                                                                toast.option({ message: 'Lưu thât bại!!!', type: 'error' });
+                                                                toast.show();
+                                                            })
+
+                                                            document.querySelector('#importExcelForm_file').value = null
+                                                            document.querySelector('#importExcelForm_file').removeEventListener('change', handle)
+                                                        }
+                                                        document.querySelector('#importExcelForm_file').addEventListener('change', handle)
+                                                        document.querySelector('#importExcelForm_file').click()
+                                                    },
+                                                },
+                                            },")
+                            }
+
+                            'addRowButton',
+                            'searchPanel',]
+                    },
+                }).dxDataGrid('instance');
+            });
+        }
+    </script>
+}

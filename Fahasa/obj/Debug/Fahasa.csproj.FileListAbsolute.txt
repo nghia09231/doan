@@ -1,0 +1,508 @@
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Fahasa.dll.config
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Fahasa.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Fahasa.pdb
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Antlr3.Runtime.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\CloudinaryDotNet.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EntityFramework.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EntityFramework.SqlServer.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EPPlus.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EPPlus.Interfaces.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EPPlus.System.Drawing.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ExcelDataReader.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\gfoidl.Base64.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ICSharpCode.SharpZipLib.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\jose-jwt.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.Core.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authorization.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Features.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Routing.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.DotNet.PlatformAbstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.DependencyInjection.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.DependencyModel.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.ObjectPool.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Options.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Primitives.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IdentityModel.Logging.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Net.Http.Headers.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Cookies.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Facebook.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Google.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.OAuth.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Twitter.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Web.Infrastructure.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Newtonsoft.Json.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Owin.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Buffers.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.ComponentModel.Annotations.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Diagnostics.DiagnosticSource.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Linq.Dynamic.Core.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Memory.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Net.Http.Formatting.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Numerics.Vectors.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Security.Cryptography.Cng.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Encoding.CodePages.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Encodings.Web.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Json.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Threading.Tasks.Extensions.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.ValueTuple.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Helpers.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Http.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Http.WebHost.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Mvc.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Optimization.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Razor.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.Deployment.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.Razor.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\WebGrease.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\CloudinaryDotNet.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EntityFramework.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EntityFramework.SqlServer.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\EPPlus.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ExcelDataReader.pdb
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ExcelDataReader.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\gfoidl.Base64.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ICSharpCode.SharpZipLib.pdb
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\ICSharpCode.SharpZipLib.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authorization.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Http.Features.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Routing.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.DependencyInjection.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.ObjectPool.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Options.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Extensions.Primitives.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IdentityModel.Logging.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Net.Http.Headers.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Newtonsoft.Json.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Buffers.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Diagnostics.DiagnosticSource.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Linq.Dynamic.Core.pdb
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Linq.Dynamic.Core.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Memory.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Net.Http.Formatting.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Numerics.Vectors.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Security.Cryptography.Cng.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Encoding.CodePages.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Encodings.Web.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Text.Json.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Threading.Tasks.Extensions.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.ValueTuple.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Http.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Http.WebHost.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Helpers.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Mvc.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Optimization.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.Razor.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.Deployment.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\System.Web.WebPages.Razor.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Antlr3.Runtime.pdb
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.Core.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Facebook.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Cookies.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.OAuth.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Google.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.Twitter.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.csproj.AssemblyReference.cache
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.Properties.Setting.resources
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.csproj.GenerateResource.cache
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.csproj.CoreCompileInputs.cache
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.csproj.CopyComplete
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.dll
+D:\5TB\OneDrive - BF\Other\Fahasa\Fahasa\obj\Debug\Fahasa.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.dll.config
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Antlr3.Runtime.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\CloudinaryDotNet.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.SqlServer.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.Interfaces.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.System.Drawing.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\gfoidl.Base64.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\jose-jwt.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyModel.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.ObjectPool.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Options.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Primitives.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Net.Http.Headers.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Newtonsoft.Json.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Owin.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Buffers.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.ComponentModel.Annotations.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Memory.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Net.Http.Formatting.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Numerics.Vectors.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Security.Cryptography.Cng.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encoding.CodePages.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encodings.Web.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Json.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.ValueTuple.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Helpers.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.WebHost.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Mvc.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Optimization.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Razor.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Deployment.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Razor.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\WebGrease.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\CloudinaryDotNet.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.SqlServer.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\gfoidl.Base64.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Features.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.ObjectPool.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Options.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Primitives.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Abstractions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Net.Http.Headers.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Newtonsoft.Json.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Buffers.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Diagnostics.DiagnosticSource.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Memory.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Net.Http.Formatting.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Numerics.Vectors.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Security.Cryptography.Cng.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encoding.CodePages.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encodings.Web.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Json.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.ValueTuple.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.WebHost.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Helpers.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Mvc.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Optimization.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Razor.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Deployment.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Razor.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Antlr3.Runtime.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.AssemblyReference.cache
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.Properties.Setting.resources
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.GenerateResource.cache
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.CoreCompileInputs.cache
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.Up2Date
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.pdb
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\DevExtreme.AspNet.Data.dll
+C:\Users\LeLan\Desktop\FahasaBookStore\Fahasa\bin\DevExtreme.AspNet.Data.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.dll.config
+D:\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Fahasa.pdb
+D:\Desktop\FahasaBookStore\Fahasa\bin\Antlr3.Runtime.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\CloudinaryDotNet.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\DevExtreme.AspNet.Data.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.SqlServer.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.Interfaces.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.System.Drawing.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\gfoidl.Base64.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\jose-jwt.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Core.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Features.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.DotNet.PlatformAbstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyModel.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.ObjectPool.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Options.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Primitives.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Logging.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Net.Http.Headers.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Cookies.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Facebook.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Google.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.OAuth.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Twitter.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Web.Infrastructure.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Newtonsoft.Json.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\Owin.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Buffers.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.ComponentModel.Annotations.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Memory.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Net.Http.Formatting.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Numerics.Vectors.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Security.Cryptography.Cng.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encoding.CodePages.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encodings.Web.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Json.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Threading.Tasks.Extensions.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.ValueTuple.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Helpers.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.WebHost.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Mvc.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Optimization.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Razor.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Deployment.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Razor.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\WebGrease.dll
+D:\Desktop\FahasaBookStore\Fahasa\bin\CloudinaryDotNet.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\DevExtreme.AspNet.Data.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\EntityFramework.SqlServer.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\EPPlus.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.pdb
+D:\Desktop\FahasaBookStore\Fahasa\bin\ExcelDataReader.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\gfoidl.Base64.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.pdb
+D:\Desktop\FahasaBookStore\Fahasa\bin\ICSharpCode.SharpZipLib.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authentication.Core.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Authorization.Policy.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Hosting.Server.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Extensions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Http.Features.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Mvc.Core.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.ResponseCaching.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.Routing.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNetCore.WebUtilities.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Configuration.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.FileProviders.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Hosting.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.ObjectPool.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Options.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Extensions.Primitives.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IdentityModel.Logging.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.IO.RecyclableMemoryStream.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Net.Http.Headers.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Newtonsoft.Json.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Buffers.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.pdb
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Linq.Dynamic.Core.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Memory.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Net.Http.Formatting.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Numerics.Vectors.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Security.Cryptography.Cng.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encoding.CodePages.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Encodings.Web.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Text.Json.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Threading.Tasks.Extensions.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.ValueTuple.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Http.WebHost.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Helpers.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Mvc.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Optimization.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.Razor.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Deployment.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\System.Web.WebPages.Razor.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Antlr3.Runtime.pdb
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Facebook.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Cookies.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.OAuth.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Google.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.Twitter.xml
+D:\Desktop\FahasaBookStore\Fahasa\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.AssemblyReference.cache
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.Properties.Setting.resources
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.GenerateResource.cache
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.CoreCompileInputs.cache
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.csproj.Up2Date
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.dll
+D:\Desktop\FahasaBookStore\Fahasa\obj\Debug\Fahasa.pdb
